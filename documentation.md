@@ -1,124 +1,136 @@
-# Documentazione CSS
+CSS Documentation
+This documentation describes the function of each CSS file used in the online course platform project.
+The file style.css is just the whole version of the css directory, it's here just for the record, do not use/modify it
 
-Questa documentazione descrive la funzione di ogni file CSS utilizzato nel progetto della piattaforma di corsi online.
+CSS File Structure
+The CSS has been divided into separate modules to improve maintainability and code organization.
 
-## Struttura dei File CSS
+reset.css
+Function: Browser style reset
 
-Il CSS è stato suddiviso in moduli separati per migliorare la manutenibilità e l'organizzazione del codice.
+This file contains the fundamental reset styles that eliminate default browser margins and paddings and set the box-sizing to border-box for all elements. This ensures consistent layout behavior across all browsers.
 
----
+Main content:
 
-## reset.css
+Global margin and padding reset
 
-**Funzione:** Reset degli stili del browser
+Setting box-sizing: border-box for consistent size calculation
 
-Questo file contiene gli stili di reset fondamentali che eliminano i margini e i padding predefiniti del browser e impostano il box-sizing su border-box per tutti gli elementi. Questo garantisce un comportamento coerente del layout su tutti i browser.
+layout.css
+Function: General layout and base page structure
 
-**Contenuto principale:**
-- Azzeramento margin e padding globali
-- Impostazione box-sizing: border-box per calcolo dimensioni consistente
+Defines the styles for the main structural elements of the site, such as the body, the main container, and generic sections. It sets the base typography, background colors, and a centered fixed-width layout.
 
----
+Main content:
 
-## layout.css
+Body styles (fonts, colors, line-height)
 
-**Funzione:** Layout generale e struttura base della pagina
+Main container with maximum width and centering
 
-Definisce gli stili per gli elementi strutturali principali del sito, come il body, il contenitore main e le sezioni generiche. Imposta la tipografia base, i colori di sfondo e il layout centrato a larghezza fissa.
+Base section styles (padding, background, rounded corners, shadows)
 
-**Contenuto principale:**
-- Stili del body (font, colori, line-height)
-- Contenitore main con larghezza massima e centratura
-- Stili base delle sezioni (padding, background, bordi arrotondati, ombre)
-- Stili dei titoli delle sezioni
+Section title styles
 
----
+header.css
+Function: Styles for the header and navigation bar
 
-## header.css
+Contains all styles related to the site header, including the sticky navigation bar, menu links, search bar, and the login button.
 
-**Funzione:** Stili dell'intestazione e della barra di navigazione
+Main content:
 
-Contiene tutti gli stili relativi all'header del sito, inclusa la barra di navigazione sticky, i link del menu, la barra di ricerca e il pulsante di login.
+Header with sticky positioning and dark background
 
-**Contenuto principale:**
-- Header con posizione sticky e sfondo scuro
-- Navigazione con layout flex e allineamento
-- Stili per i link di navigazione con effetti hover
-- Campo di ricerca con bordi arrotondati
-- Pulsante Login con colore distintivo
+Navigation with flex layout and alignment
 
----
+Styles for navigation links with hover effects
 
-## new-courses.css
+Search field with rounded borders
 
-**Funzione:** Stili per la sezione "New Courses"
+Login button with a distinctive color
 
-Gestisce l'aspetto visivo della sezione dei nuovi corsi, incluso il layout tipo slider con frecce di navigazione e le card dei singoli corsi.
+new-courses.css
+Function: Styles for the "New Courses" section
 
-**Contenuto principale:**
-- Layout flex per lo slider con pulsanti freccia circolari
-- Card dei corsi con immagini, titoli e descrizioni
-- Effetti hover sulle card (sollevamento e ombra)
-- Pulsanti "View Course" con colore blu
-- Stili per le frecce di navigazione sinistra/destra
+Manages the visual appearance of the new courses section, including the slider-type layout with navigation arrows and individual course cards.
 
----
+Main content:
 
-## our-courses.css
+Flex layout for the slider with circular arrow buttons
 
-**Funzione:** Stili per la sezione "Our Courses"
+Course cards with images, titles, and descriptions
 
-Definisce l'aspetto della sezione dei corsi principali con layout alternato (immagine-testo / testo-immagine). Ogni corso mostra l'immagine del professore, il nome del corso, il nome del professore e una descrizione dettagliata.
+Hover effects on cards (lift and shadow)
 
-**Contenuto principale:**
-- Layout flex per articoli con spaziatura generosa
-- Immagini circolari dei professori con bordo colorato
-- Stili per titoli, sottotitoli e descrizioni
-- Pulsanti "Learn More" con colore verde
-- Effetti hover sugli articoli (ombra più marcata)
+"View Course" buttons with blue color
 
----
+Styles for left/right navigation arrows
 
-## footer.css
+our-courses.css
+Function: Styles for the "Our Courses" section
 
-**Funzione:** Stili del footer
+Defines the appearance of the main courses section with an alternating layout (image-text / text-image). Each course displays the professor's image, course name, professor's name, and a detailed description.
 
-Contiene tutti gli stili per il footer del sito, inclusi i link alle policy, le informazioni di contatto, il copyright e i link ai social media.
+Main content:
 
-**Contenuto principale:**
-- Footer con sfondo scuro e testo chiaro
-- Layout flex per i link di navigazione
-- Stili per l'indirizzo email con colore evidenziato
-- Link ai social media con icone stilizzate
-- Testo del copyright con colore tenue
+Flex layout for articles with generous spacing
 
----
+Circular professor images with colored borders
 
-## responsive.css
+Styles for titles, subtitles, and descriptions
 
-**Funzione:** Media queries per la responsività mobile
+"Learn More" buttons with green color
 
-Contiene le regole CSS che adattano il layout per dispositivi con schermi più piccoli (massimo 768px di larghezza). Modifica il comportamento degli elementi per garantire una buona esperienza utente su smartphone e tablet.
+Hover effects on articles (more pronounced shadow)
 
-**Contenuto principale:**
-- Header con layout a colonna su mobile
-- Barra di ricerca a larghezza piena
-- Sezione New Courses con slider disabilitato (niente frecce)
-- Sezione Our Courses con layout verticale invece che alternato
-- Allineamento centrato per i contenuti su schermi piccoli
+footer.css
+Function: Footer styles
 
----
+Contains all styles for the site footer, including policy links, contact information, copyright, and social media links.
 
-## Ordine di Importazione
+Main content:
 
-I file CSS devono essere importati nel seguente ordine nell'HTML:
+Footer with dark background and light text
 
-1. reset.css - per resettare gli stili del browser
-2. layout.css - per la struttura base
-3. header.css - per l'intestazione
-4. new-courses.css - per la sezione nuovi corsi
-5. our-courses.css - per la sezione corsi principali
-6. footer.css - per il piè di pagina
-7. responsive.css - per le regole responsive (deve essere ultimo)
+Flex layout for navigation links
 
-Questo ordine garantisce che gli stili vengano applicati correttamente e che le media queries abbiano la precedenza necessaria.
+Styles for the email address with highlighted color
+
+Social media links with stylized icons
+
+Copyright text with a subtle color
+
+responsive.css
+Function: Media queries for mobile responsiveness
+
+Contains CSS rules that adapt the layout for devices with smaller screens (maximum 768px wide). It modifies element behavior to ensure a good user experience on smartphones and tablets.
+
+Main content:
+
+Header with column layout on mobile
+
+Full-width search bar
+
+New Courses section with slider disabled (no arrows)
+
+Our Courses section with vertical layout instead of alternating
+
+Centered alignment for content on small screens
+
+Import Order
+CSS files must be imported in the following order in the HTML:
+
+reset.css – to reset browser styles
+
+layout.css – for the base structure
+
+header.css – for the header
+
+new-courses.css – for the new courses section
+
+our-courses.css – for the main courses section
+
+footer.css – for the footer
+
+responsive.css – for responsive rules (must be last)
+
+This order ensures that styles are applied correctly and that media queries have the necessary precedence.
