@@ -1,0 +1,28 @@
+@media (max-width: 768px) {
+    header nav {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    header form {
+        margin: 0;
+        max-width: 100%;
+    }
+
+    section:first-child > div {
+        flex-direction: column;
+    }
+
+    section:first-child > div > a {
+        display: none;
+    }
+
+    section:nth-child(2) > article {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    section:nth-child(2) > article:nth-child(even) {
+        flex-direction: column;
+    }
+}
