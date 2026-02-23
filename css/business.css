@@ -1,0 +1,75 @@
+/* Stiluri specifice pentru pagina For Business */
+.business-hero {
+    text-align: center;
+    background-color: #2c3e50;
+    color: white;
+    padding: 5rem 2rem;
+    border-radius: 10px;
+    margin-bottom: 3rem;
+}
+
+.business-hero h1 {
+    color: #3498db;
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.business-hero p {
+    font-size: 1.3rem;
+    max-width: 700px;
+    margin: 0 auto 2.5rem;
+    color: #bdc3c7;
+}
+
+.btn-contact {
+    display: inline-block;
+    background-color: #27ae60;
+    color: white;
+    padding: 1rem 2.5rem;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    transition: background-color 0.3s;
+}
+
+.btn-contact:hover {
+    background-color: #2ecc71;
+}
+
+.feature-grid {
+    display: flex;
+    gap: 2rem;
+}
+
+.feature-grid article {
+    flex: 1;
+    background-color: #fff;
+    padding: 2.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    text-align: center;
+    border-top: 4px solid #3498db;
+}
+
+.feature-grid h2 {
+    color: #2c3e50;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.feature-grid p {
+    color: #555;
+    line-height: 1.6;
+}
+
+/* Responsivitate pentru ecrane mici */
+@media (max-width: 768px) {
+    .feature-grid {
+        flex-direction: column;
+    }
+
+    .business-hero h1 {
+        font-size: 2.5rem;
+    }
+}
