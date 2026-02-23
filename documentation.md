@@ -34,7 +34,7 @@ Section title styles
 header.css
 Function: Styles for the header and navigation bar
 
-Contains all styles related to the site header, including the sticky navigation bar, menu links, search bar, and the login button.
+Contains all styles related to the site header, including the sticky navigation bar, menu links, search bar, and the login button. Includes styling for the active navigation link (underline effect).
 
 Main content:
 
@@ -42,7 +42,7 @@ Header with sticky positioning and dark background
 
 Navigation with flex layout and alignment
 
-Styles for navigation links with hover effects
+Styles for navigation links with hover effects and active state underline
 
 Search field with rounded borders
 
@@ -82,6 +82,57 @@ Styles for titles, subtitles, and descriptions
 
 Hover effects on articles (more pronounced shadow)
 
+about.css
+Function: Styles for the "About" page
+
+Contains styles specific to the about.html page, including the hero section and mission/vision content layout.
+
+Main content:
+
+Hero section with dark background and centered text
+
+Hero title with blue accent color and large font size
+
+Mission and vision cards with flex layout and left border accent
+
+Responsive layout adjustment from two columns to single column on mobile devices
+
+business.css
+Function: Styles for the "For Business" page
+
+Defines the appearance of the business.html page, including the hero section, feature grid, and call-to-action buttons.
+
+Main content:
+
+Business hero section with centered text and large heading
+
+"Contact Sales" button with green color and hover effects
+
+Feature grid with three equal-width cards
+
+Card styling with subtle shadows and rounded borders
+
+Responsive layout for mobile devices
+
+login.css
+Function: Styles for the "Login" page
+
+Contains styles for the login form, input fields, labels, and authentication button on the login.html page.
+
+Main content:
+
+Centered login section with fixed maximum width
+
+Login form with flex column layout and spacing
+
+Form groups with labels and input styling
+
+Input fields with border and focus effects (blue highlight)
+
+Login button with blue background and hover transitions
+
+Form footer link styling
+
 footer.css
 Function: Footer styles
 
@@ -116,6 +167,8 @@ Our Courses section with vertical layout instead of alternating
 
 Centered alignment for content on small screens
 
+Mobile-friendly form layouts for login and other pages
+
 Import Order
 CSS files must be imported in the following order in the HTML:
 
@@ -123,11 +176,17 @@ reset.css – to reset browser styles
 
 layout.css – for the base structure
 
-header.css – for the header
+header.css – for the header and navigation
 
 new-courses.css – for the new courses section
 
 our-courses.css – for the main courses section
+
+about.css – for the about page (if applicable)
+
+business.css – for the business page (if applicable)
+
+login.css – for the login page (if applicable)
 
 footer.css – for the footer
 
