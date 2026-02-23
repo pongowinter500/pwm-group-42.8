@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Piattaforma Corsi Online di Informatica</title>
+    <title>CodeMaster</title>
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/header.css">
@@ -13,110 +13,16 @@
     <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="about.html">About</a></li>
-                <li><a href="index.html" class="active">Catalogue</a></li>
-                <li><a href="business.html">For Business</a></li>
-            </ul>
-            <form>
-                <input type="search" name="search" placeholder="Search courses...">
-            </form>
-            <a href="login.html">Login</a>
-        </nav>
-    </header>
+    <div data-include-html="header.html"></div>
 
     <main>
-        <section>
-            <h1>New Courses</h1>
-            <div>
-                <a href="#prev">←</a>
-                <article>
-                    <h2>Python per Principianti</h2>
-                    <p>Impara le basi della programmazione con Python, uno dei linguaggi più richiesti nel mondo del lavoro.</p>
-                    <img src="https://via.placeholder.com/300x200" alt="Corso Python">
-                    <a href="#python">View Course</a>
-                </article>
-                <article>
-                    <h2>Database Design e SQL</h2>
-                    <p>Scopri come progettare database relazionali efficienti e padroneggiare il linguaggio SQL.</p>
-                    <img src="https://via.placeholder.com/300x200" alt="Corso Database">
-                    <a href="#database">View Course</a>
-                </article>
-                <article>
-                    <h2>DevOps e Docker</h2>
-                    <p>Automatizza il deployment e gestisci container con Docker e le moderne pratiche DevOps.</p>
-                    <img src="https://via.placeholder.com/300x200" alt="Corso DevOps">
-                    <a href="#devops">View Course</a>
-                </article>
-                <a href="#next">→</a>
-            </div>
-        </section>
+        <div data-include-html="new_courses.html"></div>
 
-        <section>
-            <h1>Our Courses</h1>
-            
-            <article>
-                <img src="https://via.placeholder.com/250x250" alt="Prof. Marco Rossi">
-                <div>
-                    <h2>Cybersecurity Fundamentals</h2>
-                    <h3>Prof. Marco Rossi</h3>
-                    <p>Questo corso fornisce una solida base nei principi fondamentali della sicurezza informatica. Imparerai a identificare e mitigare le minacce più comuni, a proteggere le reti aziendali e a implementare protocolli di sicurezza efficaci. Il corso copre argomenti come crittografia, autenticazione, gestione delle vulnerabilità e risposta agli incidenti. Acquisirai competenze pratiche attraverso laboratori hands-on e simulazioni di attacchi reali. Al termine del corso sarai in grado di valutare i rischi di sicurezza e proporre soluzioni appropriate per proteggere sistemi e dati sensibili.</p>
-                    <a href="#cybersecurity">Learn More</a>
-                </div>
-            </article>
-
-            <article>
-                <div>
-                    <h2>Machine Learning Bootcamp</h2>
-                    <h3>Prof. Laura Bianchi</h3>
-                    <p>Un corso intensivo che ti guiderà attraverso i concetti fondamentali del machine learning e dell'intelligenza artificiale. Esplorerai algoritmi di apprendimento supervisionato e non supervisionato, reti neurali e deep learning. Utilizzerai librerie Python come scikit-learn, TensorFlow e PyTorch per sviluppare modelli predittivi. Il corso include progetti pratici su problemi reali come classificazione di immagini, analisi del sentiment e sistemi di raccomandazione. Imparerai anche tecniche di preprocessing dei dati, feature engineering e ottimizzazione degli iperparametri per ottenere prestazioni ottimali dai tuoi modelli.</p>
-                    <a href="#ml">Learn More</a>
-                </div>
-                <img src="https://via.placeholder.com/250x250" alt="Prof. Laura Bianchi">
-            </article>
-
-            <article>
-                <img src="https://via.placeholder.com/250x250" alt="Prof. Giuseppe Verdi">
-                <div>
-                    <h2>Full Stack Web Development</h2>
-                    <h3>Prof. Giuseppe Verdi</h3>
-                    <p>Diventa uno sviluppatore full stack completo con questo corso comprensivo che copre sia frontend che backend. Imparerai HTML5, CSS3 e JavaScript moderno, insieme a framework popolari come React per il frontend. Lato server, esplorerai Node.js, Express e database sia SQL che NoSQL come PostgreSQL e MongoDB. Il corso include anche argomenti avanzati come RESTful API, autenticazione JWT, gestione dello stato con Redux e deployment su piattaforme cloud. Svilupperai applicazioni web complete e scalabili, acquisendo le competenze richieste dalle aziende tech moderne per costruire prodotti digitali di successo.</p>
-                    <a href="#fullstack">Learn More</a>
-                </div>
-            </article>
-
-            <article>
-                <div>
-                    <h2>Cloud Computing Essentials</h2>
-                    <h3>Prof. Anna Ferrari</h3>
-                    <p>Scopri il mondo del cloud computing e impara a sfruttare le piattaforme cloud leader del mercato come AWS, Azure e Google Cloud Platform. Il corso copre i concetti fondamentali dell'architettura cloud, inclusi IaaS, PaaS e SaaS. Imparerai a configurare macchine virtuali, gestire storage cloud, implementare servizi serverless e orchestrare container con Kubernetes. Esplorerai anche strategie di migrazione al cloud, ottimizzazione dei costi e best practices per la sicurezza cloud. Attraverso laboratori pratici, acquisirai esperienza diretta nel deployment di applicazioni scalabili e resilienti nell'infrastruttura cloud, preparandoti per le certificazioni professionali più richieste.</p>
-                    <a href="#cloud">Learn More</a>
-                </div>
-                <img src="https://via.placeholder.com/250x250" alt="Prof. Anna Ferrari">
-            </article>
-        </section>
+        <div data-include-html="catalougue.html"></div>
     </main>
 
-    <footer>
-        <nav>
-            <ul>
-                <li><a href="#privacy">Privacy Policy</a></li>
-                <li><a href="#terms">Terms of Service</a></li>
-            </ul>
-        </nav>
-        <address>
-            <a href="mailto:info@corsi-informatica.it">info@corsi-informatica.it</a>
-        </address>
-        <p>&copy; 2026 Piattaforma Corsi Online di Informatica. Tutti i diritti riservati.</p>
-        <nav>
-            <ul>
-                <li><a href="https://linkedin.com">LinkedIn</a></li>
-                <li><a href="https://twitter.com">Twitter</a></li>
-                <li><a href="https://facebook.com">Facebook</a></li>
-            </ul>
-        </nav>
-    </footer>
+    <div data-include-html="footer.html"></div>
+
+    <script src="module-loader.js"></script>
 </body>
 </html>
