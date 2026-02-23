@@ -33,6 +33,13 @@ header nav ul li a:hover {
     color: #3498db;
 }
 
+header nav ul li a.active {
+    color: #3498db;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 5px;
+}
+
 header form {
     flex: 1;
     max-width: 400px;

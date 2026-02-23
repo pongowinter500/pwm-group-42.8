@@ -4,11 +4,12 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+        
         {
-            "type": "msedge",
+            "type": "chrome",
             "request": "launch",
             "name": "Open index.html",
-            "file": "c:\\AltriProgrammi\\pwm_es1\\index.html"
+            "file": "C:\\Users\\Dell\\Desktop\\pwm-group\\pwm-group-42.8\\index.html"
         }
     ]
 }

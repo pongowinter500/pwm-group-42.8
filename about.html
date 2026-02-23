@@ -12,19 +12,7 @@
     <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
-<header>
-    <nav>
-        <ul>
-            <li><a href="about.html">About</a></li>
-            <li><a href="index.html">Catalogue</a></li>
-            <li><a href="business.html">For Business</a></li>
-        </ul>
-        <form>
-            <input type="search" name="search" placeholder="Search courses...">
-        </form>
-        <a href="login.html">Login</a>
-    </nav>
-</header>
+    <div data-include-html="header.html"></div>
 
 <main>
     <section class="about-hero">
@@ -46,24 +34,8 @@
     </section>
 </main>
 
-<footer>
-    <nav>
-        <ul>
-            <li><a href="#privacy">Privacy Policy</a></li>
-            <li><a href="#terms">Terms of Service</a></li>
-        </ul>
-    </nav>
-    <address>
-        <a href="mailto:info@corsi-informatica.it">info@corsi-informatica.it</a>
-    </address>
-    <p>&copy; 2026 Online Computer Science Courses Platform. All rights reserved.</p>
-    <nav>
-        <ul>
-            <li><a href="https://linkedin.com">LinkedIn</a></li>
-            <li><a href="https://twitter.com">Twitter</a></li>
-            <li><a href="https://facebook.com">Facebook</a></li>
-        </ul>
-    </nav>
-</footer>
+    <div data-include-html="footer.html"></div>
+
+    <script src="module-loader.js"></script>
 </body>
 </html>
