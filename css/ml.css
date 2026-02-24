@@ -1,9 +1,17 @@
-/* Folosește aceeași structură ca cybersecurity.css dar poți schimba culoarea de accent */
-.course-hero { text-align: center; background-color: #1a2a6c; color: white; padding: 4rem 2rem; border-radius: 10px; margin-bottom: 2rem; }
-.course-hero h1 { color: #f39c12; font-size: 3rem; }
-.course-grid { display: flex; gap: 3rem; }
-.instructor-card { flex: 1; background: white; padding: 2rem; border-radius: 10px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-.instructor-card img { width: 200px; height: 200px; border-radius: 50%; border: 5px solid #f39c12; margin-bottom: 1rem; }
-.course-description { flex: 2; background: white; padding: 2.5rem; border-radius: 10px; }
-.btn-enroll { display: inline-block; margin-top: 2rem; background-color: #f39c12; color: white; padding: 1rem 2rem; text-decoration: none; border-radius: 5px; font-weight: bold; }
-@media (max-width: 768px) { .course-grid { flex-direction: column; } }
+/* Machine Learning Course - Color Theme */
+
+.course-hero[data-course="ml"] {
+    background-color: #1a2a6c;
+}
+
+.course-hero[data-course="ml"] h1 {
+    color: #f39c12;
+}
+
+.course-hero[data-course="ml"] ~ .course-container .instructor-card img {
+    border-color: #f39c12;
+}
+
+.course-hero[data-course="ml"] ~ .course-container .btn-enroll {
+    background-color: #f39c12;
+}
