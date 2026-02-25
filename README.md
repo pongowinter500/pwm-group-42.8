@@ -19,10 +19,22 @@ WebMaster è una piattaforma web interattiva che offre corsi di informatica in d
 - **`login.html`** - Implementa login page
 
 ### Pagine Corsi (Course Details)
-- **`ml.html`** - Implementa course details page
-- **`cybersecurity.html`** - Implementa course details page
-- **`cloud.html`** - Implementa course details page
-- **`fullstack.html`** - Implementa course details page
+- **`ml.html`** - Machine Learning Bootcamp
+- **`cybersecurity.html`** - Cybersecurity Fundamentals
+- **`cloud.html`** - Cloud Computing
+- **`fullstack.html`** - Full-Stack Development
+- **`python.html`** - Python per Principianti
+- **`database.html`** - Database Design e SQL
+- **`devops.html`** - DevOps e Docker
+
+### Moduli HTML (codice che viene usato solo dalla landing page, diviso per chiarezza)
+- **`new_courses.html`** - Sezione nuovi corsi con slider
+- **`catalougue.html`** - Catalogo completo dei corsi
+
+### Template HTML
+- **`header.html`** - Intestazione e navigazione
+- **`footer.html`** - Footer del sito
+- **`learnmore.html`** - Template standardizzato per pagine di dettaglio corsi
 
 ### Risorse
 - **`figma_mockups/`** - Mockup di design del progetto in formato pdf e in formato png 
@@ -31,25 +43,24 @@ WebMaster è una piattaforma web interattiva che offre corsi di informatica in d
 
 ## Funzionalità
 
-✨ **Interfaccia Utente**
+**Interfaccia Utente**
 - Design moderno e professionale
 - Layout responsive per dispositivi mobili e desktop
 - Navigazione sticky con effetti hover
-- Barra di ricerca integrata
+- Barra di ricerca
 
-📚 **Catalogo Corsi**
+**Catalogo Corsi**
 - Visualizzazione corsi in formato slider
 - Pagine di dettaglio per ogni corso
 - Informazioni su docenti e programma
-- Sistema di enrollment
 
-🎨 **Architettura Modulare**
+**Architettura Modulare**
 - Componenti HTML riutilizzabili (header, footer)
 - CSS modulare per facile manutenibilità
 - Sistema di caricamento dinamico dei moduli
 - Temi personalizzati per ogni corso
 
-🔐 **Sistema di Accesso**
+**Sistema di Accesso**
 - Pagina di login dedicata
 - Sezione Business per aziende
 

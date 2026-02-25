@@ -1,0 +1,18 @@
+/* Python Course - Color Theme */
+
+.course-hero[data-course="python"] {
+    background-color: #306998;
+}
+
+.course-hero[data-course="python"] h1 {
+    color: #ffd43b;
+}
+
+.course-hero[data-course="python"] ~ .course-container .instructor-card img {
+    border-color: #ffd43b;
+}
+
+.course-hero[data-course="python"] ~ .course-container .btn-enroll {
+    background-color: #ffd43b;
+    color: #306998;
+}

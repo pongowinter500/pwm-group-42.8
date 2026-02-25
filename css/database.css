@@ -1,0 +1,17 @@
+/* Database Course - Color Theme */
+
+.course-hero[data-course="database"] {
+    background-color: #013220;
+}
+
+.course-hero[data-course="database"] h1 {
+    color: #00d9ff;
+}
+
+.course-hero[data-course="database"] ~ .course-container .instructor-card img {
+    border-color: #00d9ff;
+}
+
+.course-hero[data-course="database"] ~ .course-container .btn-enroll {
+    background-color: #27ae60;
+}
