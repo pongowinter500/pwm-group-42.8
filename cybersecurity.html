@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/header.css">
-    <link rel="stylesheet" href="css/learnmore.css">
+    <link rel="stylesheet" href="css/course-template.css">
     <link rel="stylesheet" href="css/cyber-style.css">
     <link rel="stylesheet" href="css/footer.css">
     <link rel="stylesheet" href="css/responsive.css">
@@ -15,29 +15,26 @@
 <body>
 <div data-include-html="header.html"></div>
 <main>
-    <section class="course-hero" data-course="cyber">
-        <h1>Cybersecurity Fundamentals</h1>
-        <p>Master the principles of information security and threat mitigation.</p>
-    </section>
-    <div class="course-container">
-        <aside class="instructor-card">
-            <img src="images/profilo_1.png" alt="Prof. Marco Rossi">
-            <h3>Prof. Marco Rossi</h3>
-            <p>Senior Security Expert</p>
-        </aside>
-        <article class="course-content">
-            <h2>About this course</h2>
-            <p>Learn to identify threats, protect networks, and implement security protocols. Covers cryptography, authentication, and incident response.</p>
-            <h2>What you will learn</h2>
-            <ul>
-                <li>Vulnerability management</li>
-                <li>Hands-on attack simulations</li>
-                <li>Data protection strategies</li>
-            </ul>
-            <a href="mailto:enroll@codemaster.com" class="btn-enroll">Enroll Now</a>
-        </article>
-    </div>
+    <div data-include-html="course-template.html"></div>
 </main>
+<script>
+    const courseData = {
+        courseName: "cyber",
+        courseTitle: "Cybersecurity Fundamentals",
+        courseSubtitle: "Master the principles of information security and threat mitigation.",
+        instructorImg: "images/profilo_1.png",
+        instructorName: "Prof. Marco Rossi",
+        instructorTitle: "Senior Security Expert",
+        section1Title: "About this course",
+        section1Text: "Learn to identify threats, protect networks, and implement security protocols. Covers cryptography, authentication, and incident response.",
+        section2Title: "What you will learn",
+        topics: [
+            "Vulnerability management",
+            "Hands-on attack simulations",
+            "Data protection strategies"
+        ]
+    };
+</script>
 <div data-include-html="footer.html"></div>
 <script src="module-loader.js"></script>
 </body>

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/header.css">
-    <link rel="stylesheet" href="css/learnmore.css">
+    <link rel="stylesheet" href="css/course-template.css">
     <link rel="stylesheet" href="css/cloud.css">
     <link rel="stylesheet" href="css/footer.css">
     <link rel="stylesheet" href="css/responsive.css">
@@ -15,29 +15,26 @@
 <body>
 <div data-include-html="header.html"></div>
 <main>
-    <section class="course-hero" data-course="cloud">
-        <h1>Cloud Computing Essentials</h1>
-        <p>Deploy resilient and scalable applications in the cloud.</p>
-    </section>
-    <div class="course-container">
-        <aside class="instructor-card">
-            <img src="images/profilo_4.png" alt="Prof. Anna Ferrari">
-            <h3>Prof. Anna Ferrari</h3>
-            <p>Cloud Solutions Architect</p>
-        </aside>
-        <article class="course-content">
-            <h2>Curriculum Highlights</h2>
-            <p>Discover the world of cloud computing and learn to leverage market-leading platforms like AWS, Azure, and Google Cloud Platform.</p>
-            <h2>Topics Covered</h2>
-            <ul>
-                <li>IaaS, PaaS, and SaaS architectures.</li>
-                <li>Kubernetes and container orchestration.</li>
-                <li>Serverless and cost optimization.</li>
-            </ul>
-            <a href="mailto:enroll@codemaster.com" class="btn-enroll">Start Learning</a>
-        </article>
-    </div>
+    <div data-include-html="course-template.html"></div>
 </main>
+<script>
+    const courseData = {
+        courseName: "cloud",
+        courseTitle: "Cloud Computing Essentials",
+        courseSubtitle: "Deploy resilient and scalable applications in the cloud.",
+        instructorImg: "images/profilo_4.png",
+        instructorName: "Prof. Anna Ferrari",
+        instructorTitle: "Cloud Solutions Architect",
+        section1Title: "Curriculum Highlights",
+        section1Text: "Discover the world of cloud computing and learn to leverage market-leading platforms like AWS, Azure, and Google Cloud Platform.",
+        section2Title: "Topics Covered",
+        topics: [
+            "IaaS, PaaS, and SaaS architectures.",
+            "Kubernetes and container orchestration.",
+            "Serverless and cost optimization."
+        ]
+    };
+</script>
 <div data-include-html="footer.html"></div>
 <script src="module-loader.js"></script>
 </body>

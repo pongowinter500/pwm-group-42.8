@@ -1,4 +1,48 @@
 /**
+ * Popola i data-attributes del template del corso con i dati specifici
+ */
+function populateCourseData() {
+    if (typeof courseData === 'undefined') return;
+    
+    // Popola l'attributo data-course per il tema colore
+    const courseHeroSection = document.querySelector('.course-hero');
+    if (courseHeroSection && courseData.courseName) {
+        courseHeroSection.setAttribute('data-course', courseData.courseName);
+    }
+    
+    // Popola i campi semplici
+    const courseTitle = document.querySelector('[data-course-title]');
+    if (courseTitle) courseTitle.textContent = courseData.courseTitle;
+    
+    const courseSubtitle = document.querySelector('[data-course-subtitle]');
+    if (courseSubtitle) courseSubtitle.textContent = courseData.courseSubtitle;
+    
+    const instructorImg = document.querySelector('[data-instructor-img]');
+    if (instructorImg) instructorImg.src = courseData.instructorImg;
+    
+    const instructorName = document.querySelector('[data-instructor-name]');
+    if (instructorName) instructorName.textContent = courseData.instructorName;
+    
+    const instructorTitle = document.querySelector('[data-instructor-title]');
+    if (instructorTitle) instructorTitle.textContent = courseData.instructorTitle;
+    
+    const section1Title = document.querySelector('[data-section-1-title]');
+    if (section1Title) section1Title.textContent = courseData.section1Title;
+    
+    const section1Text = document.querySelector('[data-section-1-text]');
+    if (section1Text) section1Text.textContent = courseData.section1Text;
+    
+    const section2Title = document.querySelector('[data-section-2-title]');
+    if (section2Title) section2Title.textContent = courseData.section2Title;
+    
+    // Popola la lista di argomenti
+    const topicsList = document.querySelector('[data-topics-list]');
+    if (topicsList && courseData.topics) {
+        topicsList.innerHTML = courseData.topics.map(topic => `<li>${topic}</li>`).join('');
+    }
+}
+
+/**
  * Evidenzia il link di navigazione attivo sulla pagina corrente
  */
 function highlightActiveNavLink() {
@@ -67,4 +111,6 @@ async function loadHTMLModules() {
 document.addEventListener('DOMContentLoaded', async () => {
     await loadHTMLModules();
     highlightActiveNavLink();
+    populateCourseData();
 });
+

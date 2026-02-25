@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/header.css">
-    <link rel="stylesheet" href="css/learnmore.css">
+    <link rel="stylesheet" href="css/course-template.css">
     <link rel="stylesheet" href="css/devops.css">
     <link rel="stylesheet" href="css/footer.css">
     <link rel="stylesheet" href="css/responsive.css">
@@ -15,30 +15,27 @@
 <body>
 <div data-include-html="header.html"></div>
 <main>
-    <section class="course-hero" data-course="devops">
-        <h1>DevOps e Docker</h1>
-        <p>Automatizza deployment e gestisci container con le moderne pratiche DevOps.</p>
-    </section>
-    <div class="course-container">
-        <aside class="instructor-card">
-            <img src="images/profilo_1.png" alt="Prof. Luca Ferrari">
-            <h3>Prof. Luca Ferrari</h3>
-            <p>DevOps Engineer</p>
-        </aside>
-        <article class="course-content">
-            <h2>Descrizione del Corso</h2>
-            <p>Impara le metodologie DevOps e la containerizzazione con Docker. Scoprirai come automatizzare il ciclo di vita delle applicazioni, dalla build al deployment, utilizzando i migliori strumenti del settore.</p>
-            <h2>Argomenti Principali</h2>
-            <ul>
-                <li>Docker: container, immagini e orchestrazione</li>
-                <li>CI/CD con Jenkins e GitLab</li>
-                <li>Kubernetes per la gestione dei container</li>
-                <li>Monitoraggio e logging delle applicazioni</li>
-            </ul>
-            <a href="mailto:enroll@codemaster.com" class="btn-enroll">Iscriviti Ora</a>
-        </article>
-    </div>
+    <div data-include-html="course-template.html"></div>
 </main>
+<script>
+    const courseData = {
+        courseName: "devops",
+        courseTitle: "DevOps e Docker",
+        courseSubtitle: "Automatizza deployment e gestisci container con le moderne pratiche DevOps.",
+        instructorImg: "images/profilo_1.png",
+        instructorName: "Prof. Luca Ferrari",
+        instructorTitle: "DevOps Engineer",
+        section1Title: "Descrizione del Corso",
+        section1Text: "Impara le metodologie DevOps e la containerizzazione con Docker. Scoprirai come automatizzare il ciclo di vita delle applicazioni, dalla build al deployment, utilizzando i migliori strumenti del settore.",
+        section2Title: "Argomenti Principali",
+        topics: [
+            "Docker: container, immagini e orchestrazione",
+            "CI/CD con Jenkins e GitLab",
+            "Kubernetes per la gestione dei container",
+            "Monitoraggio e logging delle applicazioni"
+        ]
+    };
+</script>
 <div data-include-html="footer.html"></div>
 <script src="module-loader.js"></script>
 </body>

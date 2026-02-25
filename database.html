@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/header.css">
-    <link rel="stylesheet" href="css/learnmore.css">
+    <link rel="stylesheet" href="css/course-template.css">
     <link rel="stylesheet" href="css/database.css">
     <link rel="stylesheet" href="css/footer.css">
     <link rel="stylesheet" href="css/responsive.css">
@@ -15,30 +15,27 @@
 <body>
 <div data-include-html="header.html"></div>
 <main>
-    <section class="course-hero" data-course="database">
-        <h1>Database Design e SQL</h1>
-        <p>Progetta database efficienti e padroneggia il linguaggio SQL.</p>
-    </section>
-    <div class="course-container">
-        <aside class="instructor-card">
-            <img src="images/profilo_4.png" alt="Prof. Maria Colombo">
-            <h3>Prof. Maria Colombo</h3>
-            <p>Database Architect</p>
-        </aside>
-        <article class="course-content">
-            <h2>Descrizione del Corso</h2>
-            <p>Scopri come progettare database relazionali robusti e scalabili. Imparerai a modellare dati, ottimizzare query e gestire transazioni con i principali sistemi di database management.</p>
-            <h2>Argomenti Principali</h2>
-            <ul>
-                <li>Modellazione dati e normalizzazione</li>
-                <li>Query SQL avanzate e ottimizzazione</li>
-                <li>Transazioni, indici e stored procedures</li>
-                <li>MySQL, PostgreSQL e best practices</li>
-            </ul>
-            <a href="mailto:enroll@codemaster.com" class="btn-enroll">Iscriviti Ora</a>
-        </article>
-    </div>
+    <div data-include-html="course-template.html"></div>
 </main>
+<script>
+    const courseData = {
+        courseName: "database",
+        courseTitle: "Database Design e SQL",
+        courseSubtitle: "Progetta database efficienti e padroneggia il linguaggio SQL.",
+        instructorImg: "images/profilo_4.png",
+        instructorName: "Prof. Maria Colombo",
+        instructorTitle: "Database Architect",
+        section1Title: "Descrizione del Corso",
+        section1Text: "Scopri come progettare database relazionali robusti e scalabili. Imparerai a modellare dati, ottimizzare query e gestire transazioni con i principali sistemi di database management.",
+        section2Title: "Argomenti Principali",
+        topics: [
+            "Modellazione dati e normalizzazione",
+            "Query SQL avanzate e ottimizzazione",
+            "Transazioni, indici e stored procedures",
+            "MySQL, PostgreSQL e best practices"
+        ]
+    };
+</script>
 <div data-include-html="footer.html"></div>
 <script src="module-loader.js"></script>
 </body>
