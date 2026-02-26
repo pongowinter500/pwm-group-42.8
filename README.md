@@ -34,12 +34,16 @@ Course details are contained in the `html/courses/` folder.
 
 ### HTML Templates
 Modular HTML files are grouped under `html/templates/`.
+Header and footer are used by every page. 
+Course-template is used by all the course detail pages (all the pages inside "courses" directory)
 - **`html/templates/header.html`** - Header and navigation
 - **`html/templates/footer.html`** - Site footer
 - **`html/templates/course-template.html`** - Standardized template for course detail pages
 
 ### Resources
-- **`figma_mockups/`** - Design mockups in PDF and PNG formats
+- **`figma_mockups/`** - Design mockups in PDF and PNG formats. Only header and footer have a storyboard,
+- because they're the only components whose design changed. Pages mockups have the second version (v2) of header and footer because we didn't modify them,
+- but in reality the design follows the third version (v3) of header and footer
 - **`css/`** - Modular style sheets
 - **`images/`** - Graphic assets
 
