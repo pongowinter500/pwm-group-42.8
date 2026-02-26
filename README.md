@@ -32,9 +32,10 @@ WebMaster è una piattaforma web interattiva che offre corsi di informatica in d
 - **`catalougue.html`** - Catalogo completo dei corsi
 
 ### Template HTML
-- **`header.html`** - Intestazione e navigazione
-- **`footer.html`** - Footer del sito
-- **`course-template.html`** - Template standardizzato per pagine di dettaglio corsi
+I file HTML modulari sono ora raggruppati all'interno della cartella `html/templates/`.
+- **`html/templates/header.html`** - Intestazione e navigazione
+- **`html/templates/footer.html`** - Footer del sito
+- **`html/templates/course-template.html`** - Template standardizzato per pagine di dettaglio corsi
 
 ### Risorse
 - **`figma_mockups/`** - Mockup di design del progetto in formato pdf e in formato png 
