@@ -46,10 +46,10 @@ function populateCourseData() {
  */
 function processPageLinks() {
     const currentPath = window.location.pathname;
-    const currentPage = currentPath.split('/').pop() || 'index.html';
-    const isInHtmlFolder = currentPath.includes('/html/');
     const pathParts = currentPath.split('/').filter(Boolean);
-    const currentPageFolderDepth = pathParts.length - 1; // -1 because last part is the filename
+    const currentPage = pathParts[pathParts.length - 1] || 'index.html';
+    const currentPageFolderDepth = pathParts.length - 1; // directories before the filename
+    const isInHtmlFolder = pathParts.includes('html');
     
     document.querySelectorAll('a[href]').forEach(link => {
         let href = link.getAttribute('href');
@@ -59,40 +59,53 @@ function processPageLinks() {
             return;
         }
         
-        // handle any link pointing to index.html: make sure it reaches the actual landing page
+        // adjust index link so it always points to the root index.html
         if (href.endsWith('index.html')) {
-            if (isInHtmlFolder) {
-                // pages inside html need to go up to root
-                // depth 1 (html folder): go up 1 level
-                // depth 2+ (subfolders): go up appropriate levels
-                const upLevels = currentPageFolderDepth;
-                link.setAttribute('href', '../'.repeat(upLevels) + 'index.html');
-            } else {
-                link.setAttribute('href', 'index.html');
-            }
-            // keep normalized value for highlighting
+            // the number of ".." segments needed to climb from the current
+            // location back to the project root (where index.html lives)
+            // if we are already in the root folder depth will be 0 and no prefix
+            const upLevels = Math.max(currentPageFolderDepth - 1, 0);
+            link.setAttribute('href', '../'.repeat(upLevels) + 'index.html');
             href = link.getAttribute('href');
         }
         
-        // Normalize the path for comparison
-        let hrefNormalized = href.replace(/\.\.\//g, '').replace('html/', '');
+        // keep a normalized version for highlighting
+        let hrefNormalized = href.replace(/\.\.\//g, '').replace(/^html\//, '');
         
         // Correggi i percorsi in base alla posizione corrente
         if (isInHtmlFolder) {
+            // strip any leading "html/" that might have been added when on the
+            // root page; once inside the folder we don't want that prefix
             if (href.startsWith('html/')) {
-                link.setAttribute('href', href.replace('html/', ''));
+                link.setAttribute('href', href.replace(/^html\//, ''));
                 href = link.getAttribute('href');
             }
-            // For simple filenames: only add ../ if we're deeper than just the html folder
+
+            // handle links to the courses subfolder specially; they should be
+            // relative to the html folder itself. when we are already inside a
+            // deeper subfolder (like html/courses/) we need to climb one level
+            // so that the path still begins at html/
+            if (href.startsWith('courses/')) {
+                if (currentPageFolderDepth > 2) {
+                    link.setAttribute('href', '../' + href);
+                    href = link.getAttribute('href');
+                }
+            }
+
+            // for simple page filenames we only prepend ".." when we are inside
+            // a subfolder of html (courses/, etc). pages directly under html
+            // should reference each other by name only.
             if (/^[a-z-]+\.html$/.test(href) && href !== currentPage) {
-                if (currentPageFolderDepth > 1) {
-                    // We're in a subfolder like courses/, need to go up one level to reach html/
+                if (currentPageFolderDepth > 2) {
                     link.setAttribute('href', '../' + href);
                     href = link.getAttribute('href');
                 }
             }
         } else {
-            if (href.match(/^[a-z-]+\.html$/) && href !== 'index.html') {
+            // when on the root index we prefix links so they point into html/
+            if (href.startsWith('courses/')) {
+                link.setAttribute('href', 'html/' + href);
+            } else if (/^[a-z-]+\.html$/.test(href) && href !== 'index.html') {
                 link.setAttribute('href', 'html/' + href);
             }
         }

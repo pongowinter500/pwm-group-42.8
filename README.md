@@ -30,7 +30,7 @@ Course details are contained in the `html/courses/` folder.
 
 ### HTML Modules (used only by the landing page, separated for clarity)
 - **`new_courses.html`** - New courses section with slider
-- **`catalougue.html`** - Full course catalogue
+- **`catalogue.html`** - Full course catalogue
 
 ### HTML Templates
 Modular HTML files are grouped under `html/templates/`.
