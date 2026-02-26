@@ -1,16 +1,16 @@
 /**
- * Popola i data-attributes del template del corso con i dati specifici
+ * Populates the course template data-attributes with specific data
  */
 function populateCourseData() {
     if (typeof courseData === 'undefined') return;
     
-    // Popola l'attributo data-course per il tema colore
+    // Populate the data-course attribute for theming
     const courseHeroSection = document.querySelector('.course-hero');
     if (courseHeroSection && courseData.courseName) {
         courseHeroSection.setAttribute('data-course', courseData.courseName);
     }
     
-    // Mappa dei data-attributes ai campi di courseData
+    // Map of data-attributes to courseData fields
     const fieldMap = {
         '[data-course-title]': 'courseTitle',
         '[data-course-subtitle]': 'courseSubtitle',
@@ -22,7 +22,7 @@ function populateCourseData() {
         '[data-section-2-title]': 'section2Title'
     };
     
-    // Popola i campi tramite la mappa
+    // Populate fields using the map
     Object.entries(fieldMap).forEach(([selector, fieldName]) => {
         const element = document.querySelector(selector);
         if (element && courseData[fieldName]) {
@@ -34,7 +34,7 @@ function populateCourseData() {
         }
     });
     
-    // Popola la lista di argomenti
+    // Populate the list of topics
     const topicsList = document.querySelector('[data-topics-list]');
     if (topicsList && courseData.topics) {
         topicsList.innerHTML = courseData.topics.map(topic => `<li>${topic}</li>`).join('');
@@ -74,7 +74,7 @@ function processPageLinks() {
             href = link.getAttribute('href');
         }
         
-        // Normalizza il percorso per il confronto
+        // Normalize the path for comparison
         let hrefNormalized = href.replace(/\.\.\//g, '').replace('html/', '');
         
         // Correggi i percorsi in base alla posizione corrente
@@ -105,8 +105,8 @@ function processPageLinks() {
 }
 
 /**
- * Carica dinamicamente blocchi HTML da file esterni nella pagina
- * Usa l'attributo data-include-html per specificare il file da caricare
+ * Dynamically loads HTML blocks from external files into the page
+ * Uses the data-include-html attribute to specify which file to load
  */
 async function loadHTMLModules() {
     const elements = document.querySelectorAll('[data-include-html]');
@@ -138,7 +138,7 @@ async function loadHTMLModules() {
     }
 }
 
-// Corregge percorso del logo in base alla profondità della pagina
+// Adjusts logo path based on page depth
 function adjustHeaderLogo() {
     const logo = document.querySelector('.company-logo');
     if (!logo) return;
