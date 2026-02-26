@@ -48,6 +48,8 @@ function processPageLinks() {
     const currentPath = window.location.pathname;
     const currentPage = currentPath.split('/').pop() || 'index.html';
     const isInHtmlFolder = currentPath.includes('/html/');
+    const pathParts = currentPath.split('/').filter(Boolean);
+    const currentPageFolderDepth = pathParts.length - 1; // -1 because last part is the filename
     
     document.querySelectorAll('a[href]').forEach(link => {
         let href = link.getAttribute('href');
@@ -57,18 +59,40 @@ function processPageLinks() {
             return;
         }
         
+        // handle any link pointing to index.html: make sure it reaches the actual landing page
+        if (href.endsWith('index.html')) {
+            if (isInHtmlFolder) {
+                // pages inside html need to go up to root
+                // depth 1 (html folder): go up 1 level
+                // depth 2+ (subfolders): go up appropriate levels
+                const upLevels = currentPageFolderDepth;
+                link.setAttribute('href', '../'.repeat(upLevels) + 'index.html');
+            } else {
+                link.setAttribute('href', 'index.html');
+            }
+            // keep normalized value for highlighting
+            href = link.getAttribute('href');
+        }
+        
         // Normalizza il percorso per il confronto
-        let hrefNormalized = href.replace('../', '').replace('html/', '');
+        let hrefNormalized = href.replace(/\.\.\//g, '').replace('html/', '');
         
         // Correggi i percorsi in base alla posizione corrente
         if (isInHtmlFolder) {
             if (href.startsWith('html/')) {
                 link.setAttribute('href', href.replace('html/', ''));
+                href = link.getAttribute('href');
+            }
+            // For simple filenames: only add ../ if we're deeper than just the html folder
+            if (/^[a-z-]+\.html$/.test(href) && href !== currentPage) {
+                if (currentPageFolderDepth > 1) {
+                    // We're in a subfolder like courses/, need to go up one level to reach html/
+                    link.setAttribute('href', '../' + href);
+                    href = link.getAttribute('href');
+                }
             }
         } else {
-            if (href === '../index.html') {
-                link.setAttribute('href', 'index.html');
-            } else if (href.match(/^[a-z-]+\.html$/) && href !== 'index.html') {
+            if (href.match(/^[a-z-]+\.html$/) && href !== 'index.html') {
                 link.setAttribute('href', 'html/' + href);
             }
         }
@@ -114,10 +138,21 @@ async function loadHTMLModules() {
     }
 }
 
+// Corregge percorso del logo in base alla profondità della pagina
+function adjustHeaderLogo() {
+    const logo = document.querySelector('.company-logo');
+    if (!logo) return;
+    const pathParts = window.location.pathname.split('/').filter(Boolean);
+    // number of directory levels before the file
+    const prefix = pathParts.length > 1 ? '../'.repeat(pathParts.length - 1) : '';
+    logo.src = prefix + 'images/company_icon.png';
+}
+
 // Carica i moduli e processa i link quando il DOM è pronto
 document.addEventListener('DOMContentLoaded', async () => {
     await loadHTMLModules();
     processPageLinks();
     populateCourseData();
+    adjustHeaderLogo();
 });
 

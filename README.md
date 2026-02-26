@@ -19,13 +19,14 @@ WebMaster è una piattaforma web interattiva che offre corsi di informatica in d
 - **`login.html`** - Implementa login page
 
 ### Pagine Corsi (Course Details)
-- **`ml.html`** - Machine Learning Bootcamp
-- **`cybersecurity.html`** - Cybersecurity Fundamentals
-- **`cloud.html`** - Cloud Computing
-- **`fullstack.html`** - Full-Stack Development
-- **`python.html`** - Python per Principianti
-- **`database.html`** - Database Design e SQL
-- **`devops.html`** - DevOps e Docker
+I dettagli dei corsi sono ora raccolti nella cartella `html/courses/`.
+- **`html/courses/ml.html`** - Machine Learning Bootcamp
+- **`html/courses/cybersecurity.html`** - Cybersecurity Fundamentals
+- **`html/courses/cloud.html`** - Cloud Computing
+- **`html/courses/fullstack.html`** - Full-Stack Development
+- **`html/courses/python.html`** - Python per Principianti
+- **`html/courses/database.html`** - Database Design e SQL
+- **`html/courses/devops.html`** - DevOps e Docker
 
 ### Moduli HTML (codice che viene usato solo dalla landing page, diviso per chiarezza)
 - **`new_courses.html`** - Sezione nuovi corsi con slider
