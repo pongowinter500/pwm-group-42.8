@@ -10,30 +10,29 @@ function populateCourseData() {
         courseHeroSection.setAttribute('data-course', courseData.courseName);
     }
     
-    // Popola i campi semplici
-    const courseTitle = document.querySelector('[data-course-title]');
-    if (courseTitle) courseTitle.textContent = courseData.courseTitle;
+    // Mappa dei data-attributes ai campi di courseData
+    const fieldMap = {
+        '[data-course-title]': 'courseTitle',
+        '[data-course-subtitle]': 'courseSubtitle',
+        '[data-instructor-img]': 'instructorImg',
+        '[data-instructor-name]': 'instructorName',
+        '[data-instructor-title]': 'instructorTitle',
+        '[data-section-1-title]': 'section1Title',
+        '[data-section-1-text]': 'section1Text',
+        '[data-section-2-title]': 'section2Title'
+    };
     
-    const courseSubtitle = document.querySelector('[data-course-subtitle]');
-    if (courseSubtitle) courseSubtitle.textContent = courseData.courseSubtitle;
-    
-    const instructorImg = document.querySelector('[data-instructor-img]');
-    if (instructorImg) instructorImg.src = courseData.instructorImg;
-    
-    const instructorName = document.querySelector('[data-instructor-name]');
-    if (instructorName) instructorName.textContent = courseData.instructorName;
-    
-    const instructorTitle = document.querySelector('[data-instructor-title]');
-    if (instructorTitle) instructorTitle.textContent = courseData.instructorTitle;
-    
-    const section1Title = document.querySelector('[data-section-1-title]');
-    if (section1Title) section1Title.textContent = courseData.section1Title;
-    
-    const section1Text = document.querySelector('[data-section-1-text]');
-    if (section1Text) section1Text.textContent = courseData.section1Text;
-    
-    const section2Title = document.querySelector('[data-section-2-title]');
-    if (section2Title) section2Title.textContent = courseData.section2Title;
+    // Popola i campi tramite la mappa
+    Object.entries(fieldMap).forEach(([selector, fieldName]) => {
+        const element = document.querySelector(selector);
+        if (element && courseData[fieldName]) {
+            if (selector === '[data-instructor-img]') {
+                element.src = courseData[fieldName];
+            } else {
+                element.textContent = courseData[fieldName];
+            }
+        }
+    });
     
     // Popola la lista di argomenti
     const topicsList = document.querySelector('[data-topics-list]');
@@ -43,32 +42,40 @@ function populateCourseData() {
 }
 
 /**
- * Evidenzia il link di navigazione attivo sulla pagina corrente
+ * Gestisce i link della pagina: corregge i percorsi e evidenzia il link attivo
  */
-function highlightActiveNavLink() {
-    // Ottiene il nome del file corrente (es: "index.html" o "about.html")
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+function processPageLinks() {
+    const currentPath = window.location.pathname;
+    const currentPage = currentPath.split('/').pop() || 'index.html';
+    const isInHtmlFolder = currentPath.includes('/html/');
     
-    // Mappa le pagine ai loro link di navigazione
-    const pageToLink = {
-        'index.html': 'index.html',
-        'about.html': 'about.html',
-        'business.html': 'business.html',
-        '': 'index.html' // Se è la radice, assume index.html
-    };
-    
-    const linkPage = pageToLink[currentPage] || currentPage;
-    
-    // Trova tutti i link nei menu di navigazione
-    document.querySelectorAll('nav a[href]').forEach(link => {
-        const href = link.getAttribute('href');
+    document.querySelectorAll('a[href]').forEach(link => {
+        let href = link.getAttribute('href');
         
-        // Rimuove la classe active da tutti i link
-        link.classList.remove('active');
+        // Ignora link speciali (anchor, mailto, http/https)
+        if (href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('http')) {
+            return;
+        }
         
-        // Aggiunge la classe active al link della pagina corrente
-        if (href === linkPage || href === 'index.html' && currentPage === '') {
-            link.classList.add('active');
+        // Normalizza il percorso per il confronto
+        let hrefNormalized = href.replace('../', '').replace('html/', '');
+        
+        // Correggi i percorsi in base alla posizione corrente
+        if (isInHtmlFolder) {
+            if (href.startsWith('html/')) {
+                link.setAttribute('href', href.replace('html/', ''));
+            }
+        } else {
+            if (href === '../index.html') {
+                link.setAttribute('href', 'index.html');
+            } else if (href.match(/^[a-z-]+\.html$/) && href !== 'index.html') {
+                link.setAttribute('href', 'html/' + href);
+            }
+        }
+        
+        // Evidenzia il link della pagina attuale (solo per nav)
+        if (link.closest('nav')) {
+            link.classList.toggle('active', hrefNormalized === currentPage);
         }
     });
 }
@@ -107,10 +114,10 @@ async function loadHTMLModules() {
     }
 }
 
-// Carica i moduli e evidenzia il link attivo quando il DOM è pronto
+// Carica i moduli e processa i link quando il DOM è pronto
 document.addEventListener('DOMContentLoaded', async () => {
     await loadHTMLModules();
-    highlightActiveNavLink();
+    processPageLinks();
     populateCourseData();
 });
 
