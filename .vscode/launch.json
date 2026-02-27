@@ -6,7 +6,7 @@
     "configurations": [
         
         {
-            "type": "chrome",
+            "type": "msedge",
             "request": "launch",
             "name": "Open index.html",
             "file": "C:\\Users\\Dell\\Desktop\\pwm-group\\pwm-group-42.8\\index.html"
