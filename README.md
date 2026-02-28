@@ -10,7 +10,14 @@ Online platform for computer science courses developed by **Group 42.8**.
 ## Description
 WebMaster is an interactive web platform offering computer science courses across various technology areas. The project features a modern, responsive interface with a modular architecture.
 
-## Project Structure
+## Project Requirements
+-newest courses section
+-login form 
+-possibility of searching specific courses
+-course catalogue
+-section about the platform
+-intuitive design 
+-possibility for businesses to contact the platform 
 
 ### Main Pages
 - **`index.html`** - Implements the landing page
@@ -48,27 +55,11 @@ Course-template is used by all the course detail pages (all the pages inside "co
 - **`images/`** - Graphic assets
 
 ## Features
-
-**User Interface**
-- Modern, professional design
-- Responsive layout for mobile and desktop
-- Sticky navigation with hover effects
-- Search bar
-
-**Course Catalogue**
-- Slider-style course display
-- Detail pages for each course
-- Instructor and curriculum information
-
 **Modular Architecture**
 - Reusable HTML components (header, footer)
 - Modular CSS for easy maintenance
 - Dynamic module loading system
 - Custom themes per course
-
-**Access System**
-- Dedicated login page
-- Business section for companies
 
 ## Technologies Used
 - HTML5
