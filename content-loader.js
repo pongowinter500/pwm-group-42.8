@@ -1,0 +1,333 @@
+/**
+ * Content Loader - Carica dinamicamente i contenuti da content.json
+ * Lavora insieme a module-loader.js per popolare elementi HTML con dati dal JSON
+ */
+
+// Cache per i dati caricati
+let contentData = null;
+
+/**
+ * Carica il file content.json
+ */
+async function loadContentData() {
+    if (contentData) return contentData;
+    
+    try {
+        const response = await fetch('data/content.json');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        contentData = await response.json();
+        return contentData;
+    } catch (error) {
+        console.error('Errore nel caricamento di content.json:', error);
+        return null;
+    }
+}
+
+/**
+ * Trova un corso per nome o ID
+ */
+function getCourse(identifier) {
+    if (!contentData || !contentData.courses) return null;
+    
+    if (typeof identifier === 'number') {
+        return contentData.courses.find(c => c.id === identifier);
+    }
+    return contentData.courses.find(c => c.courseName === identifier);
+}
+
+/**
+ * Trova un istruttore per ID
+ */
+function getInstructor(instructorId) {
+    if (!contentData || !contentData.instructors) return null;
+    return contentData.instructors.find(i => i.id === instructorId);
+}
+
+/**
+ * Popola gli elementi con attributo data-content-type
+ * Esempi:
+ * - data-content-type="about.hero.title"
+ * - data-content-type="business.hero.description"
+ * - data-content-type="siteInfo.name"
+ */
+function populateContentElements() {
+    if (!contentData) return;
+    
+    const elements = document.querySelectorAll('[data-content-type]');
+    
+    elements.forEach(element => {
+        const path = element.getAttribute('data-content-type');
+        const value = getNestedValue(contentData, path);
+        
+        if (value !== undefined && value !== null) {
+            if (element.tagName === 'IMG') {
+                element.src = value;
+                element.alt = element.alt || value;
+            } else if (element.tagName === 'A' && path.includes('Email')) {
+                element.href = `mailto:${value}`;
+                element.textContent = value;
+            } else {
+                element.textContent = value;
+            }
+        }
+    });
+}
+
+/**
+ * Ottiene un valore da un oggetto usando un path con notazione dot
+ * Es: "about.hero.title" -> contentData.about.hero.title
+ */
+function getNestedValue(obj, path) {
+    return path.split('.').reduce((current, key) => current?.[key], obj);
+}
+
+/**
+ * Popola i corsi nella pagina catalogue o new_courses
+ * Cerca elementi con data-course-list="all" o data-course-list="new"
+ */
+function populateCourseList() {
+    if (!contentData || !contentData.courses) return;
+    
+    const courseListContainers = document.querySelectorAll('[data-course-list]');
+    
+    courseListContainers.forEach(container => {
+        const listType = container.getAttribute('data-course-list');
+        
+        // Verifica se i corsi sono già stati caricati
+        if (container.dataset.loaded === 'true') return;
+        
+        let coursesToShow = contentData.courses;
+        
+        // Mappa per i nomi dei file che non corrispondono al courseName
+        const fileNameMap = {
+            'cyber': 'cybersecurity'
+        };
+        
+        // Filtra solo i corsi nuovi se richiesto
+        if (listType === 'new') {
+            coursesToShow = contentData.courses.filter(c => c.isNew === true);
+            
+            // Layout per new courses (card con icone)
+            const coursesHTML = coursesToShow.map(course => {
+                const fileName = fileNameMap[course.courseName] || course.courseName;
+                return `
+                <article>
+                    <p>${course.description || course.courseSubtitle}</p>
+                    <h2><img src="${course.icon}" alt="${course.courseTitle}" class="course-icon"> ${course.courseTitle}</h2>
+                    <a href="html/courses/${fileName}.html">View Course</a>
+                </article>
+            `;
+            }).join('');
+            
+            // Se container è una section, aggiungi dopo l'h1
+            if (container.tagName === 'SECTION') {
+                const title = container.querySelector('h1');
+                if (title) {
+                    title.insertAdjacentHTML('afterend', coursesHTML);
+                }
+            } else {
+                container.innerHTML = coursesHTML;
+            }
+            
+        } else {
+            // Per il catalogo, mostra solo i corsi che NON sono nuovi
+            coursesToShow = contentData.courses.filter(c => c.isNew !== true);
+            
+            // Layout per catalogue (con foto professori, layout alternato)
+            const coursesHTML = coursesToShow.map((course, index) => {
+                const fileName = fileNameMap[course.courseName] || course.courseName;
+                const isEven = index % 2 === 0;
+                const imgElement = `<img src="${course.instructorImg}" alt="${course.instructorName}">`;
+                const contentElement = `
+                    <div>
+                        <h2>${course.courseTitle}</h2>
+                        <h3>${course.instructorName}</h3>
+                        <p>${course.catalogueDescription || course.section1Text}</p>
+                        <a href="html/courses/${fileName}.html">Learn More</a>
+                    </div>
+                `;
+                
+                // Alterna immagine sinistra/destra
+                return `<article>${isEven ? imgElement + contentElement : contentElement + imgElement}</article>`;
+            }).join('');
+            
+            // Se container è una section, aggiungi dopo l'h1
+            if (container.tagName === 'SECTION') {
+                const title = container.querySelector('h1');
+                if (title) {
+                    title.insertAdjacentHTML('afterend', coursesHTML);
+                }
+            } else {
+                container.innerHTML = coursesHTML;
+            }
+        }
+        
+        // Marca il container come caricato
+        container.dataset.loaded = 'true';
+    });
+}
+
+/**
+ * Popola le feature nella pagina business
+ * Cerca elementi con data-features-list
+ */
+function populateBusinessFeatures() {
+    if (!contentData || !contentData.business || !contentData.business.features) return;
+    
+    const featuresContainer = document.querySelector('[data-features-list]');
+    if (!featuresContainer) return;
+    
+    const featuresHTML = contentData.business.features.map(feature => `
+        <div class="feature-card">
+            <h3>${feature.title}</h3>
+            <p>${feature.description}</p>
+        </div>
+    `).join('');
+    
+    featuresContainer.innerHTML = featuresHTML;
+}
+
+/**
+ * Popola i dettagli del corso per le pagine individuali dei corsi
+ * Usa il nome del corso dall'URL o da un attributo data-course
+ */
+function populateCourseDetails() {
+    if (!contentData) return;
+    
+    // Cerca il data-course attribute nell'hero section o nel body
+    const courseHero = document.querySelector('[data-course]');
+    if (!courseHero) return;
+    
+    let courseName = courseHero.getAttribute('data-course');
+    
+    // Se data-course è vuoto, prova a estrarre il nome del corso dall'URL
+    if (!courseName) {
+        const path = window.location.pathname;
+        const match = path.match(/\/courses\/([^/.]+)\.html/);
+        if (match) {
+            courseName = match[1] === 'cybersecurity' ? 'cyber' : match[1];
+            courseHero.setAttribute('data-course', courseName);
+        }
+    }
+    
+    const course = getCourse(courseName);
+    
+    if (!course) {
+        console.warn(`Corso non trovato: ${courseName}`);
+        return;
+    }
+    
+    // Popola tutti gli elementi con data-course-field
+    const fieldMap = {
+        'title': 'courseTitle',
+        'subtitle': 'courseSubtitle',
+        'instructor-img': 'instructorImg',
+        'instructor-name': 'instructorName',
+        'instructor-title': 'instructorTitle',
+        'section1-title': 'section1Title',
+        'section1-text': 'section1Text',
+        'section2-title': 'section2Title',
+        'duration': 'duration',
+        'level': 'level',
+        'price': 'price',
+        'category': 'category'
+    };
+    
+    Object.entries(fieldMap).forEach(([dataAttr, fieldName]) => {
+        const element = document.querySelector(`[data-course-${dataAttr}]`);
+        if (element && course[fieldName]) {
+            if (dataAttr === 'instructor-img') {
+                element.src = course[fieldName];
+            } else if (dataAttr === 'price') {
+                element.textContent = `€${course[fieldName]}`;
+            } else {
+                element.textContent = course[fieldName];
+            }
+        }
+    });
+    
+    // Popola i topics se presenti
+    const topicsList = document.querySelector('[data-course-topics]');
+    if (topicsList && course.topics) {
+        const topicsHTML = course.topics.map(topic => `<li>${topic}</li>`).join('');
+        topicsList.innerHTML = topicsHTML;
+    }
+}
+
+/**
+ * Popola gli istruttori
+ */
+function populateInstructors() {
+    if (!contentData || !contentData.instructors) return;
+    
+    const instructorsContainer = document.querySelector('[data-instructors-list]');
+    if (!instructorsContainer) return;
+    
+    const instructorsHTML = contentData.instructors.map(instructor => `
+        <div class="instructor-card">
+            <img src="${instructor.image}" alt="${instructor.name}">
+            <h3>${instructor.name}</h3>
+            <p class="title">${instructor.title}</p>
+            <p class="bio">${instructor.bio}</p>
+            <div class="specializations">
+                ${instructor.specialization.map(spec => `<span class="tag">${spec}</span>`).join('')}
+            </div>
+        </div>
+    `).join('');
+    
+    instructorsContainer.innerHTML = instructorsHTML;
+}
+
+/**
+ * Funzione principale che carica e popola tutti i contenuti
+ */
+async function initContentLoader() {
+    // Carica i dati
+    await loadContentData();
+    
+    if (!contentData) {
+        console.error('Impossibile caricare i dati del contenuto');
+        return;
+    }
+    
+    // Popola i vari tipi di contenuto presenti nella pagina
+    populateContentElements();
+    populateCourseList();
+    populateCourseDetails();
+    populateBusinessFeatures();
+    populateInstructors();
+}
+
+// Inizializza il content loader dopo che i moduli HTML sono stati caricati
+// Ascolta l'evento 'modulesLoaded' emesso da module-loader.js
+window.addEventListener('modulesLoaded', initContentLoader);
+
+// Se i moduli sono già stati caricati (pagine senza module-loader), inizializza subito
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        // Aspetta un tick per dare tempo a module-loader di emetterne l'evento
+        setTimeout(() => {
+            if (!contentData) initContentLoader();
+        }, 100);
+    });
+} else {
+    // Se il DOM è già pronto e non ci sono moduli da caricare
+    setTimeout(() => {
+        if (!contentData) initContentLoader();
+    }, 100);
+}
+
+// Esporta le funzioni per uso esterno se necessario
+if (typeof window !== 'undefined') {
+    window.contentLoader = {
+        loadContentData,
+        getCourse,
+        getInstructor,
+        initContentLoader,
+        populateContentElements,
+        populateCourseList,
+        populateCourseDetails
+    };
+}

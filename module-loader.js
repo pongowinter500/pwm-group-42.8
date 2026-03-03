@@ -1,43 +1,4 @@
 /**
- * Populates the course template data-attributes with specific data
- */
-function populateCourseData() {
-    if (typeof courseData === 'undefined') return;
-    
-    const courseHeroSection = document.querySelector('.course-hero');
-    if (courseHeroSection && courseData.courseName) {
-        courseHeroSection.setAttribute('data-course', courseData.courseName);
-    }
-    
-    const fieldMap = {
-        '[data-course-title]': 'courseTitle',
-        '[data-course-subtitle]': 'courseSubtitle',
-        '[data-instructor-img]': 'instructorImg',
-        '[data-instructor-name]': 'instructorName',
-        '[data-instructor-title]': 'instructorTitle',
-        '[data-section-1-title]': 'section1Title',
-        '[data-section-1-text]': 'section1Text',
-        '[data-section-2-title]': 'section2Title'
-    };
-    
-    Object.entries(fieldMap).forEach(([selector, fieldName]) => {
-        const element = document.querySelector(selector);
-        if (element && courseData[fieldName]) {
-            if (selector === '[data-instructor-img]') {
-                element.src = courseData[fieldName];
-            } else {
-                element.textContent = courseData[fieldName];
-            }
-        }
-    });
-    
-    const topicsList = document.querySelector('[data-topics-list]');
-    if (topicsList && courseData.topics) {
-        topicsList.innerHTML = courseData.topics.map(topic => `<li>${topic}</li>`).join('');
-    }
-}
-
-/**
  * Dynamically loads HTML blocks from external files into the page
  * Uses the data-include-html attribute to specify which file to load
  */
@@ -80,10 +41,12 @@ function markActiveNav() {
     });
 }
 
-// Carica i moduli e popola i dati dei corsi quando il DOM è pronto
+// Carica i moduli quando il DOM è pronto
 document.addEventListener('DOMContentLoaded', async () => {
     await loadHTMLModules();
-    populateCourseData();
     markActiveNav();
+    
+    // Emetti un evento custom per notificare che i moduli sono stati caricati
+    window.dispatchEvent(new CustomEvent('modulesLoaded'));
 });
 
