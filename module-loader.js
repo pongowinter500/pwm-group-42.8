@@ -32,22 +32,49 @@ async function loadHTMLModules() {
 
 // highlight current nav item based on URL
 function markActiveNav() {
-    const current = location.pathname.split('/').pop();
-    if (!current) return;
+    let current = location.pathname.split('/').pop();
+    if (!current) current = 'index.html';
 
+    // clean previous active states
+    document.querySelectorAll('nav ul li a').forEach(a => a.classList.remove('active'));
+
+    // try exact filename match
+    let matched = false;
     document.querySelectorAll('nav ul li a').forEach(a => {
-        const target = a.getAttribute('href').split('/').pop();
-        if (target === current) a.classList.add('active');
+        const href = a.getAttribute('href') || '';
+        const target = href.split('/').pop() || '';
+        if (target === current) {
+            a.classList.add('active');
+            matched = true;
+        }
     });
+
+    // fallback: if no exact match (e.g. root paths), try index link
+    if (!matched && (current === '' || current === 'index.html')) {
+        const idx = document.querySelector('nav ul li a[href="index.html"], nav ul li a[href="./index.html"]');
+        if (idx) idx.classList.add('active');
+    }
 }
 
-// Carica i moduli quando il DOM è pronto
+// Carica i moduli quando il DOM è pronto e inizializza tutta la logica
 document.addEventListener('DOMContentLoaded', async () => {
     await loadHTMLModules();
+    if (typeof populateCourseData === 'function') {
+        try { populateCourseData(); } catch (e) { console.warn('populateCourseData error:', e); }
+    }
     markActiveNav();
-    
+
     // Emetti un evento custom per notificare che i moduli sono stati caricati
     window.dispatchEvent(new CustomEvent('modulesLoaded'));
+
+    // Se siamo sulla pagina di login, colleghiamo il form
+    const authForm = document.getElementById('auth-form');
+    if (authForm) {
+        authForm.addEventListener('submit', handleLogin);
+    }
+
+    // Verifichiamo se l'utente è già autenticato e mostriamo l'eventuale banner
+    checkAuthStatus();
 });
 
 /**
@@ -60,23 +87,27 @@ async function handleLogin(event) {
     const password = document.getElementById('password').value;
 
     try {
-        // Preluăm datele din fișierul JSON (simulăm un server)
-        const response = await fetch('data/users.json');
+        // Preleviamo i dati degli utenti dal file JSON (simuliamo un server).
+        // Il percorso è diverso se ci troviamo dentro la cartella html/.
+        const dataPath = location.pathname.includes('/html/') ?
+            '../data/users.json' :
+            'data/users.json';
+        const response = await fetch(dataPath);
         const data = await response.json();
 
         // Căutăm utilizatorul în listă
         const user = data.users.find(u => u.email === email && u.password === password);
 
         if (user) {
-            // Salvăm sesiunea în localStorage
+            // Conserviamo lo stato di autenticazione
             localStorage.setItem('isAuthenticated', 'true');
             localStorage.setItem('userRole', user.role);
             localStorage.setItem('userEmail', user.email);
 
-            alert(`Autentificare reușită! Bine ai venit, ${user.role}.`);
-            window.location.href = 'index.html'; // Redirecționare
+            alert(`Autenticazione riuscita! Bentornato, ${user.role}.`);
+            window.location.href = 'index.html'; // rimandiamo alla home
         } else {
-            alert("Email sau parolă incorectă.");
+            alert("Email o password non validi.");
         }
     } catch (error) {
         console.error("Eroare la încărcarea bazei de date de utilizatori:", error);
@@ -91,7 +122,7 @@ function checkAuthStatus() {
     const role = localStorage.getItem('userRole');
 
     if (isAuthenticated) {
-        // Schimbăm butonul de Login în Logout în header
+        // Modifichiamo il link di login in logout
         const loginLink = document.querySelector('a[href="html/login.html"]');
         if (loginLink) {
             loginLink.textContent = "Logout";
@@ -102,28 +133,19 @@ function checkAuthStatus() {
             };
         }
 
-        // Afișăm conținut specific dacă este Admin
+        // Banner di notifica permanente in alto
+        const statusMsg = document.createElement('div');
+        let bannerStyle = "color: white; text-align: center; padding: 10px;";
         if (role === 'admin') {
-            const adminMsg = document.createElement('div');
-            adminMsg.style.cssText = "background: #e74c3c; color: white; text-align: center; padding: 10px;";
-            adminMsg.textContent = "Panou Administrare: Acces Complet Activat";
-            document.body.prepend(adminMsg);
+            bannerStyle = "background: #e74c3c;" + bannerStyle;
+            statusMsg.textContent = "Accesso amministratore attivo";
+        } else {
+            bannerStyle = "background: #2ecc71;" + bannerStyle;
+            statusMsg.textContent = `Connesso come ${role}`;
         }
+        statusMsg.style.cssText = bannerStyle;
+        document.body.prepend(statusMsg);
     }
 }
 
-// Actualizăm event listener-ul existent din module-loader.js
-document.addEventListener('DOMContentLoaded', async () => {
-    await loadHTMLModules();
-    populateCourseData();
-    markActiveNav();
-
-    // Inițializăm logica de login dacă suntem pe pagina de login
-    const authForm = document.getElementById('auth-form');
-    if (authForm) {
-        authForm.addEventListener('submit', handleLogin);
-    }
-
-    checkAuthStatus();
-});
 
