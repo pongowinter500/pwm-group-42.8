@@ -1,28 +1,247 @@
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     header nav {
-        flex-direction: column;
+        padding: 0 1.25rem;
+        gap: 1rem;
+    }
+
+    header nav ul {
         gap: 1rem;
     }
 
     header form {
+        margin: 0 1rem;
+        max-width: 320px;
+    }
+
+    main {
+        padding: 1.5rem;
+    }
+
+    section {
+        padding: 2rem;
+        margin-bottom: 2.5rem;
+    }
+
+    [data-course-list="new"] {
+        flex-wrap: wrap;
+        gap: 1.25rem;
+    }
+
+    [data-course-list="new"] article {
+        max-width: none;
+    }
+
+    #our-courses > article {
+        gap: 1.5rem;
+        padding: 1.5rem;
+    }
+
+    #our-courses > article img {
+        width: 200px;
+        height: 200px;
+    }
+
+    .about-hero h1,
+    .business-hero h1,
+    .course-hero h1 {
+        font-size: 2.6rem;
+    }
+
+    .course-container {
+        gap: 2rem;
+    }
+
+    .instructor-card img {
+        width: 160px;
+        height: 160px;
+    }
+
+    .login-section {
+        margin: 3rem auto;
+        padding: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        position: static;
+    }
+
+    header nav {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 0 1rem;
+        gap: 0.9rem;
+    }
+
+    header nav .company-logo {
+        height: 44px;
+        align-self: center;
+    }
+
+    header nav ul {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.75rem 1rem;
+    }
+
+    header form {
+        order: 3;
         margin: 0;
         max-width: 100%;
     }
 
-    section:first-child > div {
-        flex-direction: column;
+    header > nav > a {
+        align-self: center;
     }
 
-    section:first-child > div > a {
-        display: none;
+    main {
+        padding: 1rem;
     }
 
-    section:nth-child(2) > article {
+    section {
+        padding: 1.5rem;
+        margin-bottom: 1.75rem;
+    }
+
+    section > h1 {
+        font-size: 2rem;
+    }
+
+    [data-course-list="new"] {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    [data-course-list="new"] article {
+        width: 100%;
+        max-width: none;
+    }
+
+    [data-course-list="new"] article p {
+        min-height: unset;
+    }
+
+    #our-courses > article,
+    #our-courses > article:nth-child(even) {
         flex-direction: column;
         text-align: center;
+        gap: 1rem;
     }
 
-    section:nth-child(2) > article:nth-child(even) {
+    #our-courses > article img {
+        width: 170px;
+        height: 170px;
+        margin: 0 auto;
+    }
+
+    #our-courses > article p {
+        text-align: left;
+    }
+
+    .mission-vision,
+    .feature-grid {
         flex-direction: column;
+    }
+
+    .feature-grid > * {
+        width: 100%;
+    }
+
+    .about-hero,
+    .business-hero,
+    .course-hero {
+        padding: 2.5rem 1.25rem;
+    }
+
+    .about-hero h1,
+    .business-hero h1,
+    .course-hero h1 {
+        font-size: 2.1rem;
+    }
+
+    .about-hero p,
+    .business-hero p,
+    .course-hero p {
+        font-size: 1rem;
+    }
+
+    .course-container {
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+
+    .instructor-card,
+    .course-content {
+        padding: 1.5rem;
+    }
+
+    .login-section {
+        margin: 2rem auto;
+        padding: 1.5rem;
+    }
+
+    .btn-login {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    header nav {
+        padding: 0 0.75rem;
+    }
+
+    header nav ul {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    main {
+        padding: 0.75rem;
+    }
+
+    section {
+        padding: 1rem;
+        border-radius: 8px;
+    }
+
+    section > h1 {
+        font-size: 1.65rem;
+    }
+
+    .about-hero h1,
+    .business-hero h1,
+    .course-hero h1 {
+        font-size: 1.75rem;
+    }
+
+    .about-hero p,
+    .business-hero p,
+    .course-hero p {
+        font-size: 0.95rem;
+    }
+
+    #our-courses > article img {
+        width: 140px;
+        height: 140px;
+    }
+
+    .instructor-card img {
+        width: 130px;
+        height: 130px;
+    }
+
+    .course-content h2 {
+        font-size: 1.25rem;
+    }
+
+    .btn-contact,
+    .btn-enroll,
+    .btn-login {
+        width: 100%;
+        text-align: center;
+        padding: 0.85rem 1rem;
     }
 }
