@@ -78,24 +78,63 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 /**
- * Gestionează procesul de autentificare și validare
+ * Gestisce il processo di autenticazione con validazione HTML5 nativa
  */
 async function handleLogin(event) {
-    event.preventDefault(); // Oprește trimiterea standard a formularului
+    event.preventDefault();
 
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+    const form = event.target;
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const emailError = document.getElementById('email-error');
+    const passwordError = document.getElementById('password-error');
+
+    // Reset messaggi di errore
+    emailError.textContent = '';
+    passwordError.textContent = '';
+
+    // Validazione HTML5 usando l'API Constraint Validation
+    let isValid = true;
+
+    // Valida email
+    if (!emailInput.validity.valid) {
+        isValid = false;
+        if (emailInput.validity.valueMissing) {
+            emailError.textContent = 'Email is required';
+        } else if (emailInput.validity.typeMismatch || emailInput.validity.patternMismatch) {
+            emailError.textContent = 'Please enter a valid email address';
+        }
+    }
+
+    // Valida password
+    if (!passwordInput.validity.valid) {
+        isValid = false;
+        if (passwordInput.validity.valueMissing) {
+            passwordError.textContent = 'Password is required';
+        } else if (passwordInput.validity.tooShort) {
+            passwordError.textContent = `Password must be at least ${passwordInput.minLength} characters`;
+        } else if (passwordInput.validity.tooLong) {
+            passwordError.textContent = `Password must not exceed ${passwordInput.maxLength} characters`;
+        }
+    }
+
+    // Se il form non è valido, ferma l'invio
+    if (!isValid) {
+        return;
+    }
+
+    const email = emailInput.value;
+    const password = passwordInput.value;
 
     try {
-        // Preleviamo i dati degli utenti dal file JSON (simuliamo un server).
-        // Il percorso è diverso se ci troviamo dentro la cartella html/.
+        // Preleviamo i dati degli utenti dal file JSON (simuliamo un server)
         const dataPath = location.pathname.includes('/html/') ?
             '../data/users.json' :
             'data/users.json';
         const response = await fetch(dataPath);
         const data = await response.json();
 
-        // Căutăm utilizatorul în listă
+        // Cerchiamo l'utente nella lista
         const user = data.users.find(u => u.email === email && u.password === password);
 
         if (user) {
@@ -105,12 +144,15 @@ async function handleLogin(event) {
             localStorage.setItem('userEmail', user.email);
 
             alert(`Autenticazione riuscita! Bentornato, ${user.role}.`);
-            window.location.href = 'index.html'; // rimandiamo alla home
+            window.location.href = 'index.html';
         } else {
-            alert("Email o password non validi.");
+            // Mostra errore per credenziali non valide
+            emailError.textContent = 'Invalid email or password';
+            passwordError.textContent = 'Invalid email or password';
         }
     } catch (error) {
-        console.error("Eroare la încărcarea bazei de date de utilizatori:", error);
+        console.error("Errore nel caricamento del database utenti:", error);
+        emailError.textContent = 'An error occurred. Please try again later.';
     }
 }
 
