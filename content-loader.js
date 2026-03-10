@@ -281,6 +281,21 @@ function populateInstructors() {
 }
 
 /**
+ * Modifica il pulsante "Enroll Now" in "Modify Course" per gli admin
+ */
+function updateEnrollButtonForAdmin() {
+    const isAdmin = localStorage.getItem('userRole') === 'admin';
+    
+    if (isAdmin) {
+        const enrollButton = document.querySelector('.btn-enroll');
+        if (enrollButton) {
+            enrollButton.textContent = 'Modify Course';
+            enrollButton.href = '#modify-course';
+        }
+    }
+}
+
+/**
  * Funzione principale che carica e popola tutti i contenuti
  */
 async function initContentLoader() {
@@ -298,6 +313,9 @@ async function initContentLoader() {
     populateCourseDetails();
     populateBusinessFeatures();
     populateInstructors();
+    
+    // Aggiorna il pulsante Enroll per gli admin
+    updateEnrollButtonForAdmin();
 }
 
 // Inizializza il content loader dopo che i moduli HTML sono stati caricati
@@ -328,6 +346,7 @@ if (typeof window !== 'undefined') {
         initContentLoader,
         populateContentElements,
         populateCourseList,
-        populateCourseDetails
+        populateCourseDetails,
+        updateEnrollButtonForAdmin
     };
 }
