@@ -289,6 +289,22 @@
       }
     ]
   },
+  "frontendConfig": {
+    "adminEditableSelectors": [
+      "[data-course-title]",
+      "[data-course-subtitle]",
+      "[data-course-instructor-name]",
+      "[data-course-instructor-title]",
+      "[data-course-section1-title]",
+      "[data-course-section1-text]",
+      "[data-course-section2-title]",
+      "[data-course-duration]",
+      "[data-course-level]",
+      "[data-course-price]",
+      "[data-course-category]",
+      "[data-course-topics] li"
+    ]
+  },
   "siteInfo": {
     "name": "CodeMaster",
     "description": "The leading platform in online computer science education",

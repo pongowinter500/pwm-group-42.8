@@ -106,6 +106,24 @@
     opacity: 0.9;
 }
 
+/* Admin inline editing mode (frontend only) */
+.course-content.admin-edit-mode {
+    border: 2px dashed #f39c12;
+}
+
+.admin-editable-field {
+    outline: 2px dashed #f39c12;
+    outline-offset: 2px;
+   /* background: #fffbe6; */
+    border-radius: 4px;
+    cursor: text;
+}
+
+.admin-editable-field:focus {
+    outline-color: #d35400;
+   /* background: #fff6d5; */
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .course-hero h1 {

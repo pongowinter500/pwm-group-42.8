@@ -5,6 +5,36 @@
 
 // Cache per i dati caricati
 let contentData = null;
+let isAdminEditMode = false;
+
+const DEFAULT_ADMIN_EDITABLE_SELECTORS = [
+    '[data-course-title]',
+    '[data-course-subtitle]',
+    '[data-course-instructor-name]',
+    '[data-course-instructor-title]',
+    '[data-course-section1-title]',
+    '[data-course-section1-text]',
+    '[data-course-section2-title]',
+    '[data-course-duration]',
+    '[data-course-level]',
+    '[data-course-price]',
+    '[data-course-category]',
+    '[data-course-topics] li'
+];
+
+/**
+ * Legge dal JSON i selettori modificabili per admin.
+ * Se non presenti o non validi, usa il fallback locale.
+ */
+function getAdminEditableSelectors() {
+    const selectors = contentData?.frontendConfig?.adminEditableSelectors;
+
+    if (Array.isArray(selectors) && selectors.length > 0) {
+        return selectors;
+    }
+
+    return DEFAULT_ADMIN_EDITABLE_SELECTORS;
+}
 
 /**
  * Carica il file content.json
@@ -289,10 +319,62 @@ function updateEnrollButtonForAdmin() {
     if (isAdmin) {
         const enrollButton = document.querySelector('.btn-enroll');
         if (enrollButton) {
-            enrollButton.textContent = 'Modify Course';
-            enrollButton.href = '#modify-course';
+            enrollButton.textContent = 'Edit Course';
+            enrollButton.href = '#edit-course';
+            if (enrollButton.dataset.adminEditBound !== 'true') {
+                enrollButton.addEventListener('click', handleAdminEditButtonClick);
+                enrollButton.dataset.adminEditBound = 'true';
+            }
         }
     }
+}
+
+/**
+ * Ritorna gli elementi testuali modificabili nella pagina corso.
+ */
+function getAdminEditableElements() {
+    const selectors = getAdminEditableSelectors();
+
+    return selectors.flatMap(selector =>
+        Array.from(document.querySelectorAll(selector))
+    );
+}
+
+/**
+ * Attiva/disattiva la modalita di modifica inline per gli admin.
+ * Solo frontend: modifica il DOM in memoria, senza scrivere su JSON.
+ */
+function toggleAdminEditMode(enable) {
+    const courseContent = document.querySelector('.course-content');
+    const editableElements = getAdminEditableElements();
+
+    editableElements.forEach(element => {
+        element.contentEditable = enable ? 'true' : 'false';
+        element.classList.toggle('admin-editable-field', enable);
+        element.setAttribute('spellcheck', 'false');
+    });
+
+    if (courseContent) {
+        courseContent.classList.toggle('admin-edit-mode', enable);
+    }
+
+    isAdminEditMode = enable;
+}
+
+/**
+ * Gestisce il click del bottone corso in modalita admin.
+ */
+function handleAdminEditButtonClick(event) {
+    event.preventDefault();
+
+    const button = event.currentTarget;
+    if (!button) return;
+
+    const shouldEnableEdit = !isAdminEditMode;
+    toggleAdminEditMode(shouldEnableEdit);
+
+    button.textContent = shouldEnableEdit ? 'Save Changes' : 'Edit Course';
+    button.href = shouldEnableEdit ? '#save-course' : '#edit-course';
 }
 
 /**
@@ -347,6 +429,7 @@ if (typeof window !== 'undefined') {
         populateContentElements,
         populateCourseList,
         populateCourseDetails,
-        updateEnrollButtonForAdmin
+        updateEnrollButtonForAdmin,
+        toggleAdminEditMode
     };
 }
