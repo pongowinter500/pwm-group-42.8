@@ -29,6 +29,10 @@ header .company-logo {
     flex-shrink: 0;
 }
 
+header .company-logo--mobile {
+    display: none;
+}
+
 header .nav-menu {
     display: flex;
     align-items: center;
@@ -242,7 +246,15 @@ header .site-nav.menu-open .menu-toggle span:nth-child(3) {
     }
 
     header .company-logo {
-        height: 44px;
+        display: none;
+    }
+
+    header .company-logo--mobile {
+        display: block;
+        height: 36px;
+        width: auto;
+        margin: 0.3rem 0;
+        flex-shrink: 0;
     }
 
     header .search-toggle {
