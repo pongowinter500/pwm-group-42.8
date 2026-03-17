@@ -56,6 +56,58 @@ function markActiveNav() {
     }
 }
 
+// initialize the mobile search toggle behavior
+function initSearchToggle() {
+    const searchToggle = document.querySelector('.search-toggle');
+    const mobileSearchForm = document.querySelector('.mobile-search-form');
+
+    if (!searchToggle || !mobileSearchForm) return;
+
+    if (searchToggle.dataset.searchToggleInitialized === 'true') return;
+    searchToggle.dataset.searchToggleInitialized = 'true';
+
+    const setSearchState = (isOpen) => {
+        searchToggle.classList.toggle('active', isOpen);
+        mobileSearchForm.classList.toggle('active', isOpen);
+        searchToggle.setAttribute('aria-expanded', String(isOpen));
+
+        if (isOpen) {
+            // Focus sull'input di ricerca quando viene aperto
+            const searchInput = mobileSearchForm.querySelector('input[type="search"]');
+            if (searchInput) {
+                setTimeout(() => searchInput.focus(), 100);
+            }
+        }
+    };
+
+    searchToggle.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const isOpen = mobileSearchForm.classList.contains('active');
+        setSearchState(!isOpen);
+    });
+
+    // Chiudi la ricerca quando si clicca fuori
+    document.addEventListener('click', (event) => {
+        if (!searchToggle.contains(event.target) && !mobileSearchForm.contains(event.target)) {
+            setSearchState(false);
+        }
+    });
+
+    // Chiudi con il tasto Escape
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            setSearchState(false);
+        }
+    });
+
+    // Chiudi quando si ridimensiona la finestra a desktop
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+            setSearchState(false);
+        }
+    });
+}
+
 // initialize the mobile dropdown navigation behavior
 function initMobileMenu() {
     const nav = document.querySelector('header .site-nav');
@@ -112,6 +164,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     markActiveNav();
     initMobileMenu();
+    initSearchToggle();
 
     // Emetti un evento custom per notificare che i moduli sono stati caricati
     window.dispatchEvent(new CustomEvent('modulesLoaded'));
