@@ -36,11 +36,11 @@ function markActiveNav() {
     if (!current) current = 'index.html';
 
     // clean previous active states
-    document.querySelectorAll('nav ul li a').forEach(a => a.classList.remove('active'));
+    document.querySelectorAll('header nav ul li a').forEach(a => a.classList.remove('active'));
 
     // try exact filename match
     let matched = false;
-    document.querySelectorAll('nav ul li a').forEach(a => {
+    document.querySelectorAll('header nav ul li a').forEach(a => {
         const href = a.getAttribute('href') || '';
         const target = href.split('/').pop() || '';
         if (target === current) {
@@ -51,9 +51,57 @@ function markActiveNav() {
 
     // fallback: if no exact match (e.g. root paths), try index link
     if (!matched && (current === '' || current === 'index.html')) {
-        const idx = document.querySelector('nav ul li a[href="index.html"], nav ul li a[href="./index.html"]');
+        const idx = document.querySelector('header nav ul li a[href="index.html"], header nav ul li a[href="./index.html"]');
         if (idx) idx.classList.add('active');
     }
+}
+
+// initialize the mobile dropdown navigation behavior
+function initMobileMenu() {
+    const nav = document.querySelector('header .site-nav');
+    if (!nav) return;
+
+    const toggleButton = nav.querySelector('.menu-toggle');
+    const navMenu = nav.querySelector('.nav-menu');
+    if (!toggleButton || !navMenu) return;
+
+    if (nav.dataset.mobileMenuInitialized === 'true') return;
+    nav.dataset.mobileMenuInitialized = 'true';
+
+    const setMenuState = (isOpen) => {
+        nav.classList.toggle('menu-open', isOpen);
+        document.body.classList.toggle('mobile-menu-open', isOpen);
+        toggleButton.setAttribute('aria-expanded', String(isOpen));
+        toggleButton.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+    };
+
+    toggleButton.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const isOpen = nav.classList.contains('menu-open');
+        setMenuState(!isOpen);
+    });
+
+    navMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => setMenuState(false));
+    });
+
+    document.addEventListener('click', (event) => {
+        if (!nav.contains(event.target)) {
+            setMenuState(false);
+        }
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            setMenuState(false);
+        }
+    });
+
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+            setMenuState(false);
+        }
+    });
 }
 
 // Carica i moduli quando il DOM è pronto e inizializza tutta la logica
@@ -63,6 +111,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         try { populateCourseData(); } catch (e) { console.warn('populateCourseData error:', e); }
     }
     markActiveNav();
+    initMobileMenu();
 
     // Emetti un evento custom per notificare che i moduli sono stati caricati
     window.dispatchEvent(new CustomEvent('modulesLoaded'));
