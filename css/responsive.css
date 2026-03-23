@@ -70,6 +70,7 @@
         display: grid;
         grid-template-columns: 1fr;
         gap: 1rem;
+        position: relative;
     }
 
     [data-course-list="new"] article {
@@ -79,6 +80,32 @@
 
     [data-course-list="new"] article p {
         min-height: unset;
+    }
+
+    section:first-child .courses-slider {
+        position: relative;
+        padding: 0 3.5rem;
+    }
+
+    section:first-child .slider-btn {
+        display: flex;
+    }
+
+    section:first-child [data-course-list="new"] {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    section:first-child [data-course-list="new"] article {
+        display: none;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    section:first-child [data-course-list="new"] article.active {
+        display: flex;
     }
 
     #our-courses > article,

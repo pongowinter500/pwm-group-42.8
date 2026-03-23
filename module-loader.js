@@ -156,6 +156,45 @@ function initMobileMenu() {
     });
 }
 
+// initialize new courses slider for mobile
+function initNewCoursesSlider() {
+    const coursesSlider = document.querySelector('section:first-child .courses-slider');
+    if (!coursesSlider) return;
+
+    const prevBtn = coursesSlider.querySelector('.slider-btn--prev');
+    const nextBtn = coursesSlider.querySelector('.slider-btn--next');
+    const courseList = coursesSlider.querySelector('[data-course-list="new"]');
+    
+    if (!prevBtn || !nextBtn || !courseList) return;
+
+    if (coursesSlider.dataset.sliderInitialized === 'true') return;
+    coursesSlider.dataset.sliderInitialized = 'true';
+
+    let currentIndex = 0;
+    const articles = courseList.querySelectorAll('article');
+    
+    if (articles.length === 0) return;
+
+    const showArticle = (index) => {
+        articles.forEach((article, i) => {
+            article.classList.toggle('active', i === index);
+        });
+    };
+
+    // Initialize with first article active
+    showArticle(0);
+
+    prevBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + articles.length) % articles.length;
+        showArticle(currentIndex);
+    });
+
+    nextBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % articles.length;
+        showArticle(currentIndex);
+    });
+}
+
 // initialize footer menu toggles for mobile
 function initFooterMenus() {
     const footerNavToggles = document.querySelectorAll('footer .footer-nav-toggle');
@@ -207,6 +246,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initMobileMenu();
     initSearchToggle();
     initFooterMenus();
+    initNewCoursesSlider();
 
     // Emetti un evento custom per notificare che i moduli sono stati caricati
     window.dispatchEvent(new CustomEvent('modulesLoaded'));

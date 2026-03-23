@@ -1,3 +1,54 @@
+section:first-child .courses-slider {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+}
+
+section:first-child [data-course-list="new"] {
+    display: flex;
+    align-items: stretch;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+section:first-child .slider-btn {
+    display: none;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(52, 152, 219, 0.9);
+    color: white;
+    border: none;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+    z-index: 10;
+    padding: 0;
+}
+
+section:first-child .slider-btn:hover {
+    background-color: #3498db;
+}
+
+section:first-child .slider-btn svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+section:first-child .slider-btn--prev {
+    left: -3.5rem;
+}
+
+section:first-child .slider-btn--next {
+    right: -3.5rem;
+}
+
 section:first-child > div {
     display: flex;
     align-items: stretch;
