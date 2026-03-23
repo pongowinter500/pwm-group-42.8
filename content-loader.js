@@ -12,13 +12,7 @@ const DEFAULT_ADMIN_EDITABLE_SELECTORS = [
     '[data-course-subtitle]',
     '[data-course-instructor-name]',
     '[data-course-instructor-title]',
-    '[data-course-section1-title]',
     '[data-course-section1-text]',
-    '[data-course-section2-title]',
-    '[data-course-duration]',
-    '[data-course-level]',
-    '[data-course-price]',
-    '[data-course-category]',
     '[data-course-topics] li'
 ];
 
@@ -256,13 +250,7 @@ function populateCourseDetails() {
         'instructor-img': 'instructorImg',
         'instructor-name': 'instructorName',
         'instructor-title': 'instructorTitle',
-        'section1-title': 'section1Title',
-        'section1-text': 'section1Text',
-        'section2-title': 'section2Title',
-        'duration': 'duration',
-        'level': 'level',
-        'price': 'price',
-        'category': 'category'
+        'section1-text': 'section1Text'
     };
     
     Object.entries(fieldMap).forEach(([dataAttr, fieldName]) => {
