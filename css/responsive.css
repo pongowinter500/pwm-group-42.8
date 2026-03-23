@@ -142,8 +142,10 @@
     .mission-vision,
     .feature-grid {
         flex-direction: column;
+        gap: 1rem;
     }
 
+    .mission-vision > *,
     .feature-grid > * {
         width: 100%;
     }
