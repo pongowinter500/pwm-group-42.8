@@ -156,6 +156,47 @@ function initMobileMenu() {
     });
 }
 
+// initialize footer menu toggles for mobile
+function initFooterMenus() {
+    const footerNavToggles = document.querySelectorAll('footer .footer-nav-toggle');
+    
+    if (footerNavToggles.length === 0) return;
+
+    footerNavToggles.forEach(toggle => {
+        if (toggle.dataset.footerMenuInitialized === 'true') return;
+        toggle.dataset.footerMenuInitialized = 'true';
+
+        const setMenuState = (isOpen) => {
+            toggle.setAttribute('aria-expanded', String(isOpen));
+        };
+
+        toggle.addEventListener('click', (event) => {
+            event.stopPropagation();
+            const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+            setMenuState(!isOpen);
+        });
+    });
+
+    // Close menus when clicking outside
+    document.addEventListener('click', (event) => {
+        const footer = document.querySelector('footer');
+        if (footer && !footer.contains(event.target)) {
+            footerNavToggles.forEach(toggle => {
+                toggle.setAttribute('aria-expanded', 'false');
+            });
+        }
+    });
+
+    // Close with Escape key
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            footerNavToggles.forEach(toggle => {
+                toggle.setAttribute('aria-expanded', 'false');
+            });
+        }
+    });
+}
+
 // Carica i moduli quando il DOM è pronto e inizializza tutta la logica
 document.addEventListener('DOMContentLoaded', async () => {
     await loadHTMLModules();
@@ -165,6 +206,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     markActiveNav();
     initMobileMenu();
     initSearchToggle();
+    initFooterMenus();
 
     // Emetti un evento custom per notificare che i moduli sono stati caricati
     window.dispatchEvent(new CustomEvent('modulesLoaded'));

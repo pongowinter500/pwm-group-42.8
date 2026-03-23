@@ -1,19 +1,50 @@
 <footer>
-    <nav>
-        <ul>
-            <li><a href="#privacy">Privacy Policy</a></li>
-            <li><a href="#terms">Terms of Service</a></li>
-        </ul>
-    </nav>
-    <address>
-        <a href="mailto:info@corsi-informatica.it">info@corsi-informatica.it</a>
-    </address>
-    <p>&copy; 2026 Online Computer Science Courses Platform. All rights reserved.</p>
-    <nav>
-        <ul>
-            <li><a href="https://linkedin.com">LinkedIn</a></li>
-            <li><a href="https://twitter.com">Twitter</a></li>
-            <li><a href="https://facebook.com">Facebook</a></li>
-        </ul>
-    </nav>
+    <div class="footer-content">
+        <!-- Privacy & Legal Menu -->
+        <nav class="footer-nav footer-nav--privacy">
+            <button
+                type="button"
+                class="footer-nav-toggle"
+                aria-label="Toggle Privacy menu"
+                aria-expanded="false"
+            >
+                Privacy & Legal
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                </svg>
+            </button>
+            <ul class="footer-nav-menu" role="region" aria-label="Privacy and Legal">
+                <li><a href="#privacy">Privacy Policy</a></li>
+                <li><a href="#terms">Terms of Service</a></li>
+            </ul>
+        </nav>
+
+        <!-- Contact -->
+        <address>
+            <a href="mailto:info@corsi-informatica.it">info@corsi-informatica.it</a>
+        </address>
+
+        <!-- Copyright -->
+        <p>&copy; 2026 Online Computer Science Courses Platform. All rights reserved.</p>
+
+        <!-- Social Menu -->
+        <nav class="footer-nav footer-nav--social">
+            <button
+                type="button"
+                class="footer-nav-toggle"
+                aria-label="Toggle Social menu"
+                aria-expanded="false"
+            >
+                Follow Us
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                </svg>
+            </button>
+            <ul class="footer-nav-menu" role="region" aria-label="Social Media">
+                <li><a href="https://linkedin.com">LinkedIn</a></li>
+                <li><a href="https://twitter.com">Twitter</a></li>
+                <li><a href="https://facebook.com">Facebook</a></li>
+            </ul>
+        </nav>
+    </div>
 </footer>
