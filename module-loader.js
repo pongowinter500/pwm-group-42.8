@@ -236,6 +236,37 @@ function initFooterMenus() {
     });
 }
 
+// initialize course description dropdown toggle
+function initDescriptionToggle() {
+    const descriptionToggle = document.querySelector('.description-toggle');
+    const descriptionContent = document.querySelector('.description-content');
+
+    if (!descriptionToggle || !descriptionContent) return;
+
+    if (descriptionToggle.dataset.descriptionToggleInitialized === 'true') return;
+    descriptionToggle.dataset.descriptionToggleInitialized = 'true';
+
+    const setDescriptionState = (isOpen) => {
+        descriptionToggle.setAttribute('aria-expanded', String(isOpen));
+    };
+
+    descriptionToggle.addEventListener('click', (event) => {
+        event.preventDefault();
+        const isOpen = descriptionToggle.getAttribute('aria-expanded') === 'true';
+        setDescriptionState(!isOpen);
+    });
+
+    // Close with Escape key
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            const isOpen = descriptionToggle.getAttribute('aria-expanded') === 'true';
+            if (isOpen) {
+                setDescriptionState(false);
+            }
+        }
+    });
+}
+
 // Carica i moduli quando il DOM è pronto e inizializza tutta la logica
 document.addEventListener('DOMContentLoaded', async () => {
     await loadHTMLModules();
@@ -247,6 +278,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initSearchToggle();
     initFooterMenus();
     initNewCoursesSlider();
+    initDescriptionToggle();
 
     // Emetti un evento custom per notificare che i moduli sono stati caricati
     window.dispatchEvent(new CustomEvent('modulesLoaded'));

@@ -125,10 +125,18 @@
         text-align: left;
     }
 
+    #our-courses > article p[data-catalogue-description] {
+        display: none;
+    }
+
     #our-courses > article a,
     section:first-child article a {
         width: 100%;
         text-align: center;
+    }
+
+    .course-description-dropdown {
+        display: block;
     }
 
     .mission-vision,

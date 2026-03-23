@@ -168,7 +168,7 @@ function populateCourseList() {
                     <div>
                         <h2>${course.courseTitle}</h2>
                         <h3>${course.instructorName}</h3>
-                        <p>${course.catalogueDescription || course.section1Text}</p>
+                        <p data-catalogue-description>${course.catalogueDescription || course.section1Text}</p>
                         <a href="html/courses/${fileName}.html">Learn More</a>
                     </div>
                 `;
@@ -271,6 +271,12 @@ function populateCourseDetails() {
     if (topicsList && course.topics) {
         const topicsHTML = course.topics.map(topic => `<li>${topic}</li>`).join('');
         topicsList.innerHTML = topicsHTML;
+    }
+    
+    // Popola la catalogueDescription se presente
+    const descriptionElement = document.querySelector('[data-catalogue-description]');
+    if (descriptionElement && course.catalogueDescription) {
+        descriptionElement.textContent = course.catalogueDescription;
     }
 }
 
