@@ -58,6 +58,7 @@
       "category": "Programming",
       "icon": "images/python_icon.png",
       "isNew": true,
+      "catalogueDescription": "This course is designed to introduce beginners to the world of programming using Python.\nIt starts from the very basics, making it accessible even to those with no prior experience.\nStudents will learn how to write clean and efficient code through practical examples.\nThe course covers essential concepts such as variables, control structures, and functions.\nIt also introduces working with files, databases, and error handling techniques.\nAn introduction to object-oriented programming helps build a solid foundation for advanced topics.\nBy the end, learners will be able to create simple projects and continue their programming journey with confidence.",
       "description": "Learn the basics of programming with Python, one of the most in-demand languages in the job market."
     },
     {
@@ -84,6 +85,7 @@
       "category": "Database",
       "icon": "images/sql_icon.png",
       "isNew": true,
+      "catalogueDescription": "This course focuses on designing efficient and scalable relational databases.\nIt guides learners through the principles of data modeling and normalization.\nStudents will gain strong SQL skills, from basic queries to advanced optimizations.\nThe course also covers transactions, indexing, and performance tuning techniques.\nPractical examples with MySQL and PostgreSQL help bridge theory and real-world usage.\nAttention is given to best practices for maintaining reliable and secure databases.\nBy the end, participants will be able to design, query, and manage databases with confidence." ,
       "description": "Discover how to design efficient relational databases and master SQL."
     },
     {
@@ -110,6 +112,7 @@
       "category": "DevOps",
       "icon": "images/docker_icon.png",
       "isNew": true,
+      "catalogueDescription": "This course provides an in-depth introduction to modern DevOps practices and tools.\nIt focuses on automating the software development lifecycle from build to deployment.\nStudents will learn how to use Docker to create, manage, and deploy containers efficiently.\nThe course also explores CI/CD pipelines using tools like Jenkins and GitLab.\nAdvanced topics include container orchestration with Kubernetes.\nMonitoring and logging techniques are covered to ensure system reliability and performance.\nBy the end, learners will be able to manage scalable and automated deployment environments.",
       "description": "Automate deployment and manage containers with Docker and modern DevOps practices."
     },
     {
