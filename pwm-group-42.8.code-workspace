@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"name": "pwm-group-42.8",
+			"path": "."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "pwm-group"
+	}
+}

@@ -279,6 +279,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     initFooterMenus();
     initNewCoursesSlider();
     initDescriptionToggle();
+    initPasswordToggle();
+    initLogoutTimer();
 
     // Emetti un evento custom per notificare che i moduli sono stati caricati
     window.dispatchEvent(new CustomEvent('modulesLoaded'));
@@ -304,10 +306,13 @@ async function handleLogin(event) {
     const passwordInput = document.getElementById('password');
     const emailError = document.getElementById('email-error');
     const passwordError = document.getElementById('password-error');
+    const loginBtn = form.querySelector('.btn-login');
 
     // Reset messaggi di errore
     emailError.textContent = '';
     passwordError.textContent = '';
+    emailInput.classList.remove('shake');
+    passwordInput.classList.remove('shake');
 
     // Validazione HTML5 usando l'API Constraint Validation
     let isValid = true;
@@ -315,6 +320,7 @@ async function handleLogin(event) {
     // Valida email
     if (!emailInput.validity.valid) {
         isValid = false;
+        emailInput.classList.add('shake');
         if (emailInput.validity.valueMissing) {
             emailError.textContent = 'Email is required';
         } else if (emailInput.validity.typeMismatch || emailInput.validity.patternMismatch) {
@@ -325,6 +331,7 @@ async function handleLogin(event) {
     // Valida password
     if (!passwordInput.validity.valid) {
         isValid = false;
+        passwordInput.classList.add('shake');
         if (passwordInput.validity.valueMissing) {
             passwordError.textContent = 'Password is required';
         } else if (passwordInput.validity.tooShort) {
@@ -342,34 +349,122 @@ async function handleLogin(event) {
     const email = emailInput.value;
     const password = passwordInput.value;
 
+    // Attiva loading state
+    loginBtn.classList.add('loading');
+    loginBtn.disabled = true;
+    emailInput.disabled = true;
+    passwordInput.disabled = true;
+
     try {
         // Preleviamo i dati degli utenti dal file JSON (simuliamo un server)
-        const dataPath = location.pathname.includes('/html/') ?
-            '../data/users.json' :
-            'data/users.json';
+        const dataPath = '/data/users.json';
         const response = await fetch(dataPath);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const data = await response.json();
 
         // Cerchiamo l'utente nella lista
         const user = data.users.find(u => u.email === email && u.password === password);
 
         if (user) {
-            // Conserviamo lo stato di autenticazione
+            // Conserviamo lo stato di autenticazione con timestamp
             localStorage.setItem('isAuthenticated', 'true');
             localStorage.setItem('userRole', user.role);
             localStorage.setItem('userEmail', user.email);
+            localStorage.setItem('loginTime', Date.now().toString());
+
+            // Svuota i campi del form
+            emailInput.value = '';
+            passwordInput.value = '';
 
             alert(`Autenticazione riuscita! Bentornato, ${user.role}.`);
             window.location.href = 'index.html';
         } else {
-            // Mostra errore per credenziali non valide
+            // Mostra errore per credenziali non valide con shake animation
+            emailInput.classList.add('shake');
+            passwordInput.classList.add('shake');
             emailError.textContent = 'Invalid email or password';
             passwordError.textContent = 'Invalid email or password';
+            
+            // Rimuovi shake class dopo l'animazione
+            setTimeout(() => {
+                emailInput.classList.remove('shake');
+                passwordInput.classList.remove('shake');
+            }, 500);
         }
     } catch (error) {
         console.error("Errore nel caricamento del database utenti:", error);
-        emailError.textContent = 'An error occurred. Please try again later.';
+        emailInput.classList.add('shake');
+        passwordInput.classList.add('shake');
+        emailError.textContent = 'Network error. Please check your connection and try again.';
+        passwordError.textContent = '';
+        
+        // Rimuovi shake class dopo l'animazione
+        setTimeout(() => {
+            emailInput.classList.remove('shake');
+            passwordInput.classList.remove('shake');
+        }, 500);
+    } finally {
+        // Disattiva loading state
+        loginBtn.classList.remove('loading');
+        loginBtn.disabled = false;
+        emailInput.disabled = false;
+        passwordInput.disabled = false;
     }
+}
+
+/**
+ * Inizializza il toggle show/hide password
+ */
+function initPasswordToggle() {
+    const passwordToggle = document.querySelector('.password-toggle');
+    const passwordInput = document.getElementById('password');
+
+    if (!passwordToggle || !passwordInput) return;
+
+    if (passwordToggle.dataset.passwordToggleInitialized === 'true') return;
+    passwordToggle.dataset.passwordToggleInitialized = 'true';
+
+    passwordToggle.addEventListener('click', (event) => {
+        event.preventDefault();
+        const isPassword = passwordInput.type === 'password';
+        passwordInput.type = isPassword ? 'text' : 'password';
+        passwordToggle.classList.toggle('visible', isPassword);
+    });
+}
+
+/**
+ * Inizializza il logout automatico dopo 30 minuti di inattività
+ */
+function initLogoutTimer() {
+    const INACTIVITY_TIMEOUT = 30 * 60 * 1000; // 30 minuti in millisecondi
+    let inactivityTimer;
+
+    const resetTimer = () => {
+        clearTimeout(inactivityTimer);
+        
+        const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+        if (!isAuthenticated) return;
+
+        inactivityTimer = setTimeout(() => {
+            localStorage.clear();
+            alert('Session expired due to inactivity. Please login again.');
+            location.reload();
+        }, INACTIVITY_TIMEOUT);
+    };
+
+    // Inizializza il timer al caricamento se l'utente è autenticato
+    if (localStorage.getItem('isAuthenticated') === 'true') {
+        resetTimer();
+    }
+
+    // Resetta il timer su attività dell'utente
+    ['mousedown', 'keydown', 'scroll', 'touchstart', 'click'].forEach(event => {
+        document.addEventListener(event, resetTimer, { passive: true });
+    });
 }
 
 /**
