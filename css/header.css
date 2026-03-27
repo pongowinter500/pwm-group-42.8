@@ -236,7 +236,27 @@ header .site-nav.menu-open .menu-toggle span:nth-child(3) {
     }
 }
 
-@media (max-width: 768px) {
+/* Tablet: Keep header same as laptop */
+@media (min-width: 481px) and (max-width: 768px) {
+    header .site-nav {
+        padding: 0 1.75rem;
+        gap: 1.25rem;
+    }
+
+    header .nav-links {
+        gap: 1.25rem;
+    }
+
+    header .nav-search {
+        max-width: 400px;
+    }
+
+    header .nav-auth-link {
+        padding: 0.6rem 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
     header {
         padding: 0.45rem 0;
     }

@@ -177,7 +177,162 @@
     }
 }
 
-@media (max-width: 768px) {
+/* Tablet: 481px - 768px */
+@media (min-width: 481px) and (max-width: 768px) {
+    main {
+        padding: 1.5rem;
+    }
+
+    section {
+        padding: 2rem;
+        margin-bottom: 2.25rem;
+    }
+
+    section > h1 {
+        font-size: 2.2rem;
+    }
+
+    /* Tablet new courses section: display like mobile (single column with slider) */
+    section:first-child .courses-slider {
+        position: relative;
+        padding: 0 3.5rem;
+        display: flex;
+        align-items: stretch;
+        justify-content: center;
+    }
+
+    section:first-child .slider-btn {
+        display: flex;
+    }
+
+    section:first-child .slider-btn--prev {
+        left: 0.5rem;
+    }
+
+    section:first-child .slider-btn--next {
+        right: 0.5rem;
+    }
+
+    section:first-child [data-course-list="new"] {
+        width: 100%;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 0 !important;
+        flex-wrap: nowrap;
+        position: relative;
+    }
+
+    section:first-child [data-course-list="new"] article {
+        display: none !important;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    section:first-child [data-course-list="new"] article.active {
+        display: flex !important;
+    }
+
+    [data-course-list="new"] article p {
+        min-height: unset;
+    }
+
+    #our-courses > article,
+    #our-courses > article:nth-child(even) {
+        gap: 1.5rem;
+        padding: 1.5rem;
+    }
+
+    #our-courses > article img {
+        width: 190px;
+        height: 190px;
+    }
+
+    #our-courses > article p[data-catalogue-description] {
+        display: none;
+    }
+
+    #our-courses > article a,
+    section:first-child article a {
+        width: 100%;
+        text-align: center;
+    }
+
+    .course-description-dropdown {
+        display: block;
+    }
+
+    .about-hero,
+    .business-hero,
+    .course-hero {
+        padding: 3rem 1.5rem;
+    }
+
+    .about-hero h1,
+    .business-hero h1,
+    .course-hero h1 {
+        font-size: 2.4rem;
+    }
+
+    .about-hero p,
+    .business-hero p,
+    .course-hero p {
+        font-size: 1.05rem;
+    }
+
+    .mission-vision,
+    .feature-grid {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .mission-vision > *,
+    .feature-grid > * {
+        width: 100%;
+    }
+
+    .course-container {
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+
+    .instructor-card,
+    .course-content {
+        padding: 1.75rem;
+    }
+
+    .instructor-card img {
+        width: 170px;
+        height: 170px;
+    }
+
+    .login-section {
+        max-width: 640px;
+        margin: 2.5rem auto;
+        padding: 2rem;
+    }
+
+    .btn-contact,
+    .btn-enroll,
+    .btn-login {
+        width: auto;
+        min-width: 180px;
+        text-align: center;
+    }
+
+    footer {
+        padding: 2rem 1.5rem 1rem;
+    }
+
+    footer .footer-content {
+        gap: 1rem 1.5rem;
+    }
+
+    footer .footer-nav-menu {
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
     main {
         padding: 1rem;
     }
@@ -214,6 +369,14 @@
 
     section:first-child .slider-btn {
         display: flex;
+    }
+
+    section:first-child .slider-btn--prev {
+        left: 0.5rem;
+    }
+
+    section:first-child .slider-btn--next {
+        right: 0.5rem;
     }
 
     section:first-child [data-course-list="new"] {
