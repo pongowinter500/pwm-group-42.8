@@ -1,3 +1,6 @@
+/* ===== COMMON CSS SECTION ===== */
+/* Shared properties across all breakpoints */
+
 section:first-child .courses-slider {
     position: relative;
     display: flex;
@@ -5,24 +8,74 @@ section:first-child .courses-slider {
     justify-content: center;
 }
 
-section:first-child [data-course-list="new"] {
+section:first-child > div {
     display: flex;
     align-items: stretch;
     gap: 2rem;
     justify-content: center;
-    flex-wrap: wrap;
+}
+
+section:first-child article {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+}
+
+section:first-child article:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+section:first-child article h2 {
+    margin-bottom: 0.8rem;
+    color: #2c3e50;
+}
+
+section:first-child article p {
+    color: #555;
+    margin-bottom: 1rem;
+}
+
+section:first-child article img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+}
+
+section:first-child article a {
+    display: inline-block;
+    background-color: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: background-color 0.3s;
+    margin-top: auto;
+}
+
+section:first-child article a:hover {
+    background-color: #2980b9;
+}
+
+section:first-child article .course-icon {
+    width: 32px;
+    height: 32px;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+    display: inline-block;
 }
 
 section:first-child .slider-btn {
-    display: none;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     background-color: rgba(52, 152, 219, 0.9);
     color: white;
     border: none;
-    width: 2.5rem;
-    height: 2.5rem;
     border-radius: 50%;
     cursor: pointer;
     align-items: center;
@@ -41,78 +94,111 @@ section:first-child .slider-btn svg {
     height: 1.25rem;
 }
 
+/* ===== MOBILE BASE (0-425px) ===== */
+/* Full mobile styling - no @media wrapper */
+
+section:first-child [data-course-list="new"] {
+    display: none;
+}
+
+section:first-child .slider-btn {
+    display: flex;
+    width: 2.25rem;
+    height: 2.25rem;
+}
+
 section:first-child .slider-btn--prev {
-    left: -3.5rem;
+    left: -2.5rem;
 }
 
 section:first-child .slider-btn--next {
-    right: -3.5rem;
-}
-
-section:first-child > div {
-    display: flex;
-    align-items: stretch;
-    gap: 2rem;
-    justify-content: center;
+    right: -2.5rem;
 }
 
 section:first-child article {
-    background-color: #f8f9fa;
-    padding: 1.5rem;
-    border-radius: 8px;
-    text-align: center;
-    flex: 1;
-    max-width: 300px;
-    transition: transform 0.3s, box-shadow 0.3s;
-    display: flex;
-    flex-direction: column;
-}
-
-section:first-child article:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    max-width: 100%;
+    flex: 0 0 100%;
+    padding: 1.25rem;
 }
 
 section:first-child article h2 {
-    font-size: 1.3rem;
-    margin-bottom: 0.8rem;
-    color: #2c3e50;
+    font-size: 1.2rem;
 }
 
 section:first-child article p {
-    font-size: 0.95rem;
-    color: #555;
-    margin-bottom: 1rem;
-    min-height: 60px;
-}
-
-section:first-child article img {
-    width: 100%;
-    height: auto;
-    border-radius: 5px;
-    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    min-height: 50px;
 }
 
 section:first-child article a {
-    display: inline-block;
-    background-color: #3498db;
-    color: white;
-    padding: 0.6rem 1.5rem;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: 600;
-    transition: background-color 0.3s;
-    margin-top: auto;
+    padding: 0.5rem 1.25rem;
+    font-size: 0.9rem;
 }
 
-section:first-child article a:hover {
-    background-color: #2980b9;
+/* ===== TABLET (min-width: 426px) ===== */
+
+@media (min-width: 426px) {
+    section:first-child [data-course-list="new"] {
+        display: flex;
+        align-items: stretch;
+        gap: 1.25rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    section:first-child .slider-btn {
+        display: none;
+    }
+
+    section:first-child article {
+        max-width: none;
+        flex: 1;
+        padding: 1.5rem;
+    }
+
+    section:first-child article h2 {
+        font-size: 1.25rem;
+    }
+
+    section:first-child article p {
+        font-size: 0.93rem;
+        min-height: 55px;
+    }
+
+    section:first-child article a {
+        padding: 0.6rem 1.4rem;
+        font-size: inherit;
+    }
 }
 
-section:first-child article .course-icon {
-    width: 32px;
-    height: 32px;
-    margin-right: 0.5rem;
-    vertical-align: middle;
-    display: inline-block;
+/* ===== DESKTOP (min-width: 769px) ===== */
+
+@media (min-width: 769px) {
+    section:first-child [data-course-list="new"] {
+        display: flex;
+        align-items: stretch;
+        gap: 2rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    section:first-child article {
+        max-width: 300px;
+        flex: 1;
+        padding: 1.5rem;
+    }
+
+    section:first-child article h2 {
+        font-size: 1.3rem;
+    }
+
+    section:first-child article p {
+        font-size: 0.95rem;
+        min-height: 60px;
+    }
+
+    section:first-child article a {
+        padding: 0.6rem 1.5rem;
+        font-size: inherit;
+    }
 }
