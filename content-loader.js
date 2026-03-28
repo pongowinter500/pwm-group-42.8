@@ -7,6 +7,11 @@
 let contentData = null;
 let isAdminEditMode = false;
 
+// Mappa per i nomi dei file che non corrispondono al courseName
+const COURSE_FILE_NAME_MAP = {
+    'cyber': 'cybersecurity'
+};
+
 const DEFAULT_ADMIN_EDITABLE_SELECTORS = [
     '[data-course-title]',
     '[data-course-subtitle]',
@@ -118,33 +123,24 @@ function populateCourseList() {
     }
     
     const courseListContainers = document.querySelectorAll('[data-course-list]');
-    console.log('Container trovati:', courseListContainers.length);
     
     courseListContainers.forEach(container => {
         const listType = container.getAttribute('data-course-list');
-        console.log('Processando container:', listType);
         
         // Verifica se i corsi sono già stati caricati
         if (container.dataset.loaded === 'true') {
-            console.log('Container già caricato:', listType);
             return;
         }
         
         let coursesToShow = contentData.courses;
         
-        // Mappa per i nomi dei file che non corrispondono al courseName
-        const fileNameMap = {
-            'cyber': 'cybersecurity'
-        };
-        
         // Filtra solo i corsi nuovi se richiesto
         if (listType === 'new') {
             coursesToShow = contentData.courses.filter(c => c.isNew === true);
-            console.log('Corsi nuovi filtrati:', coursesToShow.length);
             
             // Layout per new courses (card con icone)
             const coursesHTML = coursesToShow.map((course, index) => {
-                const fileName = fileNameMap[course.courseName] || course.courseName;
+                const fileName = COURSE_FILE_NAME_MAP[course.courseName] || course.courseName;
                 const isFirst = index === 0 ? ' class="active"' : '';
                 return `
                 <article${isFirst}>
@@ -154,8 +150,6 @@ function populateCourseList() {
                 </article>
             `;
             }).join('');
-            
-            console.log('HTML generato:', coursesHTML.length > 0 ? 'Sì' : 'No');
             
             // Se container è una section, aggiungi dopo l'h1
             if (container.tagName === 'SECTION') {
@@ -193,7 +187,6 @@ function populateCourseList() {
                 }
             } else {
                 container.innerHTML = coursesHTML;
-                console.log('Corsi inseriti, articoli:', container.querySelectorAll('article').length);
             }
             
         } else {
@@ -202,7 +195,7 @@ function populateCourseList() {
             
             // Layout per catalogue (immagine sempre in alto)
             const coursesHTML = coursesToShow.map((course, index) => {
-                const fileName = fileNameMap[course.courseName] || course.courseName;
+                const fileName = COURSE_FILE_NAME_MAP[course.courseName] || course.courseName;
                 const imgElement = `<img src="${course.instructorImg}" alt="${course.instructorName}">`;
                 const contentElement = `
                     <div>
@@ -438,11 +431,9 @@ async function initContentLoader() {
     // Reset lo stato UIState per permettere la reinizializzazione
     if (typeof UIState !== 'undefined' && UIState.initialized) {
         UIState.initialized.delete('slider');
-        console.log('Reset UIState slider');
     }
     
     if (typeof initNewCoursesSlider === 'function') {
-        console.log('Chiamando initNewCoursesSlider');
         initNewCoursesSlider();
     }
 }
