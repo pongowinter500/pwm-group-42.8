@@ -16,7 +16,7 @@
    ===================================================== */
 
 /* =====================================================
-   MOBILE BASE (0-425px)
+   MOBILE BASE (0-480px)
    No @media wrapper
    ===================================================== */
 
@@ -387,7 +387,7 @@ section:first-child [data-course-list="new"] article.active {
         height: 280px;
         object-fit: cover;
         flex-shrink: 0;
-        border-radius: 8px;
+        border-radius: 50%;
     }
 
     #our-courses > article > div {

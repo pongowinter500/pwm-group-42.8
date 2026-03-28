@@ -19,7 +19,7 @@
     border-radius: 50%;
     object-fit: cover;
     flex-shrink: 0;
-    border: 5px solid #3498db;
+    outline: 5px solid #3498db;
 }
 
 #our-courses > article > div {
