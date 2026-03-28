@@ -30,6 +30,28 @@ section:first-child [data-course-list="new"] article.active {
     display: none;
 }
 
+/* Hide section1-text on mobile (show only on tablet) */
+#our-courses > article p.section1-text {
+    display: none;
+}
+
+/* =====================================================
+   TABLET (@media 481px - 768px)
+   Show section1-text only on tablet
+   ===================================================== */
+
+@media (min-width: 481px) and (max-width: 768px) {
+    /* Show section1-text on tablet */
+    #our-courses > article p.section1-text {
+        display: block;
+        font-size: 0.9rem;
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+        font-weight: 400;
+    }
+}
+
 /* =====================================================
    LAPTOP (@media min-width: 769px)
    Show catalogue description only on laptop
@@ -44,5 +66,10 @@ section:first-child [data-course-list="new"] article.active {
         line-height: 1.7;
         margin-bottom: 1.5rem;
         font-weight: 400;
+    }
+    
+    /* Hide section1-text on laptop (use catalogue-description instead) */
+    #our-courses > article p.section1-text {
+        display: none;
     }
 }

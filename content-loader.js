@@ -208,6 +208,7 @@ function populateCourseList() {
                     <div>
                         <h2>${course.courseTitle}</h2>
                         <h3>${course.instructorName}</h3>
+                        <p class="section1-text">${course.section1Text || ''}</p>
                         <p data-catalogue-description>${course.catalogueDescription || course.section1Text}</p>
                         <a href="html/courses/${fileName}.html">Learn More</a>
                     </div>
@@ -434,11 +435,10 @@ async function initContentLoader() {
     updateEnrollButtonForAdmin();
     
     // Reinizializza lo slider dei nuovi corsi dopo che i corsi sono stati caricati
-    // Reset il flag sliderInitialized per permettere la reinizializzazione
-    const coursesSlider = document.querySelector('section:first-child .courses-slider');
-    if (coursesSlider) {
-        coursesSlider.dataset.sliderInitialized = 'false';
-        console.log('Flag sliderInitialized resettato');
+    // Reset lo stato UIState per permettere la reinizializzazione
+    if (typeof UIState !== 'undefined' && UIState.initialized) {
+        UIState.initialized.delete('slider');
+        console.log('Reset UIState slider');
     }
     
     if (typeof initNewCoursesSlider === 'function') {
