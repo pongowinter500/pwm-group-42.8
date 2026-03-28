@@ -112,15 +112,23 @@ function getNestedValue(obj, path) {
  * Cerca elementi con data-course-list="all" o data-course-list="new"
  */
 function populateCourseList() {
-    if (!contentData || !contentData.courses) return;
+    if (!contentData || !contentData.courses) {
+        console.error('contentData o courses non trovati');
+        return;
+    }
     
     const courseListContainers = document.querySelectorAll('[data-course-list]');
+    console.log('Container trovati:', courseListContainers.length);
     
     courseListContainers.forEach(container => {
         const listType = container.getAttribute('data-course-list');
+        console.log('Processando container:', listType);
         
         // Verifica se i corsi sono già stati caricati
-        if (container.dataset.loaded === 'true') return;
+        if (container.dataset.loaded === 'true') {
+            console.log('Container già caricato:', listType);
+            return;
+        }
         
         let coursesToShow = contentData.courses;
         
@@ -132,18 +140,22 @@ function populateCourseList() {
         // Filtra solo i corsi nuovi se richiesto
         if (listType === 'new') {
             coursesToShow = contentData.courses.filter(c => c.isNew === true);
+            console.log('Corsi nuovi filtrati:', coursesToShow.length);
             
             // Layout per new courses (card con icone)
-            const coursesHTML = coursesToShow.map(course => {
+            const coursesHTML = coursesToShow.map((course, index) => {
                 const fileName = fileNameMap[course.courseName] || course.courseName;
+                const isFirst = index === 0 ? ' class="active"' : '';
                 return `
-                <article>
+                <article${isFirst}>
                     <p>${course.description || course.courseSubtitle}</p>
                     <h2><img src="${course.icon}" alt="${course.courseTitle}" class="course-icon"> ${course.courseTitle}</h2>
                     <a href="html/courses/${fileName}.html">View Course</a>
                 </article>
             `;
             }).join('');
+            
+            console.log('HTML generato:', coursesHTML.length > 0 ? 'Sì' : 'No');
             
             // Se container è una section, aggiungi dopo l'h1
             if (container.tagName === 'SECTION') {
@@ -153,6 +165,7 @@ function populateCourseList() {
                 }
             } else {
                 container.innerHTML = coursesHTML;
+                console.log('Corsi inseriti, articoli:', container.querySelectorAll('article').length);
             }
             
         } else {
@@ -391,6 +404,19 @@ async function initContentLoader() {
     
     // Aggiorna il pulsante Enroll per gli admin
     updateEnrollButtonForAdmin();
+    
+    // Reinizializza lo slider dei nuovi corsi dopo che i corsi sono stati caricati
+    // Reset il flag sliderInitialized per permettere la reinizializzazione
+    const coursesSlider = document.querySelector('section:first-child .courses-slider');
+    if (coursesSlider) {
+        coursesSlider.dataset.sliderInitialized = 'false';
+        console.log('Flag sliderInitialized resettato');
+    }
+    
+    if (typeof initNewCoursesSlider === 'function') {
+        console.log('Chiamando initNewCoursesSlider');
+        initNewCoursesSlider();
+    }
 }
 
 // Inizializza il content loader dopo che i moduli HTML sono stati caricati
