@@ -382,6 +382,10 @@ section:first-child [data-course-list="new"] article.active {
         margin: 0 auto;
     }
 
+    #our-courses > article:nth-child(even) {
+        flex-direction: row-reverse;
+    }
+
     #our-courses > article img {
         width: 280px;
         height: 280px;
