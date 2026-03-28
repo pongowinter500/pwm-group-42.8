@@ -159,10 +159,9 @@ function populateCourseList() {
             // Per il catalogo, mostra solo i corsi che NON sono nuovi
             coursesToShow = contentData.courses.filter(c => c.isNew !== true);
             
-            // Layout per catalogue (con foto professori, layout alternato)
+            // Layout per catalogue (immagine sempre in alto)
             const coursesHTML = coursesToShow.map((course, index) => {
                 const fileName = fileNameMap[course.courseName] || course.courseName;
-                const isEven = index % 2 === 0;
                 const imgElement = `<img src="${course.instructorImg}" alt="${course.instructorName}">`;
                 const contentElement = `
                     <div>
@@ -173,8 +172,8 @@ function populateCourseList() {
                     </div>
                 `;
                 
-                // Alterna immagine sinistra/destra
-                return `<article>${isEven ? imgElement + contentElement : contentElement + imgElement}</article>`;
+                // Immagine sempre in alto su mobile e tablet
+                return `<article>${imgElement + contentElement}</article>`;
             }).join('');
             
             // Se container è una section, aggiungi dopo l'h1
