@@ -172,10 +172,10 @@ async function loadHTMLModules() {
                 }
                 element.parentNode.removeChild(element);
             } else {
-                console.error(`Errore nel caricamento di ${file}: ${response.status}`);
+                console.error(`Error loading ${file}: ${response.status}`);
             }
         } catch (error) {
-            console.error(`Errore nel caricamento di ${file}:`, error);
+            console.error(`Error loading ${file}:`, error);
         }
     }
 }
@@ -211,7 +211,7 @@ function initSearchToggle() {
     if (UIState.isInitialized('search')) return;
     UIState.markInitialized('search');
     
-    window.__uiHandlers = window.__uiHandlers || {};
+    window.__uiHandlegitrs = window.__uiHandlers || {};
     window.__uiHandlers.search = createToggleHandler(
         UI_SELECTORS.searchToggle,
         UI_SELECTORS.mobileSearchForm,
@@ -379,7 +379,7 @@ function initDescriptionToggle() {
     });
 }
 
-// Carica i moduli quando il DOM è pronto e inizializza tutta la logica
+// Loads modules when DOM is ready and initializes all logic
 document.addEventListener('DOMContentLoaded', async () => {
     await loadHTMLModules();
     if (typeof populateCourseData === 'function') {
@@ -395,21 +395,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     initPasswordToggle();
     initLogoutTimer();
 
-    // Emetti un evento custom per notificare che i moduli sono stati caricati
+    // Dispatch custom event to notify that modules have been loaded
     window.dispatchEvent(new CustomEvent('modulesLoaded'));
 
-    // Se siamo sulla pagina di login, colleghiamo il form
+    // If we are on the login page, attach the form event handler
     const authForm = document.getElementById('auth-form');
     if (authForm) {
         authForm.addEventListener('submit', handleLogin);
     }
 
-    // Verifichiamo se l'utente è già autenticato e mostriamo l'eventuale banner
+    // Check if user is already authenticated and display the authentication banner
     checkAuthStatus();
 });
 
 /**
- * Gestisce il processo di autenticazione con validazione HTML5 nativa
+ * Handles the authentication process with native HTML5 validation
  */
 async function handleLogin(event) {
     event.preventDefault();
@@ -421,16 +421,16 @@ async function handleLogin(event) {
     const passwordError = document.getElementById('password-error');
     const loginBtn = form.querySelector('.btn-login');
 
-    // Reset messaggi di errore
+    // Reset error messages
     emailError.textContent = '';
     passwordError.textContent = '';
     emailInput.classList.remove('shake');
     passwordInput.classList.remove('shake');
 
-    // Validazione HTML5 usando l'API Constraint Validation
+    // HTML5 validation using Constraint Validation API
     let isValid = true;
 
-    // Valida email
+    // Validate email
     if (!emailInput.validity.valid) {
         isValid = false;
         emailInput.classList.add('shake');
@@ -441,7 +441,7 @@ async function handleLogin(event) {
         }
     }
 
-    // Valida password
+    // Validate password
     if (!passwordInput.validity.valid) {
         isValid = false;
         passwordInput.classList.add('shake');
@@ -454,7 +454,7 @@ async function handleLogin(event) {
         }
     }
 
-    // Se il form non è valido, ferma l'invio
+    // If form is invalid, stop submission
     if (!isValid) {
         return;
     }
@@ -462,14 +462,14 @@ async function handleLogin(event) {
     const email = emailInput.value;
     const password = passwordInput.value;
 
-    // Attiva loading state
+    // Enable loading state
     loginBtn.classList.add('loading');
     loginBtn.disabled = true;
     emailInput.disabled = true;
     passwordInput.disabled = true;
 
     try {
-        // Preleviamo i dati degli utenti dal file JSON (simuliamo un server)
+        // Fetch user data from JSON file (simulating a server)
         const dataPath = '/data/users.json';
         const response = await fetch(dataPath);
         
@@ -479,37 +479,37 @@ async function handleLogin(event) {
         
         const data = await response.json();
 
-        // Cerchiamo l'utente nella lista
+        // Search for user in the list
         const user = data.users.find(u => u.email === email && u.password === password);
 
         if (user) {
-            // Conserviamo lo stato di autenticazione con timestamp
+            // Store authentication state with timestamp
             localStorage.setItem('isAuthenticated', 'true');
             localStorage.setItem('userRole', user.role);
             localStorage.setItem('userEmail', user.email);
             localStorage.setItem('loginTime', Date.now().toString());
 
-            // Svuota i campi del form
+            // Clear form fields
             emailInput.value = '';
             passwordInput.value = '';
 
-            alert(`Autenticazione riuscita! Bentornato, ${user.role}.`);
+            alert(`Authentication successful! Welcome back, ${user.role}.`);
             window.location.href = 'index.html';
         } else {
-            // Mostra errore per credenziali non valide con shake animation
+            // Show error for invalid credentials with shake animation
             emailInput.classList.add('shake');
             passwordInput.classList.add('shake');
             emailError.textContent = 'Invalid email or password';
             passwordError.textContent = 'Invalid email or password';
             
-            // Rimuovi shake class dopo l'animazione
+            // Remove shake class after animation
             setTimeout(() => {
                 emailInput.classList.remove('shake');
                 passwordInput.classList.remove('shake');
             }, 500);
         }
     } catch (error) {
-        console.error("Errore nel caricamento del database utenti:", error);
+        console.error("Error loading user database:", error);
         emailInput.classList.add('shake');
         passwordInput.classList.add('shake');
         emailError.textContent = 'Network error. Please check your connection and try again.';
@@ -521,7 +521,7 @@ async function handleLogin(event) {
             passwordInput.classList.remove('shake');
         }, 500);
     } finally {
-        // Disattiva loading state
+        // Disable loading state
         loginBtn.classList.remove('loading');
         loginBtn.disabled = false;
         emailInput.disabled = false;
@@ -530,7 +530,7 @@ async function handleLogin(event) {
 }
 
 /**
- * Inizializza il toggle show/hide password
+ * Initializes the show/hide password toggle
  */
 function initPasswordToggle() {
     const passwordToggle = document.querySelector(UI_SELECTORS.passwordToggle);
@@ -550,10 +550,10 @@ function initPasswordToggle() {
 }
 
 /**
- * Inizializza il logout automatico dopo 30 minuti di inattività
+ * Initializes automatic logout after 30 minutes of inactivity
  */
 function initLogoutTimer() {
-    const INACTIVITY_TIMEOUT = 30 * 60 * 1000; // 30 minuti in millisecondi
+    const INACTIVITY_TIMEOUT = 30 * 60 * 1000; // 30 minutes in milliseconds
     let inactivityTimer;
 
     const resetTimer = () => {
@@ -569,26 +569,26 @@ function initLogoutTimer() {
         }, INACTIVITY_TIMEOUT);
     };
 
-    // Inizializza il timer al caricamento se l'utente è autenticato
+    // Initialize timer on page load if user is authenticated
     if (localStorage.getItem('isAuthenticated') === 'true') {
         resetTimer();
     }
 
-    // Resetta il timer su attività dell'utente
+    // Reset timer on user activity
     ['mousedown', 'keydown', 'scroll', 'touchstart', 'click'].forEach(event => {
         document.addEventListener(event, resetTimer, { passive: true });
     });
 }
 
 /**
- * Modifica interfaccia in base al ruolo dell'utente
+ * Modifies the interface based on the user's role
  */
 function checkAuthStatus() {
     const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
     const role = localStorage.getItem('userRole');
 
     if (isAuthenticated) {
-        // Modifichiamo il link di login in logout
+        // Change login link to logout
         const loginLink = document.querySelector(UI_SELECTORS.loginLink);
         if (loginLink) {
             loginLink.textContent = "Logout";
@@ -599,15 +599,15 @@ function checkAuthStatus() {
             };
         }
 
-        // Banner di notifica permanente in alto
+        // Permanent notification banner at the top
         const statusMsg = document.createElement('div');
         let bannerStyle = "color: white; text-align: center; padding: 10px;";
         if (role === 'admin') {
             bannerStyle = "background: #e74c3c;" + bannerStyle;
-            statusMsg.textContent = "Accesso amministratore attivo";
+            statusMsg.textContent = "Admin access active";
         } else {
             bannerStyle = "background: #2ecc71;" + bannerStyle;
-            statusMsg.textContent = `Connesso come ${role}`;
+            statusMsg.textContent = `Logged in as ${role}`;
         }
         statusMsg.style.cssText = bannerStyle;
         document.body.prepend(statusMsg);
