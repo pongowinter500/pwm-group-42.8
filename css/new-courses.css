@@ -171,7 +171,7 @@ section:first-child article a {
     }
 }
 
-/* ===== DESKTOP (min-width: 769px) ===== */
+/* ===== LAPTOP (min-width: 769px) ===== */
 
 @media (min-width: 769px) {
     section:first-child [data-course-list="new"] {

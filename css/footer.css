@@ -218,7 +218,7 @@ footer p {
     }
 }
 
-/* Desktop (min-width: 769px) */
+/* Laptop (min-width: 769px) */
 @media (min-width: 769px) {
     footer {
         padding: 3rem 2rem 1rem;

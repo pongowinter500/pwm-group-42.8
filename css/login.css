@@ -241,7 +241,7 @@
 }
 
 /* ============================================================================
-   DESKTOP (@media min-width: 769px) - ONLY properties that differ from tablet
+   LAPTOP (@media min-width: 769px) - ONLY properties that differ from tablet
    ============================================================================ */
 
 @media (min-width: 769px) {

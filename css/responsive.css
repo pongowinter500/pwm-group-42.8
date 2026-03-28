@@ -29,3 +29,20 @@ section:first-child [data-course-list="new"] article.active {
 #our-courses > article p[data-catalogue-description] {
     display: none;
 }
+
+/* =====================================================
+   LAPTOP (@media min-width: 769px)
+   Show catalogue description only on laptop
+   ===================================================== */
+
+@media (min-width: 769px) {
+    /* Show course catalogue description on laptop */
+    #our-courses > article p[data-catalogue-description] {
+        display: block;
+        font-size: 0.95rem;
+        color: #666;
+        line-height: 1.7;
+        margin-bottom: 1.5rem;
+        font-weight: 400;
+    }
+}
