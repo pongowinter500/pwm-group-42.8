@@ -64,11 +64,11 @@ section > h3 {
 }
 
 /* ===================================
-   TABLET (@media min-width: 426px)
+   TABLET (@media min-width: 481px)
    Only properties that change from mobile
    =================================== */
 
-@media (min-width: 426px) {
+@media (min-width: 481px) {
     main {
         padding: 1rem;
     }

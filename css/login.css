@@ -220,10 +220,10 @@
 }
 
 /* ============================================================================
-   TABLET (@media min-width: 426px) - ONLY properties that differ from mobile
+   TABLET (@media min-width: 481px) - ONLY properties that differ from mobile
    ============================================================================ */
 
-@media (min-width: 426px) {
+@media (min-width: 481px) {
     .login-section {
         max-width: 35rem;
         margin: 2rem auto;

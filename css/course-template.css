@@ -203,10 +203,10 @@
     margin-bottom: 1.5rem;
 }
 
-/* ============= TABLET @media (min-width: 426px) ============= */
+/* ============= TABLET @media (min-width: 481px) ============= */
 /* Only properties that differ from mobile */
 
-@media (min-width: 426px) {
+@media (min-width: 481px) {
     .course-hero {
         padding: 3rem 1.5rem;
         margin-bottom: 2rem;
