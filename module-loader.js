@@ -1,3 +1,153 @@
+/* ===== CONFIGURATION ===== */
+
+/**
+ * Centralized UI selectors config
+ * Update selectors in one place instead of scattered across functions
+ */
+const UI_SELECTORS = {
+    searchToggle: '.search-toggle',
+    mobileSearchForm: '.mobile-search-form',
+    searchInput: '.mobile-search-form input[type="search"]',
+    
+    siteNav: 'header .site-nav',
+    menuToggle: '.menu-toggle',
+    navMenu: '.nav-menu',
+    navLinks: 'header nav ul li a',
+    
+    coursesSlider: 'section:first-child .courses-slider',
+    prevBtn: '.slider-btn--prev',
+    nextBtn: '.slider-btn--next',
+    courseList: '[data-course-list="new"]',
+    courseArticles: '[data-course-list="new"] article',
+    
+    descriptionToggle: '.description-toggle',
+    descriptionContent: '.description-content',
+    
+    footerToggle: 'footer .footer-nav-toggle',
+    footerNavMenu: 'footer .footer-nav-menu',
+    
+    passwordToggle: '.password-toggle',
+    passwordInput: '#password',
+    
+    authForm: '#auth-form',
+    loginLink: 'a[href="html/login.html"]'
+};
+
+/**
+ * Global UI State Management
+ * Single source of truth for all UI states
+ */
+const UIState = {
+    searchOpen: false,
+    menuOpen: false,
+    sliderIndex: 0,
+    initialized: new Set(),
+    
+    setState: function(key, value) {
+        this[key] = value;
+    },
+    
+    isInitialized: function(id) {
+        return this.initialized.has(id);
+    },
+    
+    markInitialized: function(id) {
+        this.initialized.add(id);
+    }
+};
+
+/**
+ * Utility: Debounce function for performance optimization
+ */
+function debounce(func, delay = 250) {
+    let timeout;
+    return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func(...args), delay);
+    };
+}
+
+/**
+ * Utility: Factory function for creating reusable toggle handlers
+ */
+function createToggleHandler(toggleSelector, contentSelector, options = {}) {
+    const toggle = document.querySelector(toggleSelector);
+    const content = document.querySelector(contentSelector);
+    
+    if (!toggle || !content) return null;
+    
+    const {
+        onOpen = null,
+        onClose = null,
+        focusSelector = null
+    } = options;
+    
+    let isOpen = false;
+    
+    const setState = (state) => {
+        isOpen = state;
+        toggle.classList.toggle('active', state);
+        content.classList.toggle('active', state);
+        toggle.setAttribute('aria-expanded', String(state));
+        
+        if (state && onOpen) onOpen();
+        if (!state && onClose) onClose();
+        
+        if (state && focusSelector) {
+            const focusElement = content.querySelector(focusSelector);
+            if (focusElement) setTimeout(() => focusElement.focus(), 100);
+        }
+    };
+    
+    toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setState(!isOpen);
+    });
+    
+    document.addEventListener('click', (e) => {
+        if (!toggle.contains(e.target) && !content.contains(e.target)) {
+            setState(false);
+        }
+    });
+    
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') setState(false);
+    });
+    
+    return { toggle, content, setState };
+}
+
+/**
+ * Centralized resize event handler
+ * Prevents multiple resize listeners
+ */
+function initResponsiveHandlers() {
+    const handleResize = debounce(() => {
+        if (window.innerWidth > 768) {
+            // Close all mobile UI elements when resizing to desktop
+            closeAllMobileUI();
+        }
+    }, 250);
+    
+    window.addEventListener('resize', handleResize);
+}
+
+/**
+ * Close all mobile UI elements
+ */
+function closeAllMobileUI() {
+    UIState.setState('searchOpen', false);
+    UIState.setState('menuOpen', false);
+    
+    const searchHandler = window.__uiHandlers?.search;
+    const menuHandler = window.__uiHandlers?.menu;
+    const footerToggles = document.querySelectorAll(UI_SELECTORS.footerToggle);
+    
+    if (searchHandler) searchHandler.setState(false);
+    if (menuHandler) menuHandler.setState(false);
+    footerToggles.forEach(toggle => toggle.setAttribute('aria-expanded', 'false'));
+}
+
 /**
  * Dynamically loads HTML blocks from external files into the page
  * Uses the data-include-html attribute to specify which file to load
@@ -36,11 +186,11 @@ function markActiveNav() {
     if (!current) current = 'index.html';
 
     // clean previous active states
-    document.querySelectorAll('header nav ul li a').forEach(a => a.classList.remove('active'));
+    document.querySelectorAll(UI_SELECTORS.navLinks).forEach(a => a.classList.remove('active'));
 
     // try exact filename match
     let matched = false;
-    document.querySelectorAll('header nav ul li a').forEach(a => {
+    document.querySelectorAll(UI_SELECTORS.navLinks).forEach(a => {
         const href = a.getAttribute('href') || '';
         const target = href.split('/').pop() || '';
         if (target === current) {
@@ -58,78 +208,47 @@ function markActiveNav() {
 
 // initialize the mobile search toggle behavior
 function initSearchToggle() {
-    const searchToggle = document.querySelector('.search-toggle');
-    const mobileSearchForm = document.querySelector('.mobile-search-form');
-
-    if (!searchToggle || !mobileSearchForm) return;
-
-    if (searchToggle.dataset.searchToggleInitialized === 'true') return;
-    searchToggle.dataset.searchToggleInitialized = 'true';
-
-    const setSearchState = (isOpen) => {
-        searchToggle.classList.toggle('active', isOpen);
-        mobileSearchForm.classList.toggle('active', isOpen);
-        searchToggle.setAttribute('aria-expanded', String(isOpen));
-
-        if (isOpen) {
-            // Focus sull'input di ricerca quando viene aperto
-            const searchInput = mobileSearchForm.querySelector('input[type="search"]');
-            if (searchInput) {
-                setTimeout(() => searchInput.focus(), 100);
-            }
+    if (UIState.isInitialized('search')) return;
+    UIState.markInitialized('search');
+    
+    window.__uiHandlers = window.__uiHandlers || {};
+    window.__uiHandlers.search = createToggleHandler(
+        UI_SELECTORS.searchToggle,
+        UI_SELECTORS.mobileSearchForm,
+        {
+            focusSelector: UI_SELECTORS.searchInput
         }
-    };
-
-    searchToggle.addEventListener('click', (event) => {
-        event.stopPropagation();
-        const isOpen = mobileSearchForm.classList.contains('active');
-        setSearchState(!isOpen);
-    });
-
-    // Chiudi la ricerca quando si clicca fuori
-    document.addEventListener('click', (event) => {
-        if (!searchToggle.contains(event.target) && !mobileSearchForm.contains(event.target)) {
-            setSearchState(false);
-        }
-    });
-
-    // Chiudi con il tasto Escape
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') {
-            setSearchState(false);
-        }
-    });
-
-    // Chiudi quando si ridimensiona la finestra a desktop
-    window.addEventListener('resize', () => {
-        if (window.innerWidth > 768) {
-            setSearchState(false);
-        }
-    });
+    );
 }
 
 // initialize the mobile dropdown navigation behavior
 function initMobileMenu() {
-    const nav = document.querySelector('header .site-nav');
+    if (UIState.isInitialized('menu')) return;
+    UIState.markInitialized('menu');
+    
+    const nav = document.querySelector(UI_SELECTORS.siteNav);
     if (!nav) return;
 
-    const toggleButton = nav.querySelector('.menu-toggle');
-    const navMenu = nav.querySelector('.nav-menu');
+    const toggleButton = nav.querySelector(UI_SELECTORS.menuToggle);
+    const navMenu = nav.querySelector(UI_SELECTORS.navMenu);
     if (!toggleButton || !navMenu) return;
 
-    if (nav.dataset.mobileMenuInitialized === 'true') return;
-    nav.dataset.mobileMenuInitialized = 'true';
+    let isOpen = false;
+    
+    window.__uiHandlers = window.__uiHandlers || {};
+    window.__uiHandlers.menu = { setState: (state) => setMenuState(state) };
 
-    const setMenuState = (isOpen) => {
-        nav.classList.toggle('menu-open', isOpen);
-        document.body.classList.toggle('mobile-menu-open', isOpen);
-        toggleButton.setAttribute('aria-expanded', String(isOpen));
-        toggleButton.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+    const setMenuState = (state) => {
+        isOpen = state;
+        UIState.setState('menuOpen', state);
+        nav.classList.toggle('menu-open', state);
+        document.body.classList.toggle('mobile-menu-open', state);
+        toggleButton.setAttribute('aria-expanded', String(state));
+        toggleButton.setAttribute('aria-label', state ? 'Close menu' : 'Open menu');
     };
 
     toggleButton.addEventListener('click', (event) => {
         event.stopPropagation();
-        const isOpen = nav.classList.contains('menu-open');
         setMenuState(!isOpen);
     });
 
@@ -148,34 +267,28 @@ function initMobileMenu() {
             setMenuState(false);
         }
     });
-
-    window.addEventListener('resize', () => {
-        if (window.innerWidth > 768) {
-            setMenuState(false);
-        }
-    });
 }
 
 // initialize new courses slider for mobile
 function initNewCoursesSlider() {
-    const coursesSlider = document.querySelector('section:first-child .courses-slider');
+    if (UIState.isInitialized('slider')) return;
+    UIState.markInitialized('slider');
+    
+    const coursesSlider = document.querySelector(UI_SELECTORS.coursesSlider);
     if (!coursesSlider) return;
 
-    const prevBtn = coursesSlider.querySelector('.slider-btn--prev');
-    const nextBtn = coursesSlider.querySelector('.slider-btn--next');
-    const courseList = coursesSlider.querySelector('[data-course-list="new"]');
+    const prevBtn = coursesSlider.querySelector(UI_SELECTORS.prevBtn);
+    const nextBtn = coursesSlider.querySelector(UI_SELECTORS.nextBtn);
+    const courseList = coursesSlider.querySelector(UI_SELECTORS.courseList);
     
     if (!prevBtn || !nextBtn || !courseList) return;
 
-    if (coursesSlider.dataset.sliderInitialized === 'true') return;
-    coursesSlider.dataset.sliderInitialized = 'true';
-
-    let currentIndex = 0;
     const articles = courseList.querySelectorAll('article');
     
     if (articles.length === 0) return;
 
     const showArticle = (index) => {
+        UIState.setState('sliderIndex', index);
         articles.forEach((article, i) => {
             article.classList.toggle('active', i === index);
         });
@@ -185,26 +298,26 @@ function initNewCoursesSlider() {
     showArticle(0);
 
     prevBtn.addEventListener('click', () => {
-        currentIndex = (currentIndex - 1 + articles.length) % articles.length;
-        showArticle(currentIndex);
+        const newIndex = (UIState.sliderIndex - 1 + articles.length) % articles.length;
+        showArticle(newIndex);
     });
 
     nextBtn.addEventListener('click', () => {
-        currentIndex = (currentIndex + 1) % articles.length;
-        showArticle(currentIndex);
+        const newIndex = (UIState.sliderIndex + 1) % articles.length;
+        showArticle(newIndex);
     });
 }
 
 // initialize footer menu toggles for mobile
 function initFooterMenus() {
-    const footerNavToggles = document.querySelectorAll('footer .footer-nav-toggle');
+    if (UIState.isInitialized('footer')) return;
+    UIState.markInitialized('footer');
+    
+    const footerNavToggles = document.querySelectorAll(UI_SELECTORS.footerToggle);
     
     if (footerNavToggles.length === 0) return;
 
     footerNavToggles.forEach(toggle => {
-        if (toggle.dataset.footerMenuInitialized === 'true') return;
-        toggle.dataset.footerMenuInitialized = 'true';
-
         const setMenuState = (isOpen) => {
             toggle.setAttribute('aria-expanded', String(isOpen));
         };
@@ -238,31 +351,30 @@ function initFooterMenus() {
 
 // initialize course description dropdown toggle
 function initDescriptionToggle() {
-    const descriptionToggle = document.querySelector('.description-toggle');
-    const descriptionContent = document.querySelector('.description-content');
+    if (UIState.isInitialized('description')) return;
+    UIState.markInitialized('description');
+    
+    const descriptionToggle = document.querySelector(UI_SELECTORS.descriptionToggle);
+    const descriptionContent = document.querySelector(UI_SELECTORS.descriptionContent);
 
     if (!descriptionToggle || !descriptionContent) return;
 
-    if (descriptionToggle.dataset.descriptionToggleInitialized === 'true') return;
-    descriptionToggle.dataset.descriptionToggleInitialized = 'true';
-
-    const setDescriptionState = (isOpen) => {
-        descriptionToggle.setAttribute('aria-expanded', String(isOpen));
+    let isOpen = false;
+    
+    const setDescriptionState = (state) => {
+        isOpen = state;
+        descriptionToggle.setAttribute('aria-expanded', String(state));
     };
 
     descriptionToggle.addEventListener('click', (event) => {
         event.preventDefault();
-        const isOpen = descriptionToggle.getAttribute('aria-expanded') === 'true';
         setDescriptionState(!isOpen);
     });
 
     // Close with Escape key
     document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') {
-            const isOpen = descriptionToggle.getAttribute('aria-expanded') === 'true';
-            if (isOpen) {
-                setDescriptionState(false);
-            }
+        if (event.key === 'Escape' && isOpen) {
+            setDescriptionState(false);
         }
     });
 }
@@ -274,8 +386,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         try { populateCourseData(); } catch (e) { console.warn('populateCourseData error:', e); }
     }
     markActiveNav();
-    initMobileMenu();
+    initResponsiveHandlers();
     initSearchToggle();
+    initMobileMenu();
     initFooterMenus();
     initNewCoursesSlider();
     initDescriptionToggle();
@@ -420,13 +533,13 @@ async function handleLogin(event) {
  * Inizializza il toggle show/hide password
  */
 function initPasswordToggle() {
-    const passwordToggle = document.querySelector('.password-toggle');
-    const passwordInput = document.getElementById('password');
+    const passwordToggle = document.querySelector(UI_SELECTORS.passwordToggle);
+    const passwordInput = document.querySelector(UI_SELECTORS.passwordInput);
 
     if (!passwordToggle || !passwordInput) return;
 
-    if (passwordToggle.dataset.passwordToggleInitialized === 'true') return;
-    passwordToggle.dataset.passwordToggleInitialized = 'true';
+    if (UIState.isInitialized('password')) return;
+    UIState.markInitialized('password');
 
     passwordToggle.addEventListener('click', (event) => {
         event.preventDefault();
@@ -468,7 +581,7 @@ function initLogoutTimer() {
 }
 
 /**
- * Modifică interfața în funcție de rolul utilizatorului
+ * Modifica interfaccia in base al ruolo dell'utente
  */
 function checkAuthStatus() {
     const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
@@ -476,7 +589,7 @@ function checkAuthStatus() {
 
     if (isAuthenticated) {
         // Modifichiamo il link di login in logout
-        const loginLink = document.querySelector('a[href="html/login.html"]');
+        const loginLink = document.querySelector(UI_SELECTORS.loginLink);
         if (loginLink) {
             loginLink.textContent = "Logout";
             loginLink.href = "#";

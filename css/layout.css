@@ -98,7 +98,13 @@ section > h3 {
 
 @media (min-width: 769px) {
     main {
-        padding: 2rem;
+        display: grid;
+        grid-template-columns: 1fr min(1200px, 90vw) 1fr;
+        padding: 2rem 0;
+    }
+
+    main > * {
+        grid-column: 2;
     }
 
     section {

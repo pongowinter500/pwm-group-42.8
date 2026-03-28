@@ -162,6 +162,34 @@ function populateCourseList() {
                 const title = container.querySelector('h1');
                 if (title) {
                     title.insertAdjacentHTML('afterend', coursesHTML);
+                    
+                    // Aggiungi logica carousel per le frecce su mobile
+                    const section = container;
+                    const articles = section.querySelectorAll('[data-course-list="new"] article');
+                    const prevBtn = section.querySelector('.slider-btn--prev');
+                    const nextBtn = section.querySelector('.slider-btn--next');
+                    let currentIndex = 0;
+                    
+                    if (articles.length > 1 && prevBtn && nextBtn) {
+                        const showCourse = (index) => {
+                            articles.forEach((article, idx) => {
+                                article.classList.remove('active');
+                                if (idx === index) {
+                                    article.classList.add('active');
+                                }
+                            });
+                        };
+                        
+                        prevBtn.addEventListener('click', () => {
+                            currentIndex = (currentIndex - 1 + articles.length) % articles.length;
+                            showCourse(currentIndex);
+                        });
+                        
+                        nextBtn.addEventListener('click', () => {
+                            currentIndex = (currentIndex + 1) % articles.length;
+                            showCourse(currentIndex);
+                        });
+                    }
                 }
             } else {
                 container.innerHTML = coursesHTML;

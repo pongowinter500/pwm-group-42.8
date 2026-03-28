@@ -225,12 +225,35 @@ footer p {
     }
 
     footer .footer-content {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
         gap: 2rem;
+        align-items: start;
+    }
+
+    footer .footer-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    footer .footer-nav-toggle {
+        display: inline-flex;
+        padding: 0;
     }
 
     footer .footer-nav-menu {
-        gap: 2rem;
-        flex-wrap: wrap;
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+        max-height: none;
+        opacity: 1;
+        padding: 0;
+    }
+
+    footer .footer-nav-menu li {
+        display: block;
+        padding: 0;
     }
 }
 
