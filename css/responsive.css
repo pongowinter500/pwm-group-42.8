@@ -372,18 +372,19 @@ section:first-child [data-course-list="new"] article.active {
 
     #our-courses > article {
         display: flex;
-        flex-direction: row;
+        flex-direction: row-reverse;
         gap: 2rem;
         padding: 2rem;
-        align-items: stretch;
+        align-items: flex-start;
         text-align: left;
         max-width: 900px;
         width: 100%;
         margin: 0 auto;
+        box-sizing: border-box;
     }
 
     #our-courses > article:nth-child(even) {
-        flex-direction: row-reverse;
+        flex-direction: row;
     }
 
     #our-courses > article img {
@@ -392,6 +393,7 @@ section:first-child [data-course-list="new"] article.active {
         object-fit: cover;
         flex-shrink: 0;
         border-radius: 50%;
+        align-self: center;
     }
 
     #our-courses > article > div {
@@ -399,6 +401,8 @@ section:first-child [data-course-list="new"] article.active {
         flex-direction: column;
         justify-content: flex-start;
         flex: 1;
+        min-width: 0;
+        width: 100%;
     }
 
     #our-courses > article h2 {

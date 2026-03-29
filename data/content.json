@@ -1,38 +1,4 @@
 {
-  "users": [
-    {
-        "id": 1,
-        "username": "ProvaUser",
-        "password": "ProvaPas",
-        "email": "provauser@example.com",
-        "role": "student",
-        "enrolledCourses": [1, 3, 5]
-    },
-    {
-      "id": 2,
-      "username": "albi",
-      "password": "albipass",
-      "email": "albi@example.com",
-      "role": "student",
-      "enrolledCourses": [1, 3, 5]
-    },
-    {
-      "id": 3,
-      "username": "ped",
-      "password": "pedpass",
-      "email": "ped@example.com",
-      "role": "student",
-      "enrolledCourses": [1, 3, 5]
-    },
-    {
-      "id": 4,
-      "username": "daniel",
-      "password": "danielpass",
-      "email": "daniel@example.com",
-      "role": "student",
-      "enrolledCourses": [1, 3, 5]
-    }
-  ],
   "courses": [
     {
       "id": 1,

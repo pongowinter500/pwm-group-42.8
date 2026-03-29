@@ -211,7 +211,7 @@ function initSearchToggle() {
     if (UIState.isInitialized('search')) return;
     UIState.markInitialized('search');
     
-    window.__uiHandlegitrs = window.__uiHandlers || {};
+    window.__uiHandlers = window.__uiHandlers || {};
     window.__uiHandlers.search = createToggleHandler(
         UI_SELECTORS.searchToggle,
         UI_SELECTORS.mobileSearchForm,
@@ -349,33 +349,16 @@ function initFooterMenus() {
     });
 }
 
-// initialize course description dropdown toggle
+// Initialize course description dropdown toggle
 function initDescriptionToggle() {
-    if (UIState.isInitialized('description')) return;
-    UIState.markInitialized('description');
-    
-    const descriptionToggle = document.querySelector(UI_SELECTORS.descriptionToggle);
-    const descriptionContent = document.querySelector(UI_SELECTORS.descriptionContent);
-
-    if (!descriptionToggle || !descriptionContent) return;
-
-    let isOpen = false;
-    
-    const setDescriptionState = (state) => {
-        isOpen = state;
-        descriptionToggle.setAttribute('aria-expanded', String(state));
-    };
-
-    descriptionToggle.addEventListener('click', (event) => {
+    // Use event delegation for dynamically loaded templates
+    document.addEventListener('click', (event) => {
+        const toggle = event.target.closest('.description-toggle');
+        if (!toggle) return;
+        
         event.preventDefault();
-        setDescriptionState(!isOpen);
-    });
-
-    // Close with Escape key
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && isOpen) {
-            setDescriptionState(false);
-        }
+        const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+        toggle.setAttribute('aria-expanded', String(!isOpen));
     });
 }
 
@@ -406,6 +389,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Check if user is already authenticated and display the authentication banner
     checkAuthStatus();
+    
+    // Ensure Enroll button visibility after templates are loaded
+    setTimeout(() => checkAuthStatus(), 100);
 });
 
 /**
@@ -599,19 +585,26 @@ function checkAuthStatus() {
             };
         }
 
-        // Permanent notification banner at the top
-        const statusMsg = document.createElement('div');
-        let bannerStyle = "color: white; text-align: center; padding: 10px;";
-        if (role === 'admin') {
-            bannerStyle = "background: #e74c3c;" + bannerStyle;
-            statusMsg.textContent = "Admin access active";
-        } else {
-            bannerStyle = "background: #2ecc71;" + bannerStyle;
-            statusMsg.textContent = `Logged in as ${role}`;
+        // Permanent notification banner at the top (create only if it doesn't exist)
+        if (!document.querySelector('[data-auth-banner]')) {
+            const statusMsg = document.createElement('div');
+            statusMsg.setAttribute('data-auth-banner', 'true');
+            let bannerStyle = "color: white; text-align: center; padding: 10px;";
+            if (role === 'admin') {
+                bannerStyle = "background: #e74c3c;" + bannerStyle;
+                statusMsg.textContent = "Admin access active";
+            } else {
+                bannerStyle = "background: #2ecc71;" + bannerStyle;
+                statusMsg.textContent = `Logged in as ${role}`;
+            }
+            statusMsg.style.cssText = bannerStyle;
+            document.body.prepend(statusMsg);
         }
-        statusMsg.style.cssText = bannerStyle;
-        document.body.prepend(statusMsg);
+    }
+    
+    // Show Enroll Now button for student and admin users
+    const enrollBtn = document.querySelector('.btn-enroll');
+    if (enrollBtn) {
+        enrollBtn.style.display = (isAuthenticated && (role === 'student' || role === 'admin')) ? 'inline-block' : 'none';
     }
 }
-
-

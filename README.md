@@ -92,6 +92,13 @@ Course-template is used by all the course detail pages (all the pages inside "co
 - Session tracking with login time storage
 - Show/hide password toggle for better UX
 
+**Admin Features**
+- Admin users can edit course content inline on course detail pages
+- Edit mode activated via "Edit Course" button (visible only to admin users)
+- Editable fields include: course title, subtitle, instructor name/title, course descriptions, and topics
+- Changes are applied frontend-only (no JSON persistence)
+- Admin dashboard banner (red) displays when logged in as admin
+
 ### JavaScript Utilities & Functions
 **Centralized Configuration**
 - `UI_SELECTORS` object - All DOM selectors in one place
@@ -180,53 +187,67 @@ Course-template is used by all the course detail pages (all the pages inside "co
 ```
 pwm-group-42.8/
 ├── index.html                          # Landing page
-├── module-loader.js                    # Core JS functionality
-├── content-loader.js                   # Course data population
+├── module-loader.js                    # Core JS functionality (structure, layout, behavior)
+├── content-loader.js                   # Content data population (text, images)
 ├── README.md                           # This file
+│
 ├── css/
-│   ├── reset.css                       # CSS reset/normalization
 │   ├── layout.css                      # Global layout with CSS variables
 │   ├── header.css                      # Header and navigation styles
 │   ├── footer.css                      # Footer styles
 │   ├── login.css                       # Login form styles
-│   ├── new-courses.css                 # New courses section
-│   ├── our-courses.css                 # Course catalogue section
-│   ├── course-template.css             # Course detail page template
+│   ├── new-courses.css                 # New courses section styles
+│   ├── our-courses.css                 # Course catalogue section styles
+│   ├── course-template.css             # Course detail page template styles
 │   ├── about.css                       # About page styles
 │   ├── business.css                    # Business page styles
-│   ├── responsive.css                  # Responsive rules and state-specific styles
-│   └── course-themes.css               # Course-specific color themes
+│   ├── course-themes.css               # Course-specific color themes
+│   └── responsive.css                  # Responsive breakpoints and media queries
+│
 ├── html/
 │   ├── about.html                      # About the platform page
-│   ├── business.html                   # Business contact page
+│   ├── business.html                   # Business contact/info page
 │   ├── catalogue.html                  # Full course catalogue
 │   ├── login.html                      # Login form page
 │   ├── new_courses.html                # New courses section (homepage)
-│   ├── courses/                        # Course detail pages
-│   │   ├── ml.html
-│   │   ├── cybersecurity.html
-│   │   ├── cloud.html
-│   │   ├── fullstack.html
-│   │   ├── python.html
-│   │   ├── database.html
-│   │   └── devops.html
+│   │
+│   ├── courses/                        # Detailed course pages
+│   │   ├── ml.html                     # Machine Learning Bootcamp
+│   │   ├── cybersecurity.html          # Cybersecurity Fundamentals
+│   │   ├── cloud.html                  # Cloud Computing Essentials
+│   │   ├── fullstack.html              # Full-Stack Development
+│   │   ├── python.html                 # Python for Beginners
+│   │   ├── database.html               # Database Design and SQL
+│   │   └── devops.html                 # DevOps and Docker
+│   │
 │   └── templates/                      # Reusable HTML components
-│       ├── header.html
-│       ├── footer.html
-│       └── course-template.html
+│       ├── header.html                 # Navigation header (used by all pages)
+│       ├── footer.html                 # Footer (used by all pages)
+│       └── course-template.html        # Course detail template (used by all course pages)
+│
 ├── data/
-│   ├── users.json                      # User credentials for authentication
-│   └── content.json                    # Course metadata and content
-├── images/                             # Graphic assets
-├── figma_mockups/                      # Design mockups
-└── (CSS Optimization Documentation)*   # Code snellimento analysis
+│   ├── users.json                      # User credentials and roles for authentication
+│   └── content.json                    # Course metadata, instructors, business info, admin config
+│
+├── images/                             # Graphic assets (icons, instructor photos, etc.)
+│
+├── figma_mockups_sprint1/              # Initial design mockups (PDF/PNG)
+├── figma_mockups_sprint2/              # Updated design mockups (PDF/PNG)
+│
+└── .git/                               # Version control history
 ```
 
 ## Getting Started
 1. Open `index.html` in the browser to access the platform's landing page
 2. Use the navigation menu to explore different sections
-3. Click "Login" to test the authentication system (use credentials from `data/users.json`)
+3. Click "Login" to test the authentication system
+   - **Test Credentials**: See `data/users.json` for available user accounts
+   - Available roles: `student` (can enroll in courses) and `admin` (can edit course content)
 4. Responsive design automatically adapts to your screen size
+5. **To test admin features**: Login with an admin account and navigate to any course page
+   - Click "Edit Course" button to enter edit mode
+   - Editable fields will display with orange borders
+   - Changes can be made inline and persist during the session
 
 ## Code Quality
 - All comments in English for international collaboration
