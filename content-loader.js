@@ -1,13 +1,13 @@
 /**
- * Content Loader - Carica dinamicamente i contenuti da content.json
- * Lavora insieme a module-loader.js per popolare elementi HTML con dati dal JSON
+ * Content Loader - Dynamically loads content from content.json
+ * Works together with module-loader.js to populate HTML elements with data from JSON
  */
 
-// Cache per i dati caricati
+// Cache for loaded data
 let contentData = null;
 let isAdminEditMode = false;
 
-// Mappa per i nomi dei file che non corrispondono al courseName
+// Map for file names that don't match the courseName
 const COURSE_FILE_NAME_MAP = {
     'cyber': 'cybersecurity'
 };
@@ -22,8 +22,8 @@ const DEFAULT_ADMIN_EDITABLE_SELECTORS = [
 ];
 
 /**
- * Legge dal JSON i selettori modificabili per admin.
- * Se non presenti o non validi, usa il fallback locale.
+ * Reads from JSON the selectors editable by admin.
+ * If not present or not valid, uses the local fallback.
  */
 function getAdminEditableSelectors() {
     const selectors = contentData?.frontendConfig?.adminEditableSelectors;
@@ -36,7 +36,7 @@ function getAdminEditableSelectors() {
 }
 
 /**
- * Carica il file content.json
+ * Loads the content.json file
  */
 async function loadContentData() {
     if (contentData) return contentData;
@@ -49,13 +49,13 @@ async function loadContentData() {
         contentData = await response.json();
         return contentData;
     } catch (error) {
-        console.error('Errore nel caricamento di content.json:', error);
+        console.error('Error loading content.json:', error);
         return null;
     }
 }
 
 /**
- * Trova un corso per nome o ID
+ * Finds a course by name or ID
  */
 function getCourse(identifier) {
     if (!contentData || !contentData.courses) return null;
@@ -67,7 +67,7 @@ function getCourse(identifier) {
 }
 
 /**
- * Trova un istruttore per ID
+ * Finds an instructor by ID
  */
 function getInstructor(instructorId) {
     if (!contentData || !contentData.instructors) return null;
@@ -75,8 +75,8 @@ function getInstructor(instructorId) {
 }
 
 /**
- * Popola gli elementi con attributo data-content-type
- * Esempi:
+ * Populates elements with data-content-type attribute
+ * Examples:
  * - data-content-type="about.hero.title"
  * - data-content-type="business.hero.description"
  * - data-content-type="siteInfo.name"
@@ -105,20 +105,20 @@ function populateContentElements() {
 }
 
 /**
- * Ottiene un valore da un oggetto usando un path con notazione dot
- * Es: "about.hero.title" -> contentData.about.hero.title
+ * Gets a value from an object using a dot notation path
+ * E.g.: "about.hero.title" -> contentData.about.hero.title
  */
 function getNestedValue(obj, path) {
     return path.split('.').reduce((current, key) => current?.[key], obj);
 }
 
 /**
- * Popola i corsi nella pagina catalogue o new_courses
- * Cerca elementi con data-course-list="all" o data-course-list="new"
+ * Populates courses on the catalogue or new_courses page
+ * Looks for elements with data-course-list="all" or data-course-list="new"
  */
 function populateCourseList() {
     if (!contentData || !contentData.courses) {
-        console.error('contentData o courses non trovati');
+        console.error('contentData or courses not found');
         return;
     }
     
@@ -127,18 +127,18 @@ function populateCourseList() {
     courseListContainers.forEach(container => {
         const listType = container.getAttribute('data-course-list');
         
-        // Verifica se i corsi sono già stati caricati
+        // Checks if courses have already been loaded
         if (container.dataset.loaded === 'true') {
             return;
         }
         
         let coursesToShow = contentData.courses;
         
-        // Filtra solo i corsi nuovi se richiesto
+        // Filters only new courses if requested
         if (listType === 'new') {
             coursesToShow = contentData.courses.filter(c => c.isNew === true);
             
-            // Layout per new courses (card con icone)
+            // Layout for new courses (cards with icons)
             const coursesHTML = coursesToShow.map((course, index) => {
                 const fileName = COURSE_FILE_NAME_MAP[course.courseName] || course.courseName;
                 const isFirst = index === 0 ? ' class="active"' : '';
@@ -157,7 +157,7 @@ function populateCourseList() {
                 if (title) {
                     title.insertAdjacentHTML('afterend', coursesHTML);
                     
-                    // Aggiungi logica carousel per le frecce su mobile
+                    // Add carousel logic for arrows on mobile
                     const section = container;
                     const articles = section.querySelectorAll('[data-course-list="new"] article');
                     const prevBtn = section.querySelector('.slider-btn--prev');
@@ -190,10 +190,10 @@ function populateCourseList() {
             }
             
         } else {
-            // Per il catalogo, mostra solo i corsi che NON sono nuovi
+            // For the catalogue, shows only courses that are NOT new
             coursesToShow = contentData.courses.filter(c => c.isNew !== true);
             
-            // Layout per catalogue (immagine sempre in alto)
+            // Layout for catalogue (image always on top)
             const coursesHTML = coursesToShow.map((course, index) => {
                 const fileName = COURSE_FILE_NAME_MAP[course.courseName] || course.courseName;
                 const imgElement = `<img src="${course.instructorImg}" alt="${course.instructorName}">`;
@@ -207,7 +207,7 @@ function populateCourseList() {
                     </div>
                 `;
                 
-                // Immagine sempre in alto su mobile e tablet
+                // Image always on top on mobile and tablet
                 return `<article>${imgElement + contentElement}</article>`;
             }).join('');
             
@@ -222,14 +222,14 @@ function populateCourseList() {
             }
         }
         
-        // Marca il container come caricato
+        // Marks the container as loaded
         container.dataset.loaded = 'true';
     });
 }
 
 /**
- * Popola le feature nella pagina business
- * Cerca elementi con data-features-list
+ * Populates features on the business page
+ * Looks for elements with data-features-list
  */
 function populateBusinessFeatures() {
     if (!contentData || !contentData.business || !contentData.business.features) return;
@@ -248,19 +248,19 @@ function populateBusinessFeatures() {
 }
 
 /**
- * Popola i dettagli del corso per le pagine individuali dei corsi
- * Usa il nome del corso dall'URL o da un attributo data-course
+ * Populates course details for individual course pages
+ * Uses the course name from the URL or from a data-course attribute
  */
 function populateCourseDetails() {
     if (!contentData) return;
     
-    // Cerca il data-course attribute nell'hero section o nel body
+    // Looks for the data-course attribute in the hero section or in the body
     const courseHero = document.querySelector('[data-course]');
     if (!courseHero) return;
     
     let courseName = courseHero.getAttribute('data-course');
     
-    // Se data-course è vuoto, prova a estrarre il nome del corso dall'URL
+    // If data-course is empty, tries to extract the course name from the URL
     if (!courseName) {
         const path = window.location.pathname;
         const match = path.match(/\/courses\/([^/.]+)\.html/);
@@ -273,11 +273,11 @@ function populateCourseDetails() {
     const course = getCourse(courseName);
     
     if (!course) {
-        console.warn(`Corso non trovato: ${courseName}`);
+        console.warn(`Course not found: ${courseName}`);
         return;
     }
     
-    // Popola tutti gli elementi con data-course-field
+    // Populates all elements with data-course-field
     const fieldMap = {
         'title': 'courseTitle',
         'subtitle': 'courseSubtitle',
@@ -300,14 +300,14 @@ function populateCourseDetails() {
         }
     });
     
-    // Popola i topics se presenti
+    // Populates topics if present
     const topicsList = document.querySelector('[data-course-topics]');
     if (topicsList && course.topics) {
         const topicsHTML = course.topics.map(topic => `<li>${topic}</li>`).join('');
         topicsList.innerHTML = topicsHTML;
     }
     
-    // Popola la catalogueDescription se presente
+    // Populates the catalogueDescription if present
     const descriptionElement = document.querySelector('[data-catalogue-description]');
     if (descriptionElement && course.catalogueDescription) {
         descriptionElement.textContent = course.catalogueDescription;
@@ -315,7 +315,7 @@ function populateCourseDetails() {
 }
 
 /**
- * Popola gli istruttori
+ * Populates instructors
  */
 function populateInstructors() {
     if (!contentData || !contentData.instructors) return;
@@ -339,7 +339,7 @@ function populateInstructors() {
 }
 
 /**
- * Modifica il pulsante "Enroll Now" in "Modify Course" per gli admin
+ * Changes the "Enroll Now" button to "Edit Course" for admins
  */
 function updateEnrollButtonForAdmin() {
     const isAdmin = localStorage.getItem('userRole') === 'admin';
@@ -358,7 +358,7 @@ function updateEnrollButtonForAdmin() {
 }
 
 /**
- * Ritorna gli elementi testuali modificabili nella pagina corso.
+ * Returns editable text elements on the course page.
  */
 function getAdminEditableElements() {
     const selectors = getAdminEditableSelectors();
@@ -369,8 +369,8 @@ function getAdminEditableElements() {
 }
 
 /**
- * Attiva/disattiva la modalita di modifica inline per gli admin.
- * Solo frontend: modifica il DOM in memoria, senza scrivere su JSON.
+ * Enables/disables inline edit mode for admins.
+ * Front-end only: modifies the DOM in memory, without writing to JSON.
  */
 function toggleAdminEditMode(enable) {
     const courseContent = document.querySelector('.course-content');
@@ -390,7 +390,7 @@ function toggleAdminEditMode(enable) {
 }
 
 /**
- * Gestisce il click del bottone corso in modalita admin.
+ * Handles the course button click in admin mode.
  */
 function handleAdminEditButtonClick(event) {
     event.preventDefault();
@@ -406,29 +406,29 @@ function handleAdminEditButtonClick(event) {
 }
 
 /**
- * Funzione principale che carica e popola tutti i contenuti
+ * Main function that loads and populates all content
  */
 async function initContentLoader() {
-    // Carica i dati
+    // Loads data
     await loadContentData();
     
     if (!contentData) {
-        console.error('Impossibile caricare i dati del contenuto');
+        console.error('Unable to load content data');
         return;
     }
     
-    // Popola i vari tipi di contenuto presenti nella pagina
+    // Populates various types of content present on the page
     populateContentElements();
     populateCourseList();
     populateCourseDetails();
     populateBusinessFeatures();
     populateInstructors();
     
-    // Aggiorna il pulsante Enroll per gli admin
+    // Updates the Enroll button for admins
     updateEnrollButtonForAdmin();
     
-    // Reinizializza lo slider dei nuovi corsi dopo che i corsi sono stati caricati
-    // Reset lo stato UIState per permettere la reinizializzazione
+    // Reinitializes the new courses slider after courses have been loaded
+    // Resets the UIState to allow reinitialization
     if (typeof UIState !== 'undefined' && UIState.initialized) {
         UIState.initialized.delete('slider');
     }
@@ -438,26 +438,26 @@ async function initContentLoader() {
     }
 }
 
-// Inizializza il content loader dopo che i moduli HTML sono stati caricati
-// Ascolta l'evento 'modulesLoaded' emesso da module-loader.js
+// Initializes the content loader after HTML modules have been loaded
+// Listens to the 'modulesLoaded' event emitted by module-loader.js
 window.addEventListener('modulesLoaded', initContentLoader);
 
-// Se i moduli sono già stati caricati (pagine senza module-loader), inizializza subito
+// If modules have already been loaded (pages without module-loader), initialize immediately
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
-        // Aspetta un tick per dare tempo a module-loader di emetterne l'evento
+        // Wait a tick to give module-loader time to emit the event
         setTimeout(() => {
             if (!contentData) initContentLoader();
         }, 100);
     });
 } else {
-    // Se il DOM è già pronto e non ci sono moduli da caricare
+    // If the DOM is already ready and there are no modules to load
     setTimeout(() => {
         if (!contentData) initContentLoader();
     }, 100);
 }
 
-// Esporta le funzioni per uso esterno se necessario
+// Exports functions for external use if needed
 if (typeof window !== 'undefined') {
     window.contentLoader = {
         loadContentData,
