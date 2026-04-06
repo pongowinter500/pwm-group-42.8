@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_course_attributes_topics",
+  "info": {
+    "displayName": "Topic"
+  },
+  "options": {},
+  "attributes": {
+    "TopicName": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    }
+  },
+  "config": {}
+}

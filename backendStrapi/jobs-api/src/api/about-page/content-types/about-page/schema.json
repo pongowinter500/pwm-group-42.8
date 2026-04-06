@@ -1,0 +1,31 @@
+{
+  "kind": "singleType",
+  "collectionName": "about_pages",
+  "info": {
+    "singularName": "about-page",
+    "pluralName": "about-pages",
+    "displayName": "About_page"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "HeroAboutPage": {
+      "type": "component",
+      "component": "about-page-components.hero",
+      "repeatable": false,
+      "required": true
+    },
+    "mission": {
+      "type": "component",
+      "component": "about-page-components.mission",
+      "repeatable": false
+    },
+    "offer": {
+      "type": "component",
+      "component": "about-page-components.offer",
+      "repeatable": false
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_business_page_components_features",
+  "info": {
+    "displayName": "features"
+  },
+  "options": {},
+  "attributes": {
+    "Featureid": {
+      "type": "string",
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    }
+  },
+  "config": {}
+}
