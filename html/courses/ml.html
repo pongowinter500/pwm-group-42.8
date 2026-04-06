@@ -5,38 +5,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Machine Learning Bootcamp - CodeMaster</title>
-    <link rel="stylesheet" href="../../css/reset.css">
-    <link rel="stylesheet" href="../../css/layout.css">
-    <link rel="stylesheet" href="../../css/header.css">
-    <link rel="stylesheet" href="../../css/course-template.css">
-    <link rel="stylesheet" href="../../css/ml.css">
-    <link rel="stylesheet" href="../../css/footer.css">
-    <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/course-template.css">
+    <link rel="stylesheet" href="/css/course-themes.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/responsive.css">
 </head>
 <body>
-<div data-include-html="html/templates/header.html"></div>
+<div data-include-html="/html/templates/header.html"></div>
 <main>
-    <div data-include-html="html/templates/course-template.html"></div>
+    <div data-include-html="/html/templates/course-template.html"></div>
 </main>
-<script>
-    const courseData = {
-        courseName: "ml",
-        courseTitle: "Machine Learning Bootcamp",
-        courseSubtitle: "From data processing to building advanced neural networks.",
-        instructorImg: "../../images/profilo_2.png",
-        instructorName: "Prof. Laura Bianchi",
-        instructorTitle: "AI Researcher",
-        section1Title: "Course Overview",
-        section1Text: "An intensive course that will guide you through the fundamental concepts of machine learning and artificial intelligence. You will explore algorithms, neural networks, and deep learning.",
-        section2Title: "Key Topics",
-        topics: [
-            "Python libraries: scikit-learn, TensorFlow, and PyTorch.",
-            "Image classification and sentiment analysis.",
-            "Feature engineering and optimization."
-        ]
-    };
-</script>
-<div data-include-html="html/templates/footer.html"></div>
-<script src="../../module-loader.js"></script>
+<div data-include-html="/html/templates/footer.html"></div>
+<script src="/module-loader.js"></script>
+<script src="/content-loader.js"></script>
 </body>
 </html>

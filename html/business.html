@@ -5,42 +5,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For Business - CodeMaster</title>
-    <link rel="stylesheet" href="../css/reset.css">
-    <link rel="stylesheet" href="../css/layout.css">
-    <link rel="stylesheet" href="../css/header.css">
-    <link rel="stylesheet" href="../css/business.css"> <link rel="stylesheet" href="../css/footer.css">
-    <link rel="stylesheet" href="../css/responsive.css">
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/business.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/responsive.css">
 </head>
 <body>
-    <div data-include-html="html/templates/header.html"></div>
+    <div data-include-html="/html/templates/header.html"></div>
 
 <main>
     <section class="business-hero">
-        <h1>Elevate Your Team's Skills</h1>
-        <p>Empower your workforce with world-class tech training. Customized solutions for companies of all sizes.</p>
-        <a href="mailto:business@corsi-informatica.it" class="btn-contact">Contact Sales</a>
+        <h1 data-content-type="business.hero.title">Elevate Your Team's Skills</h1>
+        <p data-content-type="business.hero.description">Empower your workforce with world-class tech training. Customized solutions for companies of all sizes.</p>
+        <a href="mailto:business@corsi-informatica.it" class="btn-contact" data-content-type="business.hero.ctaText">Contact Sales</a>
     </section>
 
     <section class="business-features">
-        <div class="feature-grid">
-            <article>
-                <h2>Custom Learning Paths</h2>
-                <p>We build specific curriculums tailored to your company's technology stack and goals.</p>
-            </article>
-            <article>
-                <h2>Progress Tracking</h2>
-                <p>Advanced analytics dashboard to monitor your employees' certifications and skill growth.</p>
-            </article>
-            <article>
-                <h2>Expert Mentorship</h2>
-                <p>Direct access to our top professors for private Q&A sessions and project reviews.</p>
-            </article>
+        <div class="feature-grid" data-features-list>
+            <!-- Le features verranno caricate dinamicamente da content-loader.js -->
         </div>
     </section>
 </main>
 
-    <div data-include-html="html/templates/footer.html"></div>
+    <div data-include-html="/html/templates/footer.html"></div>
 
-    <script src="../module-loader.js"></script>
+    <script src="/module-loader.js"></script>
+    <script src="/content-loader.js"></script>
 </body>
 </html>

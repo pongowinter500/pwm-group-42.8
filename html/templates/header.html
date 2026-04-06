@@ -1,15 +1,51 @@
 <header>
-    <nav>
-        <img src="images/company_icon.png" alt="Company Logo" class="company-logo">
-        <ul>
-            <li><a href="html/about.html">About</a></li>
-            <li><a href="index.html">Catalogue</a></li>
-            <li><a href="html/business.html">For Business</a></li>
-        </ul>
-        <form>
-            <input type="search" name="search" placeholder="Search courses...">
+    <nav class="site-nav">
+        <a href="index.html" class="logo-link" aria-label="Go to homepage">
+            <img src="/images/company_icon.png" alt="CodeMaster logo" class="company-logo">
+            <img src="/images/mobile_logo.png" alt="CodeMaster logo" class="company-logo company-logo--mobile">
+        </a>
+
+        <button
+            type="button"
+            class="search-toggle"
+            aria-label="Toggle search"
+            aria-controls="mobile-search"
+            aria-expanded="false"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+            </svg>
+        </button>
+
+        <button
+            type="button"
+            class="menu-toggle"
+            aria-label="Open menu"
+            aria-controls="primary-menu"
+            aria-expanded="false"
+        >
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <form id="mobile-search" class="mobile-search-form" role="search">
+            <label for="mobile-search-input" class="sr-only">Search courses</label>
+            <input id="mobile-search-input" type="search" name="search" placeholder="Search courses...">
         </form>
-        <a href="html/login.html">Login</a>
+
+        <div id="primary-menu" class="nav-menu">
+            <ul class="nav-links">
+                <li><a href="html/about.html">About</a></li>
+                <li><a href="index.html">Catalogue</a></li>
+                <li><a href="html/business.html">For Business</a></li>
+            </ul>
+            <form class="nav-search" role="search">
+                <label for="course-search-input" class="sr-only">Search courses</label>
+                <input id="course-search-input" type="search" name="search" placeholder="Search courses...">
+            </form>
+            <a href="html/login.html" class="nav-auth-link">Login</a>
+        </div>
     </nav>
 </header>
 

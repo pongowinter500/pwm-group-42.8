@@ -1,0 +1,277 @@
+{
+  "courses": [
+    {
+      "id": 1,
+      "courseName": "python",
+      "courseTitle": "Python for Beginners",
+      "courseSubtitle": "Learn the basics of programming with one of the most in-demand languages.",
+      "instructorId": 3,
+      "instructorImg": "images/profilo_3.png",
+      "instructorName": "Prof. Giuseppe Verdi",
+      "instructorTitle": "Senior Python Developer",
+      "section1Title": "Course Description",
+      "section1Text": "A comprehensive course to start your programming career. You'll learn Python fundamentals, from basic syntax to object-oriented programming, with practical examples and real projects.",
+      "section2Title": "Main Topics",
+      "topics": [
+        "Variables, data types, and control structures",
+        "Functions, modules, and exception handling",
+        "Working with files and databases",
+        "Introduction to object-oriented programming"
+      ],
+      "duration": "8 weeks",
+      "level": "Beginner",
+      "price": 299,
+      "category": "Programming",
+      "icon": "images/python_icon.png",
+      "isNew": true,
+      "catalogueDescription": "This course is designed to introduce beginners to the world of programming using Python.\nIt starts from the very basics, making it accessible even to those with no prior experience.\nStudents will learn how to write clean and efficient code through practical examples.\nThe course covers essential concepts such as variables, control structures, and functions.\nIt also introduces working with files, databases, and error handling techniques.\nAn introduction to object-oriented programming helps build a solid foundation for advanced topics.\nBy the end, learners will be able to create simple projects and continue their programming journey with confidence.",
+      "description": "Learn the basics of programming with Python, one of the most in-demand languages in the job market."
+    },
+    {
+      "id": 2,
+      "courseName": "database",
+      "courseTitle": "Database Design and SQL",
+      "courseSubtitle": "Design efficient databases and master the SQL language.",
+      "instructorId": 4,
+      "instructorImg": "images/profilo_4.png",
+      "instructorName": "Prof. Maria Colombo",
+      "instructorTitle": "Database Architect",
+      "section1Title": "Course Description",
+      "section1Text": "Discover how to design robust and scalable relational databases. You will learn to model data, optimize queries, and manage transactions with major DBMS.",
+      "section2Title": "Main Topics",
+      "topics": [
+        "Data modeling and normalization",
+        "Advanced SQL queries and optimization",
+        "Transactions, indexes, and stored procedures",
+        "MySQL, PostgreSQL, and best practices"
+      ],
+      "duration": "6 weeks",
+      "level": "Intermediate",
+      "price": 349,
+      "category": "Database",
+      "icon": "images/sql_icon.png",
+      "isNew": true,
+      "catalogueDescription": "This course focuses on designing efficient and scalable relational databases.\nIt guides learners through the principles of data modeling and normalization.\nStudents will gain strong SQL skills, from basic queries to advanced optimizations.\nThe course also covers transactions, indexing, and performance tuning techniques.\nPractical examples with MySQL and PostgreSQL help bridge theory and real-world usage.\nAttention is given to best practices for maintaining reliable and secure databases.\nBy the end, participants will be able to design, query, and manage databases with confidence." ,
+      "description": "Discover how to design efficient relational databases and master SQL."
+    },
+    {
+      "id": 3,
+      "courseName": "devops",
+      "courseTitle": "DevOps and Docker",
+      "courseSubtitle": "Automate deployment and manage containers using modern DevOps practices.",
+      "instructorId": 1,
+      "instructorImg": "images/profilo_1.png",
+      "instructorName": "Prof. Luca Ferrari",
+      "instructorTitle": "DevOps Engineer",
+      "section1Title": "Course Description",
+      "section1Text": "Learn DevOps methodologies and containerization with Docker. Discover how to automate the application lifecycle from build to deployment using industry‑leading tools.",
+      "section2Title": "Main Topics",
+      "topics": [
+        "Docker: containers, images, and orchestration",
+        "CI/CD with Jenkins and GitLab",
+        "Kubernetes for container management",
+        "Application monitoring and logging"
+      ],
+      "duration": "7 weeks",
+      "level": "Advanced",
+      "price": 399,
+      "category": "DevOps",
+      "icon": "images/docker_icon.png",
+      "isNew": true,
+      "catalogueDescription": "This course provides an in-depth introduction to modern DevOps practices and tools.\nIt focuses on automating the software development lifecycle from build to deployment.\nStudents will learn how to use Docker to create, manage, and deploy containers efficiently.\nThe course also explores CI/CD pipelines using tools like Jenkins and GitLab.\nAdvanced topics include container orchestration with Kubernetes.\nMonitoring and logging techniques are covered to ensure system reliability and performance.\nBy the end, learners will be able to manage scalable and automated deployment environments.",
+      "description": "Automate deployment and manage containers with Docker and modern DevOps practices."
+    },
+    {
+      "id": 4,
+      "courseName": "cyber",
+      "courseTitle": "Cybersecurity Fundamentals",
+      "courseSubtitle": "Master the principles of information security and threat mitigation.",
+      "instructorId": 1,
+      "instructorImg": "images/profilo_1.png",
+      "instructorName": "Prof. Marco Rossi",
+      "instructorTitle": "Senior Security Expert",
+      "section1Title": "About this course",
+      "section1Text": "Learn to identify threats, protect networks, and implement security protocols. Covers cryptography, authentication, and incident response.",
+      "section2Title": "What you will learn",
+      "topics": [
+        "Vulnerability management",
+        "Hands-on attack simulations",
+        "Data protection strategies"
+      ],
+      "duration": "10 weeks",
+      "level": "Intermediate",
+      "price": 449,
+      "category": "Security",
+      "icon": "images/cyber_icon.png",
+      "isNew": false,
+      "catalogueDescription": "This course provides a solid foundation in the fundamental principles of cybersecurity. You will learn to identify and mitigate common threats, protect corporate networks, and implement effective security protocols. The course covers topics such as cryptography, authentication, vulnerability management, and incident response. You will gain practical skills through hands-on labs and real attack simulations. By the end of the course you will be able to assess security risks and propose appropriate solutions to protect systems and sensitive data."
+    },
+    {
+      "id": 5,
+      "courseName": "ml",
+      "courseTitle": "Machine Learning Bootcamp",
+      "courseSubtitle": "From data processing to building advanced neural networks.",
+      "instructorId": 2,
+      "instructorImg": "images/profilo_2.png",
+      "instructorName": "Prof. Laura Bianchi",
+      "instructorTitle": "AI Researcher",
+      "section1Title": "Course Overview",
+      "section1Text": "An intensive course that will guide you through the fundamental concepts of machine learning and artificial intelligence. You will explore algorithms, neural networks, and deep learning.",
+      "section2Title": "Key Topics",
+      "topics": [
+        "Python libraries: scikit-learn, TensorFlow, and PyTorch.",
+        "Image classification and sentiment analysis.",
+        "Feature engineering and optimization."
+      ],
+      "duration": "12 weeks",
+      "level": "Advanced",
+      "price": 599,
+      "category": "AI/ML",
+      "icon": "images/ml_icon.png",
+      "isNew": false,
+      "catalogueDescription": "An intensive bootcamp that will guide you through the fundamental concepts of machine learning and artificial intelligence. You will explore supervised and unsupervised learning algorithms, neural networks, and deep learning. You will use Python libraries such as scikit-learn, TensorFlow, and PyTorch to develop predictive models. The course includes practical projects on real-world problems like image classification, sentiment analysis, and recommendation systems. You will also learn techniques for data preprocessing, feature engineering, and hyperparameter tuning to achieve optimal model performance."
+    },
+    {
+      "id": 6,
+      "courseName": "fullstack",
+      "courseTitle": "Full Stack Web Development",
+      "courseSubtitle": "Build modern, scalable web applications from scratch.",
+      "instructorId": 3,
+      "instructorImg": "images/profilo_3.png",
+      "instructorName": "Prof. Giuseppe Verdi",
+      "instructorTitle": "Senior Web Architect",
+      "section1Title": "What You Will Learn",
+      "section1Text": "Become a complete full stack developer with this comprehensive course covering both frontend and backend. You will learn HTML5, CSS3, and modern JavaScript.",
+      "section2Title": "Technology Stack",
+      "topics": [
+        "Frontend: React and modern UI/UX.",
+        "Backend: Node.js, Express, and RESTful APIs.",
+        "Databases: PostgreSQL and MongoDB."
+      ],
+      "duration": "10 weeks",
+      "level": "Intermediate",
+      "price": 499,
+      "category": "Web Development",
+      "icon": "images/fullstack_icon.png",
+      "isNew": false,
+      "catalogueDescription": "Become a complete full stack developer with this comprehensive course covering both frontend and backend. You will learn HTML5, CSS3, and modern JavaScript, along with popular frameworks like React for the frontend. On the server side, you will explore Node.js, Express, and both SQL and NoSQL databases such as PostgreSQL and MongoDB. The course also covers advanced topics like RESTful APIs, JWT authentication, state management with Redux, and deployment on cloud platforms. You will build complete scalable web applications, acquiring the skills demanded by modern tech companies to build successful digital products."
+    },
+    {
+      "id": 7,
+      "courseName": "cloud",
+      "courseTitle": "Cloud Computing Essentials",
+      "courseSubtitle": "Deploy resilient and scalable applications in the cloud.",
+      "instructorId": 4,
+      "instructorImg": "images/profilo_4.png",
+      "instructorName": "Prof. Anna Ferrari",
+      "instructorTitle": "Cloud Solutions Architect",
+      "section1Title": "Curriculum Highlights",
+      "section1Text": "Discover the world of cloud computing and learn to leverage market-leading platforms like AWS, Azure, and Google Cloud Platform.",
+      "section2Title": "Topics Covered",
+      "topics": [
+        "IaaS, PaaS, and SaaS architectures.",
+        "Kubernetes and container orchestration.",
+        "Serverless and cost optimization."
+      ],
+      "duration": "8 weeks",
+      "level": "Advanced",
+      "price": 549,
+      "category": "Cloud",
+      "icon": "images/cloud_icon.png",
+      "isNew": false,
+      "catalogueDescription": "Discover the world of cloud computing and learn to leverage market-leading cloud platforms such as AWS, Azure, and Google Cloud Platform. The course covers the fundamental concepts of cloud architecture, including IaaS, PaaS, and SaaS. You will learn to configure virtual machines, manage cloud storage, implement serverless services, and orchestrate containers with Kubernetes. You will also explore migration strategies, cost optimization, and best practices for cloud security. Through practical labs, you will gain hands-on experience deploying scalable and resilient applications in cloud infrastructure, preparing you for the most sought-after professional certifications."
+    }
+  ],
+  "instructors": [
+    {
+      "id": 1,
+      "name": "Prof. Marco Rossi",
+      "title": "Senior Security Expert",
+      "alternateTitle": "DevOps Engineer",
+      "image": "images/profilo_1.png",
+      "bio": "Expert in cybersecurity and DevOps with over 15 years of experience in the field.",
+      "specialization": ["Cybersecurity", "DevOps", "Network Security"]
+    },
+    {
+      "id": 2,
+      "name": "Prof. Laura Bianchi",
+      "title": "AI Researcher",
+      "image": "images/profilo_2.png",
+      "bio": "Leading researcher in artificial intelligence and machine learning, published author of numerous scientific papers.",
+      "specialization": ["Machine Learning", "Artificial Intelligence", "Data Science"]
+    },
+    {
+      "id": 3,
+      "name": "Prof. Giuseppe Verdi",
+      "title": "Senior Python Developer",
+      "alternateTitle": "Senior Web Architect",
+      "image": "images/profilo_3.png",
+      "bio": "Full stack developer and Python expert with experience in building enterprise-level applications.",
+      "specialization": ["Python", "Web Development", "Full Stack Development"]
+    },
+    {
+      "id": 4,
+      "name": "Prof. Maria Colombo",
+      "title": "Database Architect",
+      "alternateTitle": "Cloud Solutions Architect",
+      "image": "images/profilo_4.png",
+      "bio": "Database specialist and cloud architect with expertise in designing scalable data solutions.",
+      "specialization": ["Database Design", "Cloud Computing", "Data Architecture"]
+    }
+  ],
+  "about": {
+    "hero": {
+      "title": "Who We Are",
+      "description": "We are the leading platform in online computer science education, dedicated to training the professionals of the future."
+    },
+    "mission": {
+      "title": "Our Mission",
+      "description": "To make learning the most advanced technologies accessible to anyone, anywhere in the world. We believe that programming is the language of tomorrow."
+    },
+    "offer": {
+      "title": "What We Offer",
+      "description": "From cybersecurity to web development, our courses are curated by top university professors and IT industry professionals."
+    }
+  },
+  "business": {
+    "hero": {
+      "title": "Elevate Your Team's Skills",
+      "description": "Empower your workforce with world-class tech training. Customized solutions for companies of all sizes.",
+      "contactEmail": "business@corsi-informatica.it",
+      "ctaText": "Contact Sales"
+    },
+    "features": [
+      {
+        "id": 1,
+        "title": "Custom Learning Paths",
+        "description": "We build specific curriculums tailored to your company's technology stack and goals."
+      },
+      {
+        "id": 2,
+        "title": "Progress Tracking",
+        "description": "Advanced analytics dashboard to monitor your employees' certifications and skill growth."
+      },
+      {
+        "id": 3,
+        "title": "Expert Mentorship",
+        "description": "Direct access to our top professors for private Q&A sessions and project reviews."
+      }
+    ]
+  },
+  "frontendConfig": {
+    "adminEditableSelectors": [
+      "[data-course-title]",
+      "[data-course-subtitle]",
+      "[data-course-instructor-name]",
+      "[data-course-instructor-title]",
+      "[data-course-section1-text]",
+      "[data-course-topics] li"
+    ]
+  },
+  "siteInfo": {
+    "name": "CodeMaster",
+    "description": "The leading platform in online computer science education",
+    "contactEmail": "info@corsi-informatica.it",
+    "businessEmail": "business@corsi-informatica.it"
+  }
+}
