@@ -1,0 +1,34 @@
+﻿/* ===== GLOBAL APP STYLES ===== */
+
+:host {
+  display: block;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+app-header {
+  flex-shrink: 0;
+}
+
+router-outlet {
+  flex: 1;
+}
+
+app-footer {
+  flex-shrink: 0;
+}
+
+/* Responsive Container */
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 1rem;
+}
+
+@media (max-width: 480px) {
+  main {
+    padding: 0 0.75rem;
+  }
+}

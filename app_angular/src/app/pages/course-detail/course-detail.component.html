@@ -1,0 +1,72 @@
+<main class="course-detail-page" *ngIf="!loading">
+  <button class="btn-back" (click)="goBack()">← Back to Courses</button>
+
+  <div *ngIf="error" class="error-message">
+    <p>{{ error }}</p>
+    <a routerLink="/">Return to Home</a>
+  </div>
+
+  <article *ngIf="course" class="course-detail">
+    <section class="course-hero" [attr.data-course]="course.id">
+      <h1 [attr.data-course-title]="">{{ course.courseTitle }}</h1>
+      <p [attr.data-course-subtitle]="">{{ course.courseSubtitle }}</p>
+    </section>
+
+    <div class="course-container">
+      <aside class="instructor-card">
+        <img [src]="course.instructorImg" [alt]="course.instructorName" [attr.data-course-instructor-img]="">
+        <h3 [attr.data-course-instructor-name]="">{{ course.instructorName }}</h3>
+        <p [attr.data-course-instructor-title]="">{{ course.instructorTitle }}</p>
+      </aside>
+
+      <article class="course-content">
+        <h2>{{ course.section1Title }}</h2>
+        <p [attr.data-course-section1-text]="">{{ course.section1Text }}</p>
+
+        <h2>{{ course.section2Title }}</h2>
+        <ul [attr.data-course-topics]="">
+          <li *ngFor="let topic of course.topics">{{ topic }}</li>
+        </ul>
+
+        <div class="course-description-dropdown">
+          <button 
+            class="description-toggle" 
+            [attr.aria-expanded]="descriptionExpanded"
+            (click)="toggleDescription()"
+            type="button"
+          >
+            Full Course Description
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+            </svg>
+          </button>
+          <div 
+            class="description-content" 
+            [attr.data-catalogue-description]=""
+            [class.active]="descriptionExpanded"
+            role="region"
+          >
+            {{ course.catalogueDescription }}
+          </div>
+        </div>
+
+        <div class="course-info">
+          <div class="info-item">
+            <strong>Duration:</strong> {{ course.duration }}
+          </div>
+          <div class="info-item">
+            <strong>Level:</strong> {{ course.level }}
+          </div>
+          <div class="info-item">
+            <strong>Price:</strong> ${{ course.price }}
+          </div>
+          <div class="info-item">
+            <strong>Category:</strong> {{ course.category }}
+          </div>
+        </div>
+
+        <button (click)="enrollCourse()" class="btn-enroll">Enroll Now</button>
+      </article>
+    </div>
+  </article>
+</main>

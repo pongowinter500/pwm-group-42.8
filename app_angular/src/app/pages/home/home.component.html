@@ -1,0 +1,15 @@
+<main class="home-page">
+  <section class="our-courses-section">
+    <h1>Our Courses</h1>
+    <div class="courses-grid">
+      <app-course-card 
+        *ngFor="let course of allCourses"
+        [course]="course"
+      ></app-course-card>
+    </div>
+  </section>
+
+  <div *ngIf="loading" class="loading">
+    <p>Loading courses...</p>
+  </div>
+</main>
