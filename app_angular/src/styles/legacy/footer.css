@@ -1,0 +1,161 @@
+/* Common CSS */
+footer {
+    background-color: #34495e;
+    color: #ecf0f1;
+}
+
+footer .footer-content {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+footer .footer-nav {
+    position: relative;
+}
+
+footer .footer-nav-toggle {
+    background-color: transparent;
+    color: #ecf0f1;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    gap: 0.5rem;
+    align-items: center;
+    transition: color 0.3s;
+}
+
+footer .footer-nav-toggle:hover {
+    color: #3498db;
+}
+
+footer .footer-nav-toggle svg {
+    width: 1rem;
+    height: 1rem;
+    transition: transform 0.3s;
+}
+
+footer .footer-nav-toggle[aria-expanded="true"] svg {
+    transform: rotate(180deg);
+}
+
+footer .footer-nav-menu {
+    list-style: none;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+}
+
+footer .footer-nav-menu li a {
+    color: #ecf0f1;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+footer .footer-nav-menu li a:hover {
+    color: #3498db;
+}
+
+footer .footer-nav--social .footer-nav-menu li a {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #2c3e50;
+    border-radius: 0.3125rem;
+    transition: background-color 0.3s;
+}
+
+footer .footer-nav--social .footer-nav-menu li a:hover {
+    background-color: #3498db;
+}
+
+footer address {
+    font-style: normal;
+}
+
+footer address a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+footer address a:hover {
+    text-decoration: underline;
+}
+
+footer p {
+    margin: 0;
+    color: #bdc3c7;
+}
+
+/* Mobile Base (0-425px) */
+footer {
+    padding: 1.5rem 1rem;
+    text-align: left;
+}
+
+footer .footer-content {
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+footer .footer-nav {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+footer .footer-nav:last-of-type {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+footer .footer-nav-toggle {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    flex-direction: row;
+}
+
+footer .footer-nav-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0.75rem 0 0 1rem;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    margin-top: 0;
+}
+
+footer .footer-nav-toggle[aria-expanded="true"] + .footer-nav-menu {
+    max-height: 31.25rem;
+    opacity: 1;
+}
+
+footer .footer-nav-menu li {
+    display: block;
+    padding: 0.5rem 0;
+}
+
+footer .footer-nav--social .footer-nav-menu li a {
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+footer address {
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 1rem;
+}
+
+footer p {
+    font-size: 0.85rem;
+}
+
+/* Responsive styles are now consolidated in responsive.css */
+

@@ -8,6 +8,7 @@
     <button
       type="button"
       class="search-toggle"
+      [class.active]="searchOpen"
       aria-label="Toggle search"
       aria-controls="mobile-search"
       [attr.aria-expanded]="searchOpen"
@@ -31,16 +32,16 @@
       <span></span>
     </button>
 
-    <form *ngIf="searchOpen" id="mobile-search" class="mobile-search-form" role="search">
+    <form id="mobile-search" class="mobile-search-form" [class.active]="searchOpen" role="search">
       <label for="mobile-search-input" class="sr-only">Search courses</label>
       <input id="mobile-search-input" type="search" name="search" placeholder="Search courses...">
     </form>
 
     <div id="primary-menu" class="nav-menu">
       <ul class="nav-links">
-        <li><a routerLink="/" (click)="closeMenu()">Home</a></li>
-        <li><a routerLink="/about" (click)="closeMenu()">About</a></li>
-        <li><a routerLink="/business" (click)="closeMenu()">For Business</a></li>
+        <li><a routerLink="/about" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">About</a></li>
+        <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">Catalogue</a></li>
+        <li><a routerLink="/business" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">For Business</a></li>
       </ul>
       <form class="nav-search" role="search">
         <label for="course-search-input" class="sr-only">Search courses</label>

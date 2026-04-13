@@ -1,0 +1,17 @@
+/* Full Stack Web Development Course - Color Theme */
+
+.course-hero[data-course="fullstack"] {
+    background-color: #004e92;
+}
+
+.course-hero[data-course="fullstack"] h1 {
+    color: #00d2ff;
+}
+
+.course-hero[data-course="fullstack"] ~ .course-container .instructor-card img {
+    border-color: #00d2ff;
+}
+
+.course-hero[data-course="fullstack"] ~ .course-container .btn-enroll {
+    background-color: #27ae60;
+}

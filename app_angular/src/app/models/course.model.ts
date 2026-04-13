@@ -46,6 +46,12 @@ export interface Instructor {
 export interface ContentData {
   courses: Course[];
   instructors: Instructor[];
+  about?: AboutContent;
+  business?: BusinessContent;
+  siteInfo?: SiteInfo;
+  frontendConfig?: {
+    adminEditableSelectors?: string[];
+  };
 }
 
 /**
@@ -53,7 +59,40 @@ export interface ContentData {
  * For business page features
  */
 export interface Feature {
+  id?: number;
   title: string;
   description: string;
   icon?: string;
+}
+
+export interface AboutContent {
+  hero: {
+    title: string;
+    description: string;
+  };
+  mission: {
+    title: string;
+    description: string;
+  };
+  offer: {
+    title: string;
+    description: string;
+  };
+}
+
+export interface BusinessContent {
+  hero: {
+    title: string;
+    description: string;
+    contactEmail?: string;
+    ctaText?: string;
+  };
+  features: Feature[];
+}
+
+export interface SiteInfo {
+  name?: string;
+  description?: string;
+  contactEmail?: string;
+  businessEmail?: string;
 }

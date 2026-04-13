@@ -1,12 +1,13 @@
 <main class="business-page">
   <section class="business-hero">
-    <h1>Elevate Your Team's Skills</h1>
-    <p>Empower your workforce with world-class tech training. Customized solutions for companies of all sizes.</p>
-    <a href="mailto:business@corsi-informatica.it" class="btn-contact">Contact Sales</a>
+    <h1>{{ businessContent?.hero?.title || "Elevate Your Team's Skills" }}</h1>
+    <p>{{ businessContent?.hero?.description || 'Empower your workforce with world-class tech training. Customized solutions for companies of all sizes.' }}</p>
+    <a [href]="'mailto:' + (businessContent?.hero?.contactEmail || 'business@corsi-informatica.it')" class="btn-contact">
+      {{ businessContent?.hero?.ctaText || 'Contact Sales' }}
+    </a>
   </section>
 
   <section class="business-features">
-    <h2>Why Choose Us for Enterprise Training?</h2>
     <div class="feature-grid">
       <div class="feature-card" *ngFor="let feature of features">
         <h3>{{ feature.title }}</h3>

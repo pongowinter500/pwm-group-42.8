@@ -1,12 +1,41 @@
 <main class="home-page">
-  <section class="our-courses-section">
-    <h1>Our Courses</h1>
-    <div class="courses-grid">
-      <app-course-card 
-        *ngFor="let course of allCourses"
-        [course]="course"
-      ></app-course-card>
+  <section>
+    <h1>New Courses</h1>
+    <div class="courses-slider">
+      <button class="slider-btn slider-btn--prev" aria-label="Previous course" type="button" (click)="previousCourse()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"/>
+        </svg>
+      </button>
+
+      <div data-course-list="new">
+        <article *ngFor="let course of newCourses; let i = index" [class.active]="i === currentNewCourseIndex">
+          <p>{{ course.description || course.courseSubtitle }}</p>
+          <h2><img [src]="course.icon" [alt]="course.courseTitle" class="course-icon"> {{ course.courseTitle }}</h2>
+          <a [routerLink]="['/course', course.id]">View Course</a>
+        </article>
+      </div>
+
+      <button class="slider-btn slider-btn--next" aria-label="Next course" type="button" (click)="nextCourse()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M4 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5a.5.5 0 0 0-.5.5z"/>
+        </svg>
+      </button>
     </div>
+  </section>
+
+  <section id="our-courses">
+    <h1>Our Courses</h1>
+    <article *ngFor="let course of catalogueCourses">
+      <img [src]="course.instructorImg" [alt]="course.instructorName">
+      <div>
+        <h2>{{ course.courseTitle }}</h2>
+        <h3>{{ course.instructorName }}</h3>
+        <p class="section1-text">{{ course.section1Text }}</p>
+        <p data-catalogue-description>{{ course.catalogueDescription || course.section1Text }}</p>
+        <a [routerLink]="['/course', course.id]">Learn More</a>
+      </div>
+    </article>
   </section>
 
   <div *ngIf="loading" class="loading">

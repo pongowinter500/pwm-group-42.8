@@ -2,7 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
-import { Course, Instructor, ContentData } from '../models/course.model';
+import {
+  Course,
+  Instructor,
+  ContentData,
+  AboutContent,
+  BusinessContent,
+  Feature,
+  SiteInfo
+} from '../models/course.model';
 
 /**
  * CourseService
@@ -39,9 +47,20 @@ export class CourseService {
     this.http.get<ContentData>(this.contentPath)
       .pipe(
         tap(data => {
+          const courses = data.courses.map(course => ({
+            ...course,
+            icon: this.normalizeAssetPath(course.icon),
+            instructorImg: this.normalizeAssetPath(course.instructorImg)
+          }));
+
+          const instructors = data.instructors.map(instructor => ({
+            ...instructor,
+            image: this.normalizeAssetPath(instructor.image)
+          }));
+
           this.contentDataSubject.next(data);
-          this.coursesSubject.next(data.courses);
-          this.instructorsSubject.next(data.instructors);
+          this.coursesSubject.next(courses);
+          this.instructorsSubject.next(instructors);
         }),
         catchError(error => {
           console.error('Error loading content:', error);
@@ -56,6 +75,54 @@ export class CourseService {
    */
   getCourses(): Observable<Course[]> {
     return this.courses$;
+  }
+
+  /**
+   * Get about page content from JSON
+   */
+  getAboutContent(): Observable<AboutContent | null> {
+    return new Observable(observer => {
+      this.contentData$.subscribe(content => {
+        observer.next(content?.about ?? null);
+        observer.complete();
+      });
+    });
+  }
+
+  /**
+   * Get business page content from JSON
+   */
+  getBusinessContent(): Observable<BusinessContent | null> {
+    return new Observable(observer => {
+      this.contentData$.subscribe(content => {
+        observer.next(content?.business ?? null);
+        observer.complete();
+      });
+    });
+  }
+
+  /**
+   * Get business features list from JSON
+   */
+  getBusinessFeatures(): Observable<Feature[]> {
+    return new Observable(observer => {
+      this.contentData$.subscribe(content => {
+        observer.next(content?.business?.features ?? []);
+        observer.complete();
+      });
+    });
+  }
+
+  /**
+   * Get global site information from JSON
+   */
+  getSiteInfo(): Observable<SiteInfo | null> {
+    return new Observable(observer => {
+      this.contentData$.subscribe(content => {
+        observer.next(content?.siteInfo ?? null);
+        observer.complete();
+      });
+    });
   }
 
   /**
@@ -137,5 +204,13 @@ export class CourseService {
   reloadContent(): void {
     this.contentDataSubject.next(null);
     this.loadContent();
+  }
+
+  private normalizeAssetPath(path: string): string {
+    if (!path || /^(https?:)?\/\//.test(path) || path.startsWith('/')) {
+      return path;
+    }
+
+    return `/${path}`;
   }
 }
