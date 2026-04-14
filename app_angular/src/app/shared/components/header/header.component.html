@@ -52,8 +52,15 @@
           <a routerLink="/login" class="nav-auth-link" (click)="closeMenu()">Login</a>
         </ng-container>
         <ng-container *ngIf="isAuthenticated">
-          <span class="nav-user-info">{{ currentUser }}</span>
-          <button type="button" class="nav-logout-btn" (click)="logout()">Logout</button>
+          <div class="user-menu" [class.open]="userMenuOpen">
+            <button type="button" class="user-avatar" (click)="toggleUserMenu()">
+              {{ getInitials(currentUser) }}
+            </button>
+            <div class="dropdown-menu" *ngIf="userMenuOpen">
+              <p class="user-name">{{ currentUser }}</p>
+              <button type="button" class="logout-btn" (click)="logout()">Logout</button>
+            </div>
+          </div>
         </ng-container>
       </div>
     </div>

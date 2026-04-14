@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { CourseService } from '../../services/course.service';
 import { RouterLink } from '@angular/router';
 import { Course } from '../../models/course.model';
+import { Observable, map, shareReplay, tap } from 'rxjs';
 
 /**
  * HomePage
@@ -19,35 +20,45 @@ import { Course } from '../../models/course.model';
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit {
-  newCourses: Course[] = [];
-  catalogueCourses: Course[] = [];
-  loading = true;
+  newCourses$!: Observable<Course[]>;
+  catalogueCourses$!: Observable<Course[]>;
+  loading$!: Observable<boolean>;
   currentNewCourseIndex = 0;
+  private newCoursesLength = 0;
 
   constructor(private courseService: CourseService) {}
 
   ngOnInit(): void {
-    this.courseService.courses$.subscribe(courses => {
-      this.newCourses = courses.filter(c => c.isNew);
-      this.catalogueCourses = courses.filter(c => !c.isNew);
-      this.currentNewCourseIndex = 0;
-      this.loading = false;
-    });
+    this.newCourses$ = this.courseService.courses$.pipe(
+      map(courses => courses.filter(c => c.isNew)),
+      tap(courses => this.newCoursesLength = courses.length),
+      shareReplay(1)
+    );
+
+    this.catalogueCourses$ = this.courseService.courses$.pipe(
+      map(courses => courses.filter(c => !c.isNew)),
+      shareReplay(1)
+    );
+
+    this.loading$ = this.courseService.courses$.pipe(
+      map(courses => courses.length === 0),
+      shareReplay(1)
+    );
   }
 
   previousCourse(): void {
-    if (this.newCourses.length === 0) {
+    if (this.newCoursesLength === 0) {
       return;
     }
 
-    this.currentNewCourseIndex = (this.currentNewCourseIndex - 1 + this.newCourses.length) % this.newCourses.length;
+    this.currentNewCourseIndex = (this.currentNewCourseIndex - 1 + this.newCoursesLength) % this.newCoursesLength;
   }
 
   nextCourse(): void {
-    if (this.newCourses.length === 0) {
+    if (this.newCoursesLength === 0) {
       return;
     }
 
-    this.currentNewCourseIndex = (this.currentNewCourseIndex + 1) % this.newCourses.length;
+    this.currentNewCourseIndex = (this.currentNewCourseIndex + 1) % this.newCoursesLength;
   }
 }

@@ -9,7 +9,7 @@
       </button>
 
       <div data-course-list="new">
-        <article *ngFor="let course of newCourses; let i = index" [class.active]="i === currentNewCourseIndex">
+        <article *ngFor="let course of (newCourses$ | async); let i = index" [class.active]="i === currentNewCourseIndex">
           <p>{{ course.description || course.courseSubtitle }}</p>
           <h2><img [src]="course.icon" [alt]="course.courseTitle" class="course-icon"> {{ course.courseTitle }}</h2>
           <a [routerLink]="['/course', course.id]">View Course</a>
@@ -26,7 +26,7 @@
 
   <section id="our-courses">
     <h1>Our Courses</h1>
-    <article *ngFor="let course of catalogueCourses">
+    <article *ngFor="let course of (catalogueCourses$ | async)">
       <img [src]="course.instructorImg" [alt]="course.instructorName">
       <div>
         <h2>{{ course.courseTitle }}</h2>
@@ -38,7 +38,7 @@
     </article>
   </section>
 
-  <div *ngIf="loading" class="loading">
+  <div *ngIf="(loading$ | async)" class="loading">
     <p>Loading courses...</p>
   </div>
 </main>

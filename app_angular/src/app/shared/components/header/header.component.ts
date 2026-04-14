@@ -22,6 +22,7 @@ import { AuthService } from '../../../services/auth.service';
 export class HeaderComponent implements OnInit {
   menuOpen = false;
   searchOpen = false;
+  userMenuOpen = false;
   isAuthenticated = false;
   currentUser: string | null = null;
 
@@ -48,8 +49,17 @@ export class HeaderComponent implements OnInit {
     this.menuOpen = false;
   }
 
+  toggleUserMenu(): void {
+    this.userMenuOpen = !this.userMenuOpen;
+  }
+
+  getInitials(name: string | null): string {
+    return name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U';
+  }
+
   logout(): void {
     this.authService.logout();
     this.closeMenu();
+    this.userMenuOpen = false;
   }
 }
