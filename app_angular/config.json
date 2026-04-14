@@ -1,0 +1,30 @@
+{
+  "$schema": "./.vscode/extensions/angular.ng-template/package.json",
+  "version": "1.0.0",
+  "name": "codemaster-angular",
+  "description": "CodeMaster - Angular version",
+  "private": true,
+  
+  "fileConfigurations": {
+    "src/app/components": "Reusable components used across multiple pages",
+    "src/app/pages": "Full page components with routing",
+    "src/app/services": "Application services for data management",
+    "src/app/models": "TypeScript interfaces and type definitions",
+    "src/app/shared/components": "Shared components like Header, Footer",
+    "public/assets/images": "Course icons, instructor photos, logos",
+    "public/data": "Application data files (content.json)"
+  },
+  
+  "componentDefaults": {
+    "selector": "app-{component-name}",
+    "prefix": "app",
+    "standalone": true,
+    "skipTests": false,
+    "style": "css"
+  },
+  
+  "dataSchema": {
+    "courses": "Array of Course objects from content.json",
+    "instructors": "Extracted from courses data"
+  }
+}

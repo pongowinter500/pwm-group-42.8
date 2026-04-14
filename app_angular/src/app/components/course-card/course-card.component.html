@@ -1,0 +1,12 @@
+<article>
+  <img [src]="course.icon" [alt]="course.courseName + ' icon'" class="course-icon">
+  <h2>{{ course.courseTitle }}</h2>
+  <h3>{{ course.courseSubtitle }}</h3>
+  <p>{{ course.description }}</p>
+  <div class="course-meta">
+    <span class="course-price">${{ course.price }}</span>
+    <span class="course-level">{{ course.level }}</span>
+    <span class="course-duration">{{ course.duration }}</span>
+  </div>
+  <a [routerLink]="['/course', course.id]" class="course-link">Learn More</a>
+</article>

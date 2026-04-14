@@ -1,0 +1,34 @@
+# Angular
+/node_modules/
+/dist/
+/bazel-out
+.angular/cache/
+*.log
+npm-debug.log*
+yarn-error.log*
+yarn.lock
+package-lock.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+/tmp/
+/out-tsc/
+
+# Testing
+/karma.conf.js
+coverage/
+
+# Development
+src/environments/environment.prod.ts

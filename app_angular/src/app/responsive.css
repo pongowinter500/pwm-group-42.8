@@ -1,0 +1,233 @@
+/* Global responsive utilities and layouts */
+
+@media (min-width: 769px) {
+  header {
+    padding: 0.65rem 0;
+  }
+
+  header .site-nav {
+    padding: 0 2rem;
+    gap: 1.5rem;
+  }
+
+  header .company-logo {
+    display: inline-flex;
+    align-items: center;
+    height: 50px;
+    width: auto;
+    margin: 0.3rem 0;
+    flex-shrink: 0;
+  }
+
+  header .company-logo--mobile {
+    display: none;
+  }
+
+  header .menu-toggle {
+    display: none;
+  }
+
+  header .search-toggle {
+    display: none;
+    margin-left: 0;
+  }
+
+  header .nav-menu {
+    position: static;
+    height: auto;
+    width: auto;
+    max-width: none;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.1rem;
+    flex: 1;
+    min-width: 0;
+    transform: translateX(0);
+    transition: none;
+    z-index: auto;
+    overflow-y: visible;
+  }
+
+  header .nav-links {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    gap: 1.25rem;
+    padding: 0;
+    margin: 0;
+  }
+
+  header .nav-links li a {
+    color: #ecf0f1;
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 7px;
+    padding: 0.35rem 0.45rem;
+    transition: color 0.25s, background-color 0.25s;
+    display: inline;
+  }
+
+  header .nav-links li a:hover {
+    color: #3498db;
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+
+  header .nav-links li a.active {
+    color: #3498db;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 5px;
+    background-color: transparent;
+  }
+
+  header .nav-search {
+    display: flex;
+    flex: 1;
+    max-width: 400px;
+    margin-left: auto;
+  }
+
+  header .nav-auth-link {
+    background-color: #3498db;
+    color: white;
+    padding: 0.6rem 1.5rem;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: background-color 0.3s;
+    white-space: nowrap;
+    text-align: left;
+    width: auto;
+  }
+
+  header .nav-auth-link:hover {
+    background-color: #2980b9;
+  }
+
+  header .mobile-search-form {
+    display: none;
+  }
+
+  body.mobile-menu-open {
+    overflow: auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  header .site-nav {
+    padding: 0 3rem;
+    gap: 2rem;
+  }
+
+  header .nav-search {
+    max-width: 450px;
+  }
+}
+
+/* Footer Responsive */
+@media (min-width: 481px) and (max-width: 768px) {
+  footer {
+    padding: 2rem 1.5rem;
+    text-align: center;
+  }
+
+  footer .footer-content {
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  footer .footer-nav {
+    border-bottom: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  footer .footer-nav:last-of-type {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  footer .footer-nav-toggle {
+    display: none;
+  }
+
+  footer .footer-nav-menu {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+    padding: 0;
+    max-height: none;
+    opacity: 1;
+    overflow: visible;
+    margin: 0;
+  }
+
+  footer .footer-nav-menu li {
+    display: inline-flex;
+    padding: 0;
+  }
+
+  footer .footer-nav--social .footer-nav-menu li a {
+    margin-right: 0;
+    margin-bottom: 0;
+  }
+
+  footer address {
+    padding: 0;
+    border-bottom: none;
+    margin: 0;
+  }
+
+  footer p {
+    font-size: 0.9rem;
+  }
+}
+
+@media (min-width: 769px) {
+  footer {
+    padding: 2rem 2rem;
+    text-align: left;
+  }
+
+  footer .footer-nav-toggle {
+    display: none;
+  }
+
+  footer .footer-nav-menu {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-height: none;
+    opacity: 1;
+    overflow: visible;
+    padding: 0;
+    margin: 0;
+  }
+
+  footer .footer-nav:last-of-type .footer-nav-menu {
+    grid-template-columns: auto;
+    gap: 0.5rem;
+  }
+
+  footer .footer-nav-menu li {
+    display: block;
+    padding: 0;
+  }
+
+  footer address {
+    padding: 0;
+    border-bottom: none;
+    margin: 0;
+  }
+
+  footer p {
+    font-size: 0.95rem;
+  }
+}

@@ -1,0 +1,36 @@
+<main class="home-page">
+  <!-- New Courses Section -->
+  <section class="new-courses-section">
+    <h1>New Courses</h1>
+    <div class="courses-slider" *ngIf="!loading && newCourses.length > 0">
+      <button class="slider-btn slider-btn--prev" aria-label="Previous course" type="button" (click)="previousSlide()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"/>
+        </svg>
+      </button>
+      <div class="courses-grid">
+        <app-course-card
+          *ngFor="let course of newCourses; let i = index"
+          [course]="course"
+          [class.active]="i === currentSlideIndex"
+        ></app-course-card>
+      </div>
+      <button class="slider-btn slider-btn--next" aria-label="Next course" type="button" (click)="nextSlide()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M4 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5a.5.5 0 0 0-.5.5z"/>
+        </svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- All Courses Section -->
+  <section class="all-courses-section">
+    <h1>Our Courses</h1>
+    <div class="courses-grid" *ngIf="!loading && allCourses.length > 0">
+      <app-course-card *ngFor="let course of allCourses" [course]="course"></app-course-card>
+    </div>
+    <div *ngIf="loading" class="loading">
+      <p>Loading courses...</p>
+    </div>
+  </section>
+</main>

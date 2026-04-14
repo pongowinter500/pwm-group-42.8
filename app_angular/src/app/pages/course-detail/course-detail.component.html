@@ -1,0 +1,44 @@
+<main class="course-detail" *ngIf="!loading && course">
+  <article class="course-header">
+    <div class="course-header-content">
+      <h1>{{ course.courseTitle }}</h1>
+      <h2>{{ course.courseSubtitle }}</h2>
+      <div class="course-meta">
+        <span class="badge price">${{ course.price }}</span>
+        <span class="badge level">{{ course.level }}</span>
+        <span class="badge duration">{{ course.duration }}</span>
+      </div>
+    </div>
+    <img [src]="course.icon" [alt]="course.courseName" class="course-banner">
+  </article>
+
+  <article class="course-description">
+    <h3>{{ course.section1Title }}</h3>
+    <p>{{ course.section1Text }}</p>
+  </article>
+
+  <article class="course-topics">
+    <h3>{{ course.section2Title }}</h3>
+    <ul>
+      <li *ngFor="let topic of course.topics">{{ topic }}</li>
+    </ul>
+  </article>
+
+  <article class="course-instructor">
+    <img [src]="course.instructorImg" [alt]="course.instructorName" class="instructor-photo">
+    <div class="instructor-info">
+      <h3>{{ course.instructorName }}</h3>
+      <p class="instructor-title">{{ course.instructorTitle }}</p>
+      <p>Lesson from an expert professional</p>
+    </div>
+  </article>
+
+  <div class="cta-section">
+    <button class="btn-enroll">Enroll Now</button>
+    <a routerLink="/" class="btn-back">Back to Courses</a>
+  </div>
+</main>
+
+<div *ngIf="loading" class="loading">
+  <p>Loading course details...</p>
+</div>
