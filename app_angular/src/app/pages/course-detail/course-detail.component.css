@@ -1,3 +1,126 @@
 :host {
   display: block;
 }
+
+/* Edit mode styles */
+.course-hero.edit-mode {
+  border: 2px dashed #f39c12;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: rgba(243, 156, 18, 0.05);
+}
+
+.course-container.edit-mode {
+  border: 2px dashed #f39c12;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: rgba(243, 156, 18, 0.05);
+}
+
+.instructor-card.edit-mode {
+  border: 2px dashed #f39c12;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: rgba(243, 156, 18, 0.05);
+}
+
+.course-content.edit-mode {
+  border: 2px dashed #f39c12;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: rgba(243, 156, 18, 0.05);
+}
+
+/* Editable elements */
+[contenteditable="true"] {
+  outline: none;
+  border: 2px dashed #f39c12;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: rgba(243, 156, 18, 0.08);
+  cursor: text;
+  transition: all 0.2s ease;
+}
+
+[contenteditable="true"]:focus {
+  outline: none;
+  border: 2px solid #d35400;
+  background-color: rgba(211, 84, 0, 0.1);
+  box-shadow: 0 0 8px rgba(243, 156, 18, 0.3);
+}
+
+[contenteditable="true"]:hover {
+  background-color: rgba(243, 156, 18, 0.12);
+}
+
+ul[data-course-topics].edit-mode li {
+  list-style: disc inside;
+  margin: 8px 0;
+}
+
+.btn-edit {
+  background-color: #f39c12;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.btn-edit:hover {
+  background-color: #d35400;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
+}
+
+.btn-edit:active {
+  transform: translateY(0);
+}
+
+.course-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .course-hero.edit-mode,
+  .course-container.edit-mode,
+  .instructor-card.edit-mode,
+  .course-content.edit-mode {
+    padding: 16px;
+  }
+
+  [contenteditable="true"] {
+    padding: 3px 6px;
+  }
+
+  .btn-edit {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .course-hero.edit-mode,
+  .course-container.edit-mode,
+  .instructor-card.edit-mode,
+  .course-content.edit-mode {
+    padding: 12px;
+  }
+
+  [contenteditable="true"] {
+    padding: 2px 4px;
+  }
+
+  .btn-edit {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}
+

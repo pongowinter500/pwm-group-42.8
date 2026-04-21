@@ -20,10 +20,12 @@ interface User {
 export class AuthService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   private currentUserSubject = new BehaviorSubject<string | null>(null);
+  private userRoleSubject = new BehaviorSubject<string | null>(null);
   private usersSubject = new BehaviorSubject<User[]>([]);
 
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
   public currentUser$ = this.currentUserSubject.asObservable();
+  public userRole$ = this.userRoleSubject.asObservable();
 
   constructor(private http: HttpClient) {
     this.loadUsers();
@@ -54,10 +56,12 @@ export class AuthService {
   private checkAuthStatus(): void {
     const token = localStorage.getItem('authToken');
     const user = localStorage.getItem('currentUser');
+    const role = localStorage.getItem('userRole');
     
     if (token && user) {
       this.isAuthenticatedSubject.next(true);
       this.currentUserSubject.next(user);
+      this.userRoleSubject.next(role);
     }
   }
 
@@ -79,6 +83,7 @@ export class AuthService {
           
           this.isAuthenticatedSubject.next(true);
           this.currentUserSubject.next(user.email);
+          this.userRoleSubject.next(user.role);
           observer.next(true);
         } else {
           observer.next(false);
@@ -94,8 +99,10 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('authToken');
     localStorage.removeItem('currentUser');
+    localStorage.removeItem('userRole');
     this.isAuthenticatedSubject.next(false);
     this.currentUserSubject.next(null);
+    this.userRoleSubject.next(null);
   }
 
   /**
@@ -110,5 +117,12 @@ export class AuthService {
    */
   getCurrentUser(): string | null {
     return this.currentUserSubject.value;
+  }
+
+  /**
+   * Get current user role
+   */
+  getUserRole(): string | null {
+    return this.userRoleSubject.value;
   }
 }

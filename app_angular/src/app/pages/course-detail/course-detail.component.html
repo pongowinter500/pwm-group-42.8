@@ -5,25 +5,61 @@
   </div>
 
   <ng-container *ngIf="course">
-    <section class="course-hero" [attr.data-course]="course.courseName">
-      <h1 data-course-title>{{ course.courseTitle }}</h1>
-      <p data-course-subtitle>{{ course.courseSubtitle }}</p>
+    <section class="course-hero" [attr.data-course]="course.courseName" [class.edit-mode]="isEditMode">
+      <h1 
+        data-course-title 
+        [contentEditable]="isEditMode"
+        [attr.role]="isEditMode ? 'textbox' : 'heading'"
+      >
+        {{ course.courseTitle }}
+      </h1>
+      <p 
+        data-course-subtitle 
+        [contentEditable]="isEditMode"
+        [attr.role]="isEditMode ? 'textbox' : null"
+      >
+        {{ course.courseSubtitle }}
+      </p>
     </section>
 
-    <div class="course-container">
-      <aside class="instructor-card">
+    <div class="course-container" [class.edit-mode]="isEditMode">
+      <aside class="instructor-card" [class.edit-mode]="isEditMode">
         <img [src]="course.instructorImg" [alt]="course.instructorName" data-course-instructor-img>
-        <h3 data-course-instructor-name>{{ course.instructorName }}</h3>
-        <p data-course-instructor-title>{{ course.instructorTitle }}</p>
+        <h3 
+          data-course-instructor-name 
+          [contentEditable]="isEditMode"
+          [attr.role]="isEditMode ? 'textbox' : 'heading'"
+        >
+          {{ course.instructorName }}
+        </h3>
+        <p 
+          data-course-instructor-title 
+          [contentEditable]="isEditMode"
+          [attr.role]="isEditMode ? 'textbox' : null"
+        >
+          {{ course.instructorTitle }}
+        </p>
       </aside>
 
-      <article class="course-content">
+      <article class="course-content" [class.edit-mode]="isEditMode">
         <h2>{{ course.section1Title || 'About this course' }}</h2>
-        <p data-course-section1-text>{{ course.section1Text }}</p>
+        <p 
+          data-course-section1-text 
+          [contentEditable]="isEditMode"
+          [attr.role]="isEditMode ? 'textbox' : null"
+        >
+          {{ course.section1Text }}
+        </p>
 
         <h2>{{ course.section2Title || 'Main topics' }}</h2>
-        <ul data-course-topics>
-          <li *ngFor="let topic of course.topics">{{ topic }}</li>
+        <ul data-course-topics [class.edit-mode]="isEditMode">
+          <li 
+            *ngFor="let topic of course.topics"
+            [contentEditable]="isEditMode"
+            [attr.role]="isEditMode ? 'textbox' : null"
+          >
+            {{ topic }}
+          </li>
         </ul>
 
         <div class="course-description-dropdown">
@@ -44,7 +80,29 @@
           </div>
         </div>
 
-        <a href="mailto:enroll@codemaster.com" class="btn-enroll">Enroll Now</a>
+        <!-- Action buttons based on user role -->
+        <div class="course-actions">
+          <!-- Enroll Now button for students -->
+          <a 
+            *ngIf="(isAuthenticated$ | async) && (userRole$ | async) === 'student'" 
+            href="mailto:enroll@codemaster.com" 
+            class="btn-enroll"
+          >
+            Enroll Now
+          </a>
+
+          <!-- Edit buttons for admins -->
+          <ng-container *ngIf="(userRole$ | async) === 'admin'">
+            <button
+              class="btn-edit"
+              (click)="toggleEditMode()"
+              type="button"
+              [attr.aria-pressed]="isEditMode"
+            >
+              {{ isEditMode ? 'Save Changes' : 'Edit Course' }}
+            </button>
+          </ng-container>
+        </div>
       </article>
     </div>
   </ng-container>
