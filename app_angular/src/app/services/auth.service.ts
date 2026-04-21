@@ -1,10 +1,18 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
+
+interface User {
+  email: string;
+  password: string;
+  role: string;
+}
 
 /**
  * AuthService
  * Manages user authentication state and logic
- * Currently uses localStorage (should be replaced with proper backend authentication)
+ * Loads users from /assets/data/users.json
  */
 @Injectable({
   providedIn: 'root'
@@ -12,12 +20,31 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class AuthService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   private currentUserSubject = new BehaviorSubject<string | null>(null);
+  private usersSubject = new BehaviorSubject<User[]>([]);
 
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor() {
+  constructor(private http: HttpClient) {
+    this.loadUsers();
     this.checkAuthStatus();
+  }
+
+  /**
+   * Load users from JSON file
+   */
+  private loadUsers(): void {
+    this.http.get<{ users: User[] }>('/data/users.json')
+      .pipe(
+        tap(data => {
+          this.usersSubject.next(data.users);
+        }),
+        catchError(error => {
+          console.error('Error loading users:', error);
+          return of({ users: [] });
+        })
+      )
+      .subscribe();
   }
 
   /**
@@ -36,25 +63,28 @@ export class AuthService {
 
   /**
    * Login user with email and password
-   * TODO: Replace with actual backend API call
+   * Validates against users loaded from /assets/data/users.json
    */
   login(email: string, password: string): Observable<boolean> {
     return new Observable(observer => {
-      // Simulated authentication - replace with backend call
+      // Wait a moment to allow users to load if needed
       setTimeout(() => {
-        // For demo purposes, accept any valid email/password
-        if (email && password && password.length >= 6) {
-          localStorage.setItem('authToken', 'demo-token-' + Date.now());
-          localStorage.setItem('currentUser', email);
+        const users = this.usersSubject.value;
+        const user = users.find(u => u.email === email && u.password === password);
+        
+        if (user) {
+          localStorage.setItem('authToken', 'token-' + Date.now());
+          localStorage.setItem('currentUser', user.email);
+          localStorage.setItem('userRole', user.role);
           
           this.isAuthenticatedSubject.next(true);
-          this.currentUserSubject.next(email);
+          this.currentUserSubject.next(user.email);
           observer.next(true);
         } else {
           observer.next(false);
         }
         observer.complete();
-      }, 1000);
+      }, 500);
     });
   }
 
