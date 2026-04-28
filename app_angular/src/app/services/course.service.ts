@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
+import { Injectable, inject } from '@angular/core';
+import { Firestore, collection, doc, getDoc, getDocs, query, where } from '@angular/fire/firestore';
+import { BehaviorSubject, Observable, from, of } from 'rxjs';
+import { tap, catchError, switchMap, map } from 'rxjs/operators';
 import {
   Course,
   Instructor,
@@ -15,59 +15,136 @@ import {
 /**
  * CourseService
  * Manages all course-related data operations
- * Currently loads from content.json (can be replaced with Strapi API calls)
+ * Loads from Firestore collections: courses, instructors, siteData
  */
 @Injectable({
   providedIn: 'root'
 })
 export class CourseService {
+  private firestore = inject(Firestore);
+
   private contentDataSubject = new BehaviorSubject<ContentData | null>(null);
   private coursesSubject = new BehaviorSubject<Course[]>([]);
   private instructorsSubject = new BehaviorSubject<Instructor[]>([]);
+  private siteInfoSubject = new BehaviorSubject<SiteInfo | null>(null);
+  private aboutContentSubject = new BehaviorSubject<AboutContent | null>(null);
+  private businessContentSubject = new BehaviorSubject<BusinessContent | null>(null);
 
   public contentData$ = this.contentDataSubject.asObservable();
   public courses$ = this.coursesSubject.asObservable();
   public instructors$ = this.instructorsSubject.asObservable();
+  public siteInfo$ = this.siteInfoSubject.asObservable();
+  public aboutContent$ = this.aboutContentSubject.asObservable();
+  public businessContent$ = this.businessContentSubject.asObservable();
 
-  private contentPath = '/data/content.json';
-
-  constructor(private http: HttpClient) {
-    this.loadContent();
+  constructor() {
+    this.loadAllContent();
   }
 
   /**
-   * Load content from JSON file or API
-   * This can be easily replaced with Strapi API calls
+   * Load all content from Firestore
+   * Loads courses, instructors, and static data (about, business, siteInfo)
    */
-  private loadContent(): void {
-    if (this.contentDataSubject.value) {
-      return; // Already loaded
+  private loadAllContent(): void {
+    Promise.all([
+      this.loadCourses(),
+      this.loadInstructors(),
+      this.loadStaticContent()
+    ]).then(() => {
+      // Compose ContentData object
+      const contentData: ContentData = {
+        courses: this.coursesSubject.value,
+        instructors: this.instructorsSubject.value,
+        about: this.aboutContentSubject.value || undefined,
+        business: this.businessContentSubject.value || undefined,
+        siteInfo: this.siteInfoSubject.value || undefined
+      };
+      this.contentDataSubject.next(contentData);
+    }).catch(error => {
+      console.error('Error loading content from Firestore:', error);
+    });
+  }
+
+  /**
+   * Load all courses from Firestore 'courses' collection
+   * Document IDs are course names (e.g., 'python', 'database')
+   */
+  private async loadCourses(): Promise<void> {
+    try {
+      const coursesRef = collection(this.firestore, 'courses');
+      const querySnapshot = await getDocs(coursesRef);
+      const courses: Course[] = [];
+
+      querySnapshot.forEach((doc) => {
+        const courseData = doc.data();
+        courses.push({
+          ...courseData,
+          icon: this.normalizeAssetPath(courseData['icon']),
+          instructorImg: this.normalizeAssetPath(courseData['instructorImg'])
+        } as Course);
+      });
+
+      this.coursesSubject.next(courses);
+    } catch (error) {
+      console.error('Error loading courses from Firestore:', error);
+      this.coursesSubject.next([]);
     }
+  }
 
-    this.http.get<ContentData>(this.contentPath)
-      .pipe(
-        tap(data => {
-          const courses = data.courses.map(course => ({
-            ...course,
-            icon: this.normalizeAssetPath(course.icon),
-            instructorImg: this.normalizeAssetPath(course.instructorImg)
-          }));
+  /**
+   * Load all instructors from Firestore 'instructors' collection
+   * Document IDs are numeric instructor IDs
+   */
+  private async loadInstructors(): Promise<void> {
+    try {
+      const instructorsRef = collection(this.firestore, 'instructors');
+      const querySnapshot = await getDocs(instructorsRef);
+      const instructors: Instructor[] = [];
 
-          const instructors = data.instructors.map(instructor => ({
-            ...instructor,
-            image: this.normalizeAssetPath(instructor.image)
-          }));
+      querySnapshot.forEach((doc) => {
+        const instructorData = doc.data();
+        instructors.push({
+          ...instructorData,
+          image: this.normalizeAssetPath(instructorData['image'])
+        } as Instructor);
+      });
 
-          this.contentDataSubject.next(data);
-          this.coursesSubject.next(courses);
-          this.instructorsSubject.next(instructors);
-        }),
-        catchError(error => {
-          console.error('Error loading content:', error);
-          return of(null);
-        })
-      )
-      .subscribe();
+      this.instructorsSubject.next(instructors);
+    } catch (error) {
+      console.error('Error loading instructors from Firestore:', error);
+      this.instructorsSubject.next([]);
+    }
+  }
+
+  /**
+   * Load static content from Firestore 'siteData' collection
+   * Loads documents: about, business, siteInfo, frontendConfig
+   */
+  private async loadStaticContent(): Promise<void> {
+    try {
+      // Load about content
+      const aboutRef = doc(this.firestore, 'siteData', 'about');
+      const aboutSnap = await getDoc(aboutRef);
+      if (aboutSnap.exists()) {
+        this.aboutContentSubject.next(aboutSnap.data() as AboutContent);
+      }
+
+      // Load business content
+      const businessRef = doc(this.firestore, 'siteData', 'business');
+      const businessSnap = await getDoc(businessRef);
+      if (businessSnap.exists()) {
+        this.businessContentSubject.next(businessSnap.data() as BusinessContent);
+      }
+
+      // Load site info
+      const siteInfoRef = doc(this.firestore, 'siteData', 'siteInfo');
+      const siteInfoSnap = await getDoc(siteInfoRef);
+      if (siteInfoSnap.exists()) {
+        this.siteInfoSubject.next(siteInfoSnap.data() as SiteInfo);
+      }
+    } catch (error) {
+      console.error('Error loading static content from Firestore:', error);
+    }
   }
 
   /**
@@ -78,88 +155,68 @@ export class CourseService {
   }
 
   /**
-   * Get about page content from JSON
+   * Get about page content
    */
   getAboutContent(): Observable<AboutContent | null> {
-    return new Observable(observer => {
-      this.contentData$.subscribe(content => {
-        observer.next(content?.about ?? null);
-        observer.complete();
-      });
-    });
+    return this.aboutContent$;
   }
 
   /**
-   * Get business page content from JSON
+   * Get business page content
    */
   getBusinessContent(): Observable<BusinessContent | null> {
-    return new Observable(observer => {
-      this.contentData$.subscribe(content => {
-        observer.next(content?.business ?? null);
-        observer.complete();
-      });
-    });
+    return this.businessContent$;
   }
 
   /**
-   * Get business features list from JSON
+   * Get business features list
    */
   getBusinessFeatures(): Observable<Feature[]> {
-    return new Observable(observer => {
-      this.contentData$.subscribe(content => {
-        observer.next(content?.business?.features ?? []);
-        observer.complete();
-      });
-    });
+    return this.businessContent$.pipe(
+      map(business => business?.features ?? [])
+    );
   }
 
   /**
-   * Get global site information from JSON
+   * Get global site information
    */
   getSiteInfo(): Observable<SiteInfo | null> {
-    return new Observable(observer => {
-      this.contentData$.subscribe(content => {
-        observer.next(content?.siteInfo ?? null);
-        observer.complete();
-      });
-    });
+    return this.siteInfo$;
   }
 
   /**
    * Get a single course by ID
+   * ID can be numeric or courseName string depending on implementation
    */
-  getCourseById(id: number): Observable<Course | undefined> {
-    return new Observable(observer => {
-      this.courses$.subscribe(courses => {
-        const course = courses.find(c => c.id === id);
-        observer.next(course);
-        observer.complete();
-      });
-    });
+  getCourseById(id: number | string): Observable<Course | undefined> {
+    return this.courses$.pipe(
+      map(courses => {
+        // Try numeric ID first
+        if (typeof id === 'number') {
+          return courses.find(c => c.id === id);
+        }
+        // Then try courseName
+        return courses.find(c => c.courseName === id);
+      })
+    );
   }
 
   /**
    * Get new courses (flagged with isNew: true)
    */
   getNewCourses(): Observable<Course[]> {
-    return new Observable(observer => {
-      this.courses$.subscribe(courses => {
-        observer.next(courses.filter(c => c.isNew));
-        observer.complete();
-      });
-    });
+    return this.courses$.pipe(
+      map(courses => courses.filter(c => c.isNew))
+    );
   }
 
   /**
    * Get courses by category
    */
   getCoursesByCategory(category: string): Observable<Course[]> {
-    return new Observable(observer => {
-      this.courses$.subscribe(courses => {
-        observer.next(courses.filter(c => c.category === category));
-        observer.complete();
-      });
-    });
+    return this.courses$.pipe(
+      map(courses => courses.filter(c => c.category === category))
+    );
   }
 
   /**
@@ -173,44 +230,45 @@ export class CourseService {
    * Get an instructor by ID
    */
   getInstructorById(id: number): Observable<Instructor | undefined> {
-    return new Observable(observer => {
-      this.instructors$.subscribe(instructors => {
-        const instructor = instructors.find(i => i.id === id);
-        observer.next(instructor);
-        observer.complete();
-      });
-    });
+    return this.instructors$.pipe(
+      map(instructors => instructors.find(i => i.id === id))
+    );
   }
 
   /**
    * Search courses by keyword
    */
   searchCourses(keyword: string): Observable<Course[]> {
-    return new Observable(observer => {
-      this.courses$.subscribe(courses => {
-        const results = courses.filter(course =>
-          course.courseTitle.toLowerCase().includes(keyword.toLowerCase()) ||
-          course.description.toLowerCase().includes(keyword.toLowerCase())
+    return this.courses$.pipe(
+      map(courses => {
+        const lowerKeyword = keyword.toLowerCase();
+        return courses.filter(course =>
+          course.courseTitle.toLowerCase().includes(lowerKeyword) ||
+          course.description.toLowerCase().includes(lowerKeyword) ||
+          course.courseName.toLowerCase().includes(lowerKeyword)
         );
-        observer.next(results);
-        observer.complete();
-      });
-    });
+      })
+    );
   }
 
   /**
-   * Force reload content data
+   * Normalize asset paths
+   * Handles paths from Firestore Storage or local assets
    */
-  reloadContent(): void {
-    this.contentDataSubject.next(null);
-    this.loadContent();
-  }
-
   private normalizeAssetPath(path: string): string {
-    if (!path || /^(https?:)?\/\//.test(path) || path.startsWith('/')) {
+    if (!path) return '';
+    
+    // If it's already a Firebase Storage URL, return as is
+    if (path.startsWith('gs://') || path.startsWith('http')) {
       return path;
     }
-
-    return `/${path}`;
+    
+    // If it starts with '/', it's a local path
+    if (path.startsWith('/')) {
+      return path;
+    }
+    
+    // Otherwise assume it's a relative asset path
+    return `/assets/images/${path}`;
   }
 }

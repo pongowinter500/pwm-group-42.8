@@ -1,108 +1,138 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
+import { Injectable, inject } from '@angular/core';
+import { Auth, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, onAuthStateChanged } from '@angular/fire/auth';
+import { Firestore, doc, getDoc, setDoc, collection, query, where, getDocs } from '@angular/fire/firestore';
+import { BehaviorSubject, Observable, from, of } from 'rxjs';
+import { tap, catchError, switchMap, map } from 'rxjs/operators';
 
-interface User {
+export interface UserProfile {
   email: string;
-  password: string;
   role: string;
+  uid?: string;
 }
 
 /**
  * AuthService
- * Manages user authentication state and logic
- * Loads users from /assets/data/users.json
+ * Manages user authentication via Firebase Authentication
+ * Syncs user profile with Firestore 'users' collection
  */
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private auth = inject(Auth);
+  private firestore = inject(Firestore);
+
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   private currentUserSubject = new BehaviorSubject<string | null>(null);
   private userRoleSubject = new BehaviorSubject<string | null>(null);
-  private usersSubject = new BehaviorSubject<User[]>([]);
+  private userProfileSubject = new BehaviorSubject<UserProfile | null>(null);
 
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
   public currentUser$ = this.currentUserSubject.asObservable();
   public userRole$ = this.userRoleSubject.asObservable();
+  public userProfile$ = this.userProfileSubject.asObservable();
 
-  constructor(private http: HttpClient) {
-    this.loadUsers();
+  constructor() {
     this.checkAuthStatus();
   }
 
   /**
-   * Load users from JSON file
+   * Monitor Firebase Auth state changes
    */
-  private loadUsers(): void {
-    this.http.get<{ users: User[] }>('/data/users.json')
-      .pipe(
-        tap(data => {
-          this.usersSubject.next(data.users);
-        }),
-        catchError(error => {
-          console.error('Error loading users:', error);
-          return of({ users: [] });
-        })
-      )
-      .subscribe();
+  private checkAuthStatus(): void {
+    onAuthStateChanged(this.auth, async (user) => {
+      if (user) {
+        this.isAuthenticatedSubject.next(true);
+        this.currentUserSubject.next(user.email);
+        
+        // Fetch user profile from Firestore
+        const userProfile = await this.getUserProfileFromFirestore(user.email!);
+        if (userProfile) {
+          this.userProfileSubject.next(userProfile);
+          this.userRoleSubject.next(userProfile.role);
+        }
+      } else {
+        this.isAuthenticatedSubject.next(false);
+        this.currentUserSubject.next(null);
+        this.userRoleSubject.next(null);
+        this.userProfileSubject.next(null);
+      }
+    });
   }
 
   /**
-   * Check if user is authenticated (from localStorage)
-   * In production, verify with backend
+   * Fetch user profile from Firestore users collection by email
    */
-  private checkAuthStatus(): void {
-    const token = localStorage.getItem('authToken');
-    const user = localStorage.getItem('currentUser');
-    const role = localStorage.getItem('userRole');
-    
-    if (token && user) {
-      this.isAuthenticatedSubject.next(true);
-      this.currentUserSubject.next(user);
-      this.userRoleSubject.next(role);
+  private async getUserProfileFromFirestore(email: string): Promise<UserProfile | null> {
+    try {
+      const usersRef = collection(this.firestore, 'users');
+      const q = query(usersRef, where('email', '==', email));
+      const querySnapshot = await getDocs(q);
+      
+      if (!querySnapshot.empty) {
+        const userDoc = querySnapshot.docs[0];
+        return {
+          email: userDoc.data()['email'],
+          role: userDoc.data()['role'],
+          uid: userDoc.id
+        };
+      }
+      return null;
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+      return null;
     }
   }
 
   /**
    * Login user with email and password
-   * Validates against users loaded from /assets/data/users.json
+   * Authenticates with Firebase Authentication
    */
   login(email: string, password: string): Observable<boolean> {
-    return new Observable(observer => {
-      // Wait a moment to allow users to load if needed
-      setTimeout(() => {
-        const users = this.usersSubject.value;
-        const user = users.find(u => u.email === email && u.password === password);
-        
-        if (user) {
-          localStorage.setItem('authToken', 'token-' + Date.now());
-          localStorage.setItem('currentUser', user.email);
-          localStorage.setItem('userRole', user.role);
-          
-          this.isAuthenticatedSubject.next(true);
-          this.currentUserSubject.next(user.email);
-          this.userRoleSubject.next(user.role);
-          observer.next(true);
-        } else {
-          observer.next(false);
-        }
-        observer.complete();
-      }, 500);
-    });
+    return from(signInWithEmailAndPassword(this.auth, email, password)).pipe(
+      map(() => true),
+      catchError(error => {
+        console.error('Login error:', error);
+        return of(false);
+      })
+    );
+  }
+
+  /**
+   * Register new user with email and password
+   * Creates auth user and Firestore user document
+   */
+  register(email: string, password: string, role: string = 'user'): Observable<boolean> {
+    return from(createUserWithEmailAndPassword(this.auth, email, password)).pipe(
+      switchMap(async (result) => {
+        // Create user document in Firestore
+        const userRef = doc(this.firestore, 'users', result.user.uid);
+        await setDoc(userRef, {
+          email: email,
+          role: role,
+          createdAt: new Date()
+        });
+        return true;
+      }),
+      catchError(error => {
+        console.error('Registration error:', error);
+        return of(false);
+      })
+    );
   }
 
   /**
    * Logout user
+   * Signs out from Firebase Authentication
    */
-  logout(): void {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('currentUser');
-    localStorage.removeItem('userRole');
-    this.isAuthenticatedSubject.next(false);
-    this.currentUserSubject.next(null);
-    this.userRoleSubject.next(null);
+  logout(): Observable<boolean> {
+    return from(signOut(this.auth)).pipe(
+      map(() => true),
+      catchError(error => {
+        console.error('Logout error:', error);
+        return of(false);
+      })
+    );
   }
 
   /**
@@ -113,7 +143,7 @@ export class AuthService {
   }
 
   /**
-   * Get current user
+   * Get current user email
    */
   getCurrentUser(): string | null {
     return this.currentUserSubject.value;
@@ -124,5 +154,19 @@ export class AuthService {
    */
   getUserRole(): string | null {
     return this.userRoleSubject.value;
+  }
+
+  /**
+   * Get current user profile
+   */
+  getUserProfile(): UserProfile | null {
+    return this.userProfileSubject.value;
+  }
+
+  /**
+   * Get Firebase Auth user directly
+   */
+  getAuthUser() {
+    return this.auth.currentUser;
   }
 }
