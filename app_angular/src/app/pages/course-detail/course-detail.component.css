@@ -58,7 +58,9 @@ ul[data-course-topics].edit-mode li {
   margin: 8px 0;
 }
 
-.btn-edit {
+.btn-edit,
+.btn-save,
+.btn-cancel {
   background-color: #f39c12;
   color: white;
   border: none;
@@ -77,8 +79,37 @@ ul[data-course-topics].edit-mode li {
   box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
 }
 
-.btn-edit:active {
+.btn-save {
+  background-color: #27ae60;
+}
+
+.btn-save:hover:not(:disabled) {
+  background-color: #229954;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+}
+
+.btn-cancel {
+  background-color: #e74c3c;
+}
+
+.btn-cancel:hover:not(:disabled) {
+  background-color: #c0392b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+.btn-edit:active,
+.btn-save:active,
+.btn-cancel:active {
   transform: translateY(0);
+}
+
+.btn-save:disabled,
+.btn-cancel:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .course-actions {

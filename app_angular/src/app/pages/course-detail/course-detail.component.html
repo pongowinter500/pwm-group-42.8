@@ -93,14 +93,33 @@
 
           <!-- Edit buttons for admins -->
           <ng-container *ngIf="(userRole$ | async) === 'admin'">
-            <button
-              class="btn-edit"
-              (click)="toggleEditMode()"
-              type="button"
-              [attr.aria-pressed]="isEditMode"
-            >
-              {{ isEditMode ? 'Save Changes' : 'Edit Course' }}
-            </button>
+            <ng-container *ngIf="!isEditMode">
+              <button
+                class="btn-edit"
+                (click)="toggleEditMode()"
+                type="button"
+              >
+                Edit Course
+              </button>
+            </ng-container>
+            <ng-container *ngIf="isEditMode">
+              <button
+                class="btn-save"
+                (click)="saveCourse()"
+                [disabled]="isSaving"
+                type="button"
+              >
+                {{ isSaving ? 'Saving...' : 'Save Edit' }}
+              </button>
+              <button
+                class="btn-cancel"
+                (click)="cancelEdit()"
+                [disabled]="isSaving"
+                type="button"
+              >
+                Cancel
+              </button>
+            </ng-container>
           </ng-container>
         </div>
       </article>

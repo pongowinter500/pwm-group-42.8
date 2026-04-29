@@ -100,16 +100,15 @@ export class AuthService {
 
   /**
    * Register new user with email and password
-   * Creates auth user and Firestore user document
+   * Creates auth user and Firestore user document with 'student' role
    */
-  register(email: string, password: string, role: string = 'user'): Observable<boolean> {
+  register(email: string, password: string): Observable<boolean> {
     return from(createUserWithEmailAndPassword(this.auth, email, password)).pipe(
       switchMap(async (result) => {
-        // Create user document in Firestore
         const userRef = doc(this.firestore, 'users', result.user.uid);
         await setDoc(userRef, {
           email: email,
-          role: role,
+          role: 'student',
           createdAt: new Date()
         });
         return true;

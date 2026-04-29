@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, doc, getDoc, getDocs, query, where } from '@angular/fire/firestore';
+import { Firestore, collection, doc, getDoc, getDocs, query, where, updateDoc } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable, from, of } from 'rxjs';
 import { tap, catchError, switchMap, map } from 'rxjs/operators';
 import {
@@ -247,6 +247,25 @@ export class CourseService {
           course.description.toLowerCase().includes(lowerKeyword) ||
           course.courseName.toLowerCase().includes(lowerKeyword)
         );
+      })
+    );
+  }
+
+  /**
+   * Update a course in Firestore and local state
+   */
+  updateCourse(courseName: string, updates: Partial<Course>): Observable<void> {
+    return from(
+      updateDoc(doc(this.firestore, 'courses', courseName), updates as any).then(() => {
+        const courses = this.coursesSubject.value.map(c => 
+          c.courseName === courseName ? { ...c, ...updates } : c
+        );
+        this.coursesSubject.next(courses);
+      })
+    ).pipe(
+      catchError(error => {
+        console.error('Error updating course:', error);
+        throw error;
       })
     );
   }

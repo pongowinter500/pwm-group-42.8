@@ -1,6 +1,6 @@
 <main class="login-page">
   <section class="login-section">
-    <h1>Sign in to your account</h1>
+    <h1>{{ isSignUp ? 'Create your account' : 'Sign in to your account' }}</h1>
     
     <form class="login-form" id="auth-form" (ngSubmit)="onSubmit()" novalidate>
       <div *ngIf="errorMessage" class="error-banner">
@@ -34,7 +34,7 @@
             required 
             minlength="6"
             maxlength="50"
-            autocomplete="current-password"
+            [attr.autocomplete]="isSignUp ? 'new-password' : 'current-password'"
             title="Password must be at least 6 characters long">
           <button 
             type="button" 
@@ -55,11 +55,19 @@
       </div>
 
       <button type="submit" class="btn-login" [disabled]="loading">
-        <span class="btn-login__text">{{ loading ? 'Logging in...' : 'Login' }}</span>
+        <span class="btn-login__text">
+          {{ loading ? (isSignUp ? 'Creating account...' : 'Logging in...') : (isSignUp ? 'Sign Up' : 'Login') }}
+        </span>
         <span class="btn-login__spinner"></span>
       </button>
 
-      <p class="form-footer">Don't have an account? <a href="#register">Register here</a></p>
+      <p class="form-footer">
+        <span *ngIf="!isSignUp">Don't have an account? </span>
+        <span *ngIf="isSignUp">Already have an account? </span>
+        <a href="javascript:void(0)" (click)="toggleAuthMode()">
+          {{ isSignUp ? 'Sign in here' : 'Register here' }}
+        </a>
+      </p>
     </form>
   </section>
 </main>

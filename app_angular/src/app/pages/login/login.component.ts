@@ -6,12 +6,12 @@ import { AuthService } from '../../services/auth.service';
 
 /**
  * LoginPage
- * User authentication form
+ * User authentication and registration
  * Features:
- * - Email/Password form
+ * - Email/Password login form
+ * - Sign up form with toggle
  * - Form validation
  * - Loading state during submission
- * - Integration with AuthService
  */
 @Component({
   selector: 'app-login',
@@ -27,6 +27,7 @@ export class LoginComponent {
   loading = false;
   submitted = false;
   errorMessage: string = '';
+  isSignUp = false;
 
   constructor(
     private authService: AuthService,
@@ -37,11 +38,15 @@ export class LoginComponent {
     this.showPassword = !this.showPassword;
   }
 
+  toggleAuthMode(): void {
+    this.isSignUp = !this.isSignUp;
+    this.resetForm();
+  }
+
   onSubmit(): void {
     this.submitted = true;
     this.errorMessage = '';
 
-    // Basic validation
     if (!this.email || !this.password) {
       this.errorMessage = 'Please fill in all fields';
       return;
@@ -53,14 +58,19 @@ export class LoginComponent {
     }
 
     this.loading = true;
+    const auth$ = this.isSignUp 
+      ? this.authService.register(this.email, this.password)
+      : this.authService.login(this.email, this.password);
 
-    this.authService.login(this.email, this.password).subscribe(
+    auth$.subscribe(
       success => {
         this.loading = false;
         if (success) {
           this.router.navigate(['/']);
         } else {
-          this.errorMessage = 'Invalid credentials';
+          this.errorMessage = this.isSignUp 
+            ? 'Registration failed. This email may already exist.'
+            : 'Invalid credentials';
         }
       },
       error => {
@@ -68,5 +78,13 @@ export class LoginComponent {
         this.errorMessage = 'An error occurred. Please try again.';
       }
     );
+  }
+
+  private resetForm(): void {
+    this.email = '';
+    this.password = '';
+    this.showPassword = false;
+    this.submitted = false;
+    this.errorMessage = '';
   }
 }
