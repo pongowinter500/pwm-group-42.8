@@ -30,9 +30,12 @@ export class CourseDetailComponent implements OnInit {
   descriptionExpanded = false;
   isEditMode = false;
   isSaving = false;
+  isEnrolling = false;
+  isEnrolled = false;
   error: string | null = null;
   userRole$: Observable<string | null>;
   isAuthenticated$: Observable<boolean>;
+  private userId: string | null = null;
 
   private readonly selectors = {
     courseTitle: '[data-course-title]',
@@ -49,6 +52,7 @@ export class CourseDetailComponent implements OnInit {
   ) {
     this.userRole$ = this.authService.userRole$;
     this.isAuthenticated$ = this.authService.isAuthenticated$;
+    this.authService.userUid$.subscribe(uid => this.userId = uid);
   }
 
   ngOnInit(): void {
@@ -69,6 +73,7 @@ export class CourseDetailComponent implements OnInit {
         if (course) {
           this.course = course;
           this.resetEditableElements();
+          this.loadEnrollmentStatus(courseId);
         } else {
           this.error = 'Course not found';
         }
@@ -123,6 +128,46 @@ export class CourseDetailComponent implements OnInit {
   cancelEdit(): void {
     this.isEditMode = false;
     this.loadCourse();
+  }
+
+  private loadEnrollmentStatus(courseId: number): void {
+    if (!this.userId) return;
+    
+    this.courseService.isEnrolled(this.userId, courseId).subscribe(
+      enrolled => this.isEnrolled = enrolled
+    );
+  }
+
+  enrollCourse(): void {
+    if (!this.userId || !this.course) return;
+    
+    this.isEnrolling = true;
+    this.courseService.enrollCourse(this.userId, this.course.id).subscribe(
+      () => {
+        this.isEnrolled = true;
+        this.isEnrolling = false;
+      },
+      error => {
+        this.error = 'Failed to enroll: ' + error.message;
+        this.isEnrolling = false;
+      }
+    );
+  }
+
+  disenrollCourse(): void {
+    if (!this.userId || !this.course) return;
+    
+    this.isEnrolling = true;
+    this.courseService.disenrollCourse(this.userId, this.course.id).subscribe(
+      () => {
+        this.isEnrolled = false;
+        this.isEnrolling = false;
+      },
+      error => {
+        this.error = 'Failed to disenroll: ' + error.message;
+        this.isEnrolling = false;
+      }
+    );
   }
 
   private captureChanges(): Partial<Course> {

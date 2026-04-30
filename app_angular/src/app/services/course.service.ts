@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, doc, getDoc, getDocs, query, where, updateDoc } from '@angular/fire/firestore';
+import { Firestore, collection, doc, getDoc, getDocs, query, where, updateDoc, setDoc, deleteDoc, QueryConstraint } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable, from, of } from 'rxjs';
 import { tap, catchError, switchMap, map } from 'rxjs/operators';
 import {
@@ -266,6 +266,76 @@ export class CourseService {
       catchError(error => {
         console.error('Error updating course:', error);
         throw error;
+      })
+    );
+  }
+
+  /**
+   * Enroll a student in a course
+   * Adds a document to the user's 'enrolledCourses' subcollection
+   */
+  enrollCourse(userId: string, courseId: number): Observable<void> {
+    return from(
+      setDoc(doc(this.firestore, 'users', userId, 'enrolledCourses', courseId.toString()), {
+        courseId,
+        enrolledAt: new Date()
+      })
+    ).pipe(
+      catchError(error => {
+        console.error('Error enrolling course:', error);
+        throw error;
+      })
+    );
+  }
+
+  /**
+   * Disenroll a student from a course
+   * Removes a document from the user's 'enrolledCourses' subcollection
+   */
+  disenrollCourse(userId: string, courseId: number): Observable<void> {
+    return from(deleteDoc(doc(this.firestore, 'users', userId, 'enrolledCourses', courseId.toString()))).pipe(
+      catchError(error => {
+        console.error('Error disenrolling course:', error);
+        throw error;
+      })
+    );
+  }
+
+  /**
+   * Check if a student is enrolled in a course
+   */
+  isEnrolled(userId: string, courseId: number): Observable<boolean> {
+    return from(
+      getDoc(doc(this.firestore, 'users', userId, 'enrolledCourses', courseId.toString()))
+    ).pipe(
+      map(docSnap => docSnap.exists()),
+      catchError(error => {
+        console.error('Error checking enrollment:', error);
+        return of(false);
+      })
+    );
+  }
+
+  /**
+   * Get all enrolled courses for a student
+   * Returns Course objects for each courseId in the user's 'enrolledCourses' subcollection
+   */
+  getStudentCourses(userId: string): Observable<Course[]> {
+    return from(getDocs(collection(this.firestore, 'users', userId, 'enrolledCourses'))).pipe(
+      switchMap(querySnapshot => {
+        const courseIds = querySnapshot.docs.map(doc => Number(doc.id));
+        
+        if (courseIds.length === 0) {
+          return of([]);
+        }
+
+        return this.courses$.pipe(
+          map(allCourses => allCourses.filter(course => courseIds.includes(course.id)))
+        );
+      }),
+      catchError(error => {
+        console.error('Error fetching student courses:', error);
+        return of([]);
       })
     );
   }

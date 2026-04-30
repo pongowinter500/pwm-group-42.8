@@ -4,6 +4,7 @@ import { AboutComponent } from './pages/about/about.component';
 import { LoginComponent } from './pages/login/login.component';
 import { BusinessComponent } from './pages/business/business.component';
 import { CourseDetailComponent } from './pages/course-detail/course-detail.component';
+import { MyCoursesComponent } from './pages/my-courses/my-courses.component';
 import { canActivateAuth, canActivateRole } from './guards/auth.guard';
 
 /**
@@ -36,6 +37,12 @@ export const routes: Routes = [
     path: 'course/:id',
     component: CourseDetailComponent,
     data: { title: 'Course Details - CodeMaster' }
+  },
+  {
+    path: 'my-courses',
+    component: MyCoursesComponent,
+    canActivate: [canActivateAuth, canActivateRole],
+    data: { title: 'My Courses - CodeMaster', requiredRole: 'student' }
   },
   // Add protected routes here with canActivateAuth guard
   // Example:

@@ -54,6 +54,27 @@
   display: block;
 }
 
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  color: #7f8c8d;
+  transition: color 0.2s ease;
+}
+
+.password-toggle:hover {
+  color: #2c3e50;
+}
+
+.password-input-wrapper {
+  position: relative;
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);

@@ -1,0 +1,59 @@
+<main class="my-courses">
+  <div class="container">
+    <h1>My Courses</h1>
+
+    <div *ngIf="loading" class="loading">
+      <p>Loading your courses...</p>
+    </div>
+
+    <div *ngIf="error && !loading" class="error-message">
+      <p>{{ error }}</p>
+      <a routerLink="/">Return to Home</a>
+    </div>
+
+    <div *ngIf="!loading && !error">
+      <div *ngIf="courses.length === 0" class="no-courses">
+        <p>You are not enrolled in any courses yet.</p>
+        <a routerLink="/">Browse Courses</a>
+      </div>
+
+      <div *ngIf="courses.length > 0" class="courses-grid">
+        <div *ngFor="let course of courses" class="course-card">
+          <div class="course-header">
+            <img [src]="course.icon" [alt]="course.courseName" class="course-icon">
+            <h2>{{ course.courseTitle }}</h2>
+          </div>
+
+          <div class="course-info">
+            <p class="course-subtitle">{{ course.courseSubtitle }}</p>
+            <p class="course-level">{{ course.level }}</p>
+            <p class="course-duration">Duration: {{ course.duration }}</p>
+          </div>
+
+          <div class="course-instructor">
+            <img [src]="course.instructorImg" [alt]="course.instructorName" class="instructor-avatar">
+            <div>
+              <p class="instructor-name">{{ course.instructorName }}</p>
+              <p class="instructor-title">{{ course.instructorTitle }}</p>
+            </div>
+          </div>
+
+          <div class="course-actions">
+            <a [routerLink]="['/course', course.id]" class="btn-view">View Course</a>
+            <button 
+              class="btn-delist"
+              (click)="delistCourse(course.id)"
+              [disabled]="delistingCourseId === course.id"
+              type="button"
+            >
+              <span>{{ delistingCourseId === course.id ? 'Removing...' : 'Delist' }}</span>
+              @if (delistingCourseId === course.id) {
+                <span class="spinner"></span>
+              }
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

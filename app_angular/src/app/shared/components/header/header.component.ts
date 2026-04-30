@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
+import { Observable } from 'rxjs';
 
 /**
  * HeaderComponent
@@ -25,8 +26,11 @@ export class HeaderComponent implements OnInit {
   userMenuOpen = false;
   isAuthenticated = false;
   currentUser: string | null = null;
+  userRole$: Observable<string | null>;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) {
+    this.userRole$ = this.authService.userRole$;
+  }
 
   ngOnInit(): void {
     this.authService.isAuthenticated$.subscribe(
@@ -47,6 +51,7 @@ export class HeaderComponent implements OnInit {
 
   closeMenu(): void {
     this.menuOpen = false;
+    this.userMenuOpen = false;
   }
 
   toggleUserMenu(): void {

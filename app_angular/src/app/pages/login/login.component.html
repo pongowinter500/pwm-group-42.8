@@ -3,9 +3,11 @@
     <h1>{{ isSignUp ? 'Create your account' : 'Sign in to your account' }}</h1>
     
     <form class="login-form" id="auth-form" (ngSubmit)="onSubmit()" novalidate>
-      <div *ngIf="errorMessage" class="error-banner">
-        {{ errorMessage }}
-      </div>
+      @if (errorMessage) {
+        <div class="error-banner">
+          {{ errorMessage }}
+        </div>
+      }
 
       <div class="form-group">
         <label for="email">Email</label>
@@ -39,16 +41,22 @@
           <button 
             type="button" 
             class="password-toggle" 
-            aria-label="Toggle password visibility"
+            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
             (click)="togglePasswordVisibility()"
           >
-            <svg *ngIf="!showPassword" class="password-icon-hide" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-              <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c.36 0 .706.032 1.044.094.658.062 1.311.189 1.947.38a13.134 13.134 0 0 1 1.585 1.081A13.134 13.134 0 0 1 14.828 8 13.134 13.134 0 0 1 11.577 11.328c-.637.191-1.289.318-1.947.38A7.011 7.011 0 0 1 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
-              <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
-            </svg>
-            <svg *ngIf="showPassword" class="password-icon-show" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-              <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
-            </svg>
+            @if (!showPassword) {
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c.36 0 .706.032 1.044.094.658.062 1.311.189 1.947.38a13.134 13.134 0 0 1 1.585 1.081A13.134 13.134 0 0 1 14.828 8 13.134 13.134 0 0 1 11.577 11.328c-.637.191-1.289.318-1.947.38A7.011 7.011 0 0 1 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+              </svg>
+            }
+            @if (showPassword) {
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" stroke="currentColor" stroke-width="1.5" viewBox="0 0 16 16">
+                <circle cx="8" cy="8" r="2" fill="none"/>
+                <path d="M1 8s3-5.5 7-5.5 7 5.5 7 5.5-3 5.5-7 5.5-7-5.5-7-5.5z" fill="none"/>
+                <line x1="2" y1="2" x2="14" y2="14"/>
+              </svg>
+            }
           </button>
         </div>
         <span class="error-message" id="password-error"></span>
@@ -62,8 +70,12 @@
       </button>
 
       <p class="form-footer">
-        <span *ngIf="!isSignUp">Don't have an account? </span>
-        <span *ngIf="isSignUp">Already have an account? </span>
+        @if (!isSignUp) {
+          <span>Don't have an account? </span>
+        }
+        @if (isSignUp) {
+          <span>Already have an account? </span>
+        }
         <a href="javascript:void(0)" (click)="toggleAuthMode()">
           {{ isSignUp ? 'Sign in here' : 'Register here' }}
         </a>

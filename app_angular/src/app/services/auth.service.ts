@@ -26,11 +26,13 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<string | null>(null);
   private userRoleSubject = new BehaviorSubject<string | null>(null);
   private userProfileSubject = new BehaviorSubject<UserProfile | null>(null);
+  private userUidSubject = new BehaviorSubject<string | null>(null);
 
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
   public currentUser$ = this.currentUserSubject.asObservable();
   public userRole$ = this.userRoleSubject.asObservable();
   public userProfile$ = this.userProfileSubject.asObservable();
+  public userUid$ = this.userUidSubject.asObservable();
 
   constructor() {
     this.checkAuthStatus();
@@ -44,6 +46,7 @@ export class AuthService {
       if (user) {
         this.isAuthenticatedSubject.next(true);
         this.currentUserSubject.next(user.email);
+        this.userUidSubject.next(user.uid);
         
         // Fetch user profile from Firestore
         const userProfile = await this.getUserProfileFromFirestore(user.email!);
@@ -56,6 +59,7 @@ export class AuthService {
         this.currentUserSubject.next(null);
         this.userRoleSubject.next(null);
         this.userProfileSubject.next(null);
+        this.userUidSubject.next(null);
       }
     });
   }
@@ -160,6 +164,13 @@ export class AuthService {
    */
   getUserProfile(): UserProfile | null {
     return this.userProfileSubject.value;
+  }
+
+  /**
+   * Get current user UID
+   */
+  getUserUid(): string | null {
+    return this.userUidSubject.value;
   }
 
   /**

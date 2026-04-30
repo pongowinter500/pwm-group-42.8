@@ -82,18 +82,40 @@
 
         <!-- Action buttons based on user role -->
         <div class="course-actions">
-          <!-- Enroll Now button for students -->
-          <a 
-            *ngIf="(isAuthenticated$ | async) && (userRole$ | async) === 'student'" 
-            href="mailto:enroll@codemaster.com" 
-            class="btn-enroll"
-          >
-            Enroll Now
-          </a>
+          <!-- Student enrollment buttons -->
+          @if ((isAuthenticated$ | async) && (userRole$ | async) === 'student') {
+            @if (isEnrolled) {
+              <button disabled class="btn-enrolled" type="button">Enrolled</button>
+              <button 
+                class="btn-delist"
+                (click)="disenrollCourse()"
+                [disabled]="isEnrolling"
+                type="button"
+              >
+                <span>{{ isEnrolling ? 'Removing...' : 'Delist' }}</span>
+                @if (isEnrolling) {
+                  <span class="spinner"></span>
+                }
+              </button>
+            }
+            @if (!isEnrolled) {
+              <button
+                class="btn-enroll"
+                (click)="enrollCourse()"
+                [disabled]="isEnrolling"
+                type="button"
+              >
+                <span>{{ isEnrolling ? 'Enrolling...' : 'Enroll Now' }}</span>
+                @if (isEnrolling) {
+                  <span class="spinner"></span>
+                }
+              </button>
+            }
+          }
 
           <!-- Edit buttons for admins -->
-          <ng-container *ngIf="(userRole$ | async) === 'admin'">
-            <ng-container *ngIf="!isEditMode">
+          @if ((userRole$ | async) === 'admin') {
+            @if (!isEditMode) {
               <button
                 class="btn-edit"
                 (click)="toggleEditMode()"
@@ -101,8 +123,8 @@
               >
                 Edit Course
               </button>
-            </ng-container>
-            <ng-container *ngIf="isEditMode">
+            }
+            @if (isEditMode) {
               <button
                 class="btn-save"
                 (click)="saveCourse()"
@@ -119,8 +141,8 @@
               >
                 Cancel
               </button>
-            </ng-container>
-          </ng-container>
+            }
+          }
         </div>
       </article>
     </div>

@@ -41,6 +41,9 @@
       <ul class="nav-links">
         <li><a routerLink="/about" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">About</a></li>
         <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">Catalogue</a></li>
+        @if ((userRole$ | async) === 'student') {
+          <li><a routerLink="/my-courses" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">My Courses</a></li>
+        }
         <li><a routerLink="/business" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">For Business</a></li>
       </ul>
       <form class="nav-search" role="search">
@@ -48,20 +51,22 @@
         <input id="course-search-input" type="search" name="search" placeholder="Search courses...">
       </form>
       <div class="nav-auth">
-        <ng-container *ngIf="!isAuthenticated">
+        @if (!isAuthenticated) {
           <a routerLink="/login" class="nav-auth-link" (click)="closeMenu()">Login</a>
-        </ng-container>
-        <ng-container *ngIf="isAuthenticated">
+        }
+        @if (isAuthenticated) {
           <div class="user-menu" [class.open]="userMenuOpen">
-            <button type="button" class="user-avatar" (click)="toggleUserMenu()">
+            <button type="button" class="user-avatar" (click)="toggleUserMenu()" [attr.aria-expanded]="userMenuOpen" aria-label="User menu">
               {{ getInitials(currentUser) }}
             </button>
-            <div class="dropdown-menu" *ngIf="userMenuOpen">
-              <p class="user-name">{{ currentUser }}</p>
-              <button type="button" class="logout-btn" (click)="logout()">Logout</button>
-            </div>
+            @if (userMenuOpen) {
+              <div class="dropdown-menu">
+                <p class="user-name">{{ currentUser }}</p>
+                <button type="button" class="logout-btn" (click)="logout()">Logout</button>
+              </div>
+            }
           </div>
-        </ng-container>
+        }
       </div>
     </div>
   </nav>
