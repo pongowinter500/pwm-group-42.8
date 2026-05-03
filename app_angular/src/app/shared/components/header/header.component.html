@@ -51,17 +51,17 @@
         <input id="course-search-input" type="search" name="search" placeholder="Search courses...">
       </form>
       <div class="nav-auth">
-        @if (!isAuthenticated) {
+        @if (!(isAuthenticated$ | async)) {
           <a routerLink="/login" class="nav-auth-link" (click)="closeMenu()">Login</a>
         }
-        @if (isAuthenticated) {
+        @if ((isAuthenticated$ | async)) {
           <div class="user-menu" [class.open]="userMenuOpen">
             <button type="button" class="user-avatar" (click)="toggleUserMenu()" [attr.aria-expanded]="userMenuOpen" aria-label="User menu">
-              {{ getInitials(currentUser) }}
+              {{ getInitials(currentUser$ | async) }}
             </button>
             @if (userMenuOpen) {
               <div class="dropdown-menu">
-                <p class="user-name">{{ currentUser }}</p>
+                <p class="user-name">{{ currentUser$ | async }}</p>
                 <button type="button" class="logout-btn" (click)="logout()">Logout</button>
               </div>
             }

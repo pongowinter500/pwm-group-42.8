@@ -5,7 +5,7 @@
   </div>
 
   <ng-container *ngIf="course">
-    <section class="course-hero" [attr.data-course]="course.courseName" [class.edit-mode]="isEditMode">
+    <section class="course-hero" [attr.data-course]="course.courseName" [class.edit-mode]="isEditMode" [class.new-course]="course.isNew">
       <h1 
         data-course-title 
         [contentEditable]="isEditMode"

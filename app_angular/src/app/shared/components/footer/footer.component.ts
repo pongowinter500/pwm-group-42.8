@@ -13,15 +13,5 @@ import { CommonModule } from '@angular/common';
   styleUrl: './footer.component.css'
 })
 export class FooterComponent {
-  privacyMenuOpen = false;
-  socialMenuOpen = false;
   currentYear = new Date().getFullYear();
-
-  togglePrivacyMenu(): void {
-    this.privacyMenuOpen = !this.privacyMenuOpen;
-  }
-
-  toggleSocialMenu(): void {
-    this.socialMenuOpen = !this.socialMenuOpen;
-  }
 }

@@ -54,7 +54,6 @@ export class HomeComponent implements OnInit {
     level: 'Beginner',
     price: 99.99,
     icon: '',
-    isNew: false,
     description: '',
     catalogueDescription: ''
   };
@@ -145,7 +144,6 @@ export class HomeComponent implements OnInit {
       level: 'Beginner',
       price: 99.99,
       icon: '',
-      isNew: false,
       description: '',
       catalogueDescription: ''
     };

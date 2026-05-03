@@ -5,37 +5,6 @@ import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 /**
- * AuthGuard
- * Protects routes that require authentication
- * Redirects unauthenticated users to login page
- */
-@Injectable({
-  providedIn: 'root'
-})
-export class AuthGuard {
-  private authService = inject(AuthService);
-  private router = inject(Router);
-
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean> {
-    return this.authService.isAuthenticated$.pipe(
-      take(1),
-      map(isAuthenticated => {
-        if (isAuthenticated) {
-          return true;
-        } else {
-          // Redirect to login with return URL
-          this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
-          return false;
-        }
-      })
-    );
-  }
-}
-
-/**
  * canActivateAuth - Functional version of AuthGuard
  * Can be used directly in route definitions
  * Example: { path: 'admin', component: AdminComponent, canActivate: [canActivateAuth] }

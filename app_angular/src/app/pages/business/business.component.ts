@@ -15,13 +15,6 @@ import { BusinessContent, Feature } from '../../models/course.model';
   styleUrl: './business.component.css'
 })
 export class BusinessComponent {
-  businessContent: BusinessContent | null = null;
-  features: Feature[] = [];
+  businessContent$ = this.courseService.getBusinessContent();
 
-  constructor(private courseService: CourseService) {
-    this.courseService.getBusinessContent().subscribe(content => {
-      this.businessContent = content;
-      this.features = content?.features ?? [];
-    });
-  }
-}
+  constructor(private courseService: CourseService) {}

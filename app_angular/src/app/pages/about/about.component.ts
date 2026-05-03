@@ -15,11 +15,6 @@ import { AboutContent } from '../../models/course.model';
   styleUrl: './about.component.css'
 })
 export class AboutComponent {
-  aboutContent: AboutContent | null = null;
+  aboutContent$ = this.courseService.getAboutContent();
 
-  constructor(private courseService: CourseService) {
-    this.courseService.getAboutContent().subscribe(content => {
-      this.aboutContent = content;
-    });
-  }
-}
+  constructor(private courseService: CourseService) {}

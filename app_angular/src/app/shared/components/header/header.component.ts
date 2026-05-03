@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
@@ -20,25 +20,18 @@ import { Observable } from 'rxjs';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
   menuOpen = false;
   searchOpen = false;
   userMenuOpen = false;
-  isAuthenticated = false;
-  currentUser: string | null = null;
   userRole$: Observable<string | null>;
+  isAuthenticated$: Observable<boolean>;
+  currentUser$: Observable<string | null>;
 
   constructor(private authService: AuthService) {
     this.userRole$ = this.authService.userRole$;
-  }
-
-  ngOnInit(): void {
-    this.authService.isAuthenticated$.subscribe(
-      (isAuth: boolean) => this.isAuthenticated = isAuth
-    );
-    this.authService.currentUser$.subscribe(
-      (user: string | null) => this.currentUser = user
-    );
+    this.isAuthenticated$ = this.authService.isAuthenticated$;
+    this.currentUser$ = this.authService.currentUser$;
   }
 
   toggleMenu(): void {

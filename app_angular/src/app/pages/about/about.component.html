@@ -1,18 +1,18 @@
 <main class="about-page">
   <section class="about-hero">
-    <h1>{{ aboutContent?.hero?.title || 'Who We Are' }}</h1>
-    <p>{{ aboutContent?.hero?.description || 'We are the leading platform in online computer science education, dedicated to training the professionals of the future.' }}</p>
+    <h1>{{ (aboutContent$ | async)?.hero?.title || 'Who We Are' }}</h1>
+    <p>{{ (aboutContent$ | async)?.hero?.description || 'We are the leading platform in online computer science education, dedicated to training the professionals of the future.' }}</p>
   </section>
 
   <section class="about-content">
     <div class="mission-vision">
       <article class="mission-card">
-        <h2>{{ aboutContent?.mission?.title || 'Our Mission' }}</h2>
-        <p>{{ aboutContent?.mission?.description || 'To make learning the most advanced technologies accessible to anyone, anywhere in the world. We believe that programming is the language of tomorrow.' }}</p>
+        <h2>{{ (aboutContent$ | async)?.mission?.title || 'Our Mission' }}</h2>
+        <p>{{ (aboutContent$ | async)?.mission?.description || 'To make learning the most advanced technologies accessible to anyone, anywhere in the world. We believe that programming is the language of tomorrow.' }}</p>
       </article>
       <article class="mission-card">
-        <h2>{{ aboutContent?.offer?.title || 'What We Offer' }}</h2>
-        <p>{{ aboutContent?.offer?.description || 'From cybersecurity to web development, our courses are curated by top university professors and IT industry professionals.' }}</p>
+        <h2>{{ (aboutContent$ | async)?.offer?.title || 'What We Offer' }}</h2>
+        <p>{{ (aboutContent$ | async)?.offer?.description || 'From cybersecurity to web development, our courses are curated by top university professors and IT industry professionals.' }}</p>
       </article>
     </div>
   </section>

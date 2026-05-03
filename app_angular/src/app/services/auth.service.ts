@@ -138,19 +138,7 @@ export class AuthService {
     );
   }
 
-  /**
-   * Get current authentication state
-   */
-  isAuthenticated(): boolean {
-    return this.isAuthenticatedSubject.value;
-  }
 
-  /**
-   * Get current user email
-   */
-  getCurrentUser(): string | null {
-    return this.currentUserSubject.value;
-  }
 
   /**
    * Get current user role

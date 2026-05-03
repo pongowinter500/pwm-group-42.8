@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CourseCardComponent } from '../course-card/course-card.component';
 import { Course } from '../../models/course.model';
@@ -18,7 +18,7 @@ import { Course } from '../../models/course.model';
   templateUrl: './course-slider.component.html',
   styleUrl: './course-slider.component.css'
 })
-export class CourseSliderComponent implements OnInit {
+export class CourseSliderComponent implements OnInit, OnChanges {
   @Input() courses: Course[] = [];
   @Input() title: string = 'Courses';
   @Input() itemsPerView: number = 3;

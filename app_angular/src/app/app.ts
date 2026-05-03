@@ -19,8 +19,6 @@ import { filter } from 'rxjs/operators';
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly title = signal('CodeMaster');
-
   constructor(
     private router: Router,
     private titleService: Title
