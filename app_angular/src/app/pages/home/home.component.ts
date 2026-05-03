@@ -54,6 +54,7 @@ export class HomeComponent implements OnInit {
     level: 'Beginner',
     price: 99.99,
     icon: '',
+    isNew: false,
     description: '',
     catalogueDescription: ''
   };
@@ -101,8 +102,8 @@ export class HomeComponent implements OnInit {
   }
 
   submitNewCourse(): void {
-    if (!this.newCourse.courseName.trim() || !this.newCourse.courseTitle.trim() || !this.newCourse.instructorImg.trim()) {
-      this.createError = 'Course name, title, and instructor image URL are required';
+    if (!this.newCourse.courseName.trim() || !this.newCourse.courseTitle.trim() || !this.newCourse.instructorImg.trim() || !this.newCourse.icon.trim()) {
+      this.createError = 'Course name, title, instructor image URL, and course icon URL are required';
       return;
     }
 
@@ -144,6 +145,7 @@ export class HomeComponent implements OnInit {
       level: 'Beginner',
       price: 99.99,
       icon: '',
+      isNew: false,
       description: '',
       catalogueDescription: ''
     };

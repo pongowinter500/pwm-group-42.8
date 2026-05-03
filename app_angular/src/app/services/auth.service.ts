@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, onAuthStateChanged } from '@angular/fire/auth';
+import { Auth, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, onAuthStateChanged, User } from '@angular/fire/auth';
 import { Firestore, doc, getDoc, setDoc, collection, query, where, getDocs } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable, from, of } from 'rxjs';
 import { tap, catchError, switchMap, map } from 'rxjs/operators';
@@ -42,7 +42,7 @@ export class AuthService {
    * Monitor Firebase Auth state changes
    */
   private checkAuthStatus(): void {
-    onAuthStateChanged(this.auth, async (user) => {
+    onAuthStateChanged(this.auth, async (user: User | null) => {
       if (user) {
         this.isAuthenticatedSubject.next(true);
         this.currentUserSubject.next(user.email);
@@ -164,7 +164,7 @@ export class AuthService {
   /**
    * Get Firebase Auth user directly
    */
-  getAuthUser() {
+  getAuthUser(): User | null {
     return this.auth.currentUser;
   }
 }

@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CourseService } from '../../services/course.service';
 import { BusinessContent, Feature } from '../../models/course.model';
+import { Observable } from 'rxjs';
 
 /**
  * BusinessPage
@@ -14,7 +15,12 @@ import { BusinessContent, Feature } from '../../models/course.model';
   templateUrl: './business.component.html',
   styleUrl: './business.component.css'
 })
-export class BusinessComponent {
-  businessContent$ = this.courseService.getBusinessContent();
+export class BusinessComponent implements OnInit {
+  businessContent$!: Observable<BusinessContent | null>;
 
   constructor(private courseService: CourseService) {}
+
+  ngOnInit(): void {
+    this.businessContent$ = this.courseService.getBusinessContent();
+  }
+}

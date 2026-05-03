@@ -1,0 +1,27 @@
+<div class="course-card" (click)="navigateToCourse()">
+  <div class="course-header">
+    <img [src]="course.icon" [alt]="course.courseTitle" class="course-icon" />
+    @if (course.isNew) {
+      <span class="new-badge">New</span>
+    }
+  </div>
+  
+  <div class="course-content">
+    <h3 class="course-title">{{ course.courseTitle }}</h3>
+    <p class="course-subtitle">{{ course.courseSubtitle }}</p>
+    
+    <div class="instructor-info">
+      <img [src]="course.instructorImg" [alt]="course.instructorName" class="instructor-avatar" />
+      <div>
+        <p class="instructor-name">{{ course.instructorName }}</p>
+        <p class="instructor-title">{{ course.instructorTitle }}</p>
+      </div>
+    </div>
+    
+    <div class="course-meta">
+      <span class="duration">{{ course.duration }}</span>
+      <span class="level">{{ course.level }}</span>
+      <span class="price">${{ course.price }}</span>
+    </div>
+  </div>
+</div>

@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, doc, getDoc, getDocs, query, where, setDoc, updateDoc, deleteDoc, addDoc, serverTimestamp } from '@angular/fire/firestore';
+import { Firestore, collection, doc, getDoc, getDocs, query, where, setDoc, updateDoc, deleteDoc, addDoc, serverTimestamp, QueryDocumentSnapshot } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable, from, of } from 'rxjs';
 import { tap, catchError, switchMap, map } from 'rxjs/operators';
 import {
@@ -78,7 +78,7 @@ export class CourseService {
       const querySnapshot = await getDocs(coursesRef);
       const courses: Course[] = [];
 
-      querySnapshot.forEach((doc) => {
+      querySnapshot.forEach((doc: QueryDocumentSnapshot) => {
         const courseData = doc.data();
         
         // Use ID from Firestore or generate consistently from courseName
@@ -129,7 +129,7 @@ export class CourseService {
       const querySnapshot = await getDocs(instructorsRef);
       const instructors: Instructor[] = [];
 
-      querySnapshot.forEach((doc) => {
+      querySnapshot.forEach((doc: QueryDocumentSnapshot) => {
         const instructorData = doc.data();
         instructors.push({
           ...instructorData,
@@ -420,7 +420,7 @@ export class CourseService {
         if (snapshot.empty) {
           return of([]);
         }
-        const courseIds = snapshot.docs.map(doc => doc.data()['courseId']);
+        const courseIds = snapshot.docs.map((doc: QueryDocumentSnapshot) => doc.data()['courseId']);
         return this.courses$.pipe(
           map(courses => courses.filter(c => courseIds.includes(c.courseName) || courseIds.includes(String(c.id))))
         );

@@ -43,6 +43,7 @@ export const routes: Routes = [
     component: MyCoursesComponent,
     canActivate: [canActivateAuth, canActivateRole],
     data: { title: 'My Courses - CodeMaster', requiredRole: 'student' }
+  },
   // Wildcard route for 404
   {
     path: '**',

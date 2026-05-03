@@ -1,0 +1,35 @@
+<div class="course-slider">
+  <div class="slider-header">
+    <h2 class="slider-title">{{ title }}</h2>
+    <div class="slider-controls">
+      <button 
+        class="nav-btn prev-btn" 
+        (click)="previousSlide()" 
+        [disabled]="!canGoPrevious()"
+        aria-label="Previous courses">
+        ‹
+      </button>
+      <button 
+        class="nav-btn next-btn" 
+        (click)="nextSlide()" 
+        [disabled]="!canGoNext()"
+        aria-label="Next courses">
+        ›
+      </button>
+    </div>
+  </div>
+  
+  <div class="slider-container">
+    <div class="courses-track">
+      @for (course of visibleCourses; track course.id) {
+        <app-course-card [course]="course"></app-course-card>
+      }
+    </div>
+  </div>
+  
+  @if (courses.length === 0) {
+    <div class="no-courses">
+      <p>No courses available</p>
+    </div>
+  }
+</div>
