@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, doc, getDoc, getDocs, query, where, updateDoc, setDoc, deleteDoc, QueryConstraint } from '@angular/fire/firestore';
+import { Firestore, collection, doc, getDoc, getDocs, query, where, setDoc, updateDoc, deleteDoc, addDoc, serverTimestamp } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable, from, of } from 'rxjs';
 import { tap, catchError, switchMap, map } from 'rxjs/operators';
 import {
@@ -38,15 +38,16 @@ export class CourseService {
   public businessContent$ = this.businessContentSubject.asObservable();
 
   constructor() {
-    this.loadAllContent();
+    this.loadAllContent().catch(error => console.error('Initial load failed:', error));
   }
 
   /**
    * Load all content from Firestore
    * Loads courses, instructors, and static data (about, business, siteInfo)
+   * Returns a Promise that resolves when all data is loaded
    */
-  private loadAllContent(): void {
-    Promise.all([
+  private loadAllContent(): Promise<void> {
+    return Promise.all([
       this.loadCourses(),
       this.loadInstructors(),
       this.loadStaticContent()
@@ -62,12 +63,14 @@ export class CourseService {
       this.contentDataSubject.next(contentData);
     }).catch(error => {
       console.error('Error loading content from Firestore:', error);
+      throw error;
     });
   }
 
   /**
    * Load all courses from Firestore 'courses' collection
    * Document IDs are course names (e.g., 'python', 'database')
+   * Ensures every course has a numeric ID (from Firestore or generated consistently from courseName)
    */
   private async loadCourses(): Promise<void> {
     try {
@@ -77,8 +80,18 @@ export class CourseService {
 
       querySnapshot.forEach((doc) => {
         const courseData = doc.data();
+        
+        // Use ID from Firestore or generate consistently from courseName
+        let courseId = courseData['id'];
+        if (!courseId || courseId === undefined || courseId === null) {
+          // Generate ID consistently based on courseName (deterministic hash)
+          const courseName = courseData['courseName'] || doc.id;
+          courseId = this.generateConsistentIdFromName(courseName);
+        }
+
         courses.push({
           ...courseData,
+          id: courseId,
           icon: this.normalizeAssetPath(courseData['icon']),
           instructorImg: this.normalizeAssetPath(courseData['instructorImg'])
         } as Course);
@@ -89,6 +102,21 @@ export class CourseService {
       console.error('Error loading courses from Firestore:', error);
       this.coursesSubject.next([]);
     }
+  }
+
+  /**
+   * Generate a consistent numeric ID from a course name
+   * Same name always produces same ID
+   */
+  private generateConsistentIdFromName(name: string): number {
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      const char = name.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32-bit integer
+    }
+    // Return positive number between 1000-10000 for generated IDs
+    return (Math.abs(hash) % 9000) + 1000;
   }
 
   /**
@@ -252,17 +280,56 @@ export class CourseService {
   }
 
   /**
-   * Update a course in Firestore and local state
+   * Create a new course in Firestore
+   */
+  createCourse(course: Omit<Course, 'id'>): Observable<void> {
+    // Generate numeric ID: max existing ID + 1
+    const currentCourses = this.coursesSubject.value;
+    const maxId = currentCourses.length > 0 
+      ? Math.max(...currentCourses.map(c => c.id))
+      : 0;
+    const newId = maxId + 1;
+
+    // Generate instructorId from form data or use default
+    let instructorId = 1;
+    if (course.instructorName) {
+      const existingInstructor = this.instructorsSubject.value.find(
+        i => i.name.toLowerCase() === course.instructorName.toLowerCase()
+      );
+      if (existingInstructor) {
+        instructorId = existingInstructor.id;
+      } else {
+        // Auto-generate new instructor ID
+        const maxInstructorId = this.instructorsSubject.value.length > 0
+          ? Math.max(...this.instructorsSubject.value.map(i => i.id))
+          : 0;
+        instructorId = maxInstructorId + 1;
+      }
+    }
+
+    const courseWithId: Course = {
+      ...course,
+      id: newId,
+      instructorId: instructorId
+    };
+
+    const courseId = course.courseName.toLowerCase().replace(/\s+/g, '-');
+    return from(setDoc(doc(this.firestore, 'courses', courseId), courseWithId)).pipe(
+      switchMap(() => from(this.loadAllContent())),
+      catchError(error => {
+        console.error('Error creating course:', error);
+        throw error;
+      })
+    );
+  }
+
+  /**
+   * Update an existing course in Firestore
    */
   updateCourse(courseName: string, updates: Partial<Course>): Observable<void> {
-    return from(
-      updateDoc(doc(this.firestore, 'courses', courseName), updates as any).then(() => {
-        const courses = this.coursesSubject.value.map(c => 
-          c.courseName === courseName ? { ...c, ...updates } : c
-        );
-        this.coursesSubject.next(courses);
-      })
-    ).pipe(
+    const courseId = courseName.toLowerCase().replace(/\s+/g, '-');
+    return from(updateDoc(doc(this.firestore, 'courses', courseId), updates)).pipe(
+      switchMap(() => from(this.loadAllContent())),
       catchError(error => {
         console.error('Error updating course:', error);
         throw error;
@@ -271,44 +338,19 @@ export class CourseService {
   }
 
   /**
-   * Enroll a student in a course
-   * Adds a document to the user's 'enrolledCourses' subcollection
+   * Check if a user is enrolled in a course
    */
-  enrollCourse(userId: string, courseId: number): Observable<void> {
+  isEnrolled(userId: string, courseId: string | number): Observable<boolean> {
     return from(
-      setDoc(doc(this.firestore, 'users', userId, 'enrolledCourses', courseId.toString()), {
-        courseId,
-        enrolledAt: new Date()
-      })
+      getDocs(
+        query(
+          collection(this.firestore, 'enrollments'),
+          where('userId', '==', userId),
+          where('courseId', '==', String(courseId))
+        )
+      )
     ).pipe(
-      catchError(error => {
-        console.error('Error enrolling course:', error);
-        throw error;
-      })
-    );
-  }
-
-  /**
-   * Disenroll a student from a course
-   * Removes a document from the user's 'enrolledCourses' subcollection
-   */
-  disenrollCourse(userId: string, courseId: number): Observable<void> {
-    return from(deleteDoc(doc(this.firestore, 'users', userId, 'enrolledCourses', courseId.toString()))).pipe(
-      catchError(error => {
-        console.error('Error disenrolling course:', error);
-        throw error;
-      })
-    );
-  }
-
-  /**
-   * Check if a student is enrolled in a course
-   */
-  isEnrolled(userId: string, courseId: number): Observable<boolean> {
-    return from(
-      getDoc(doc(this.firestore, 'users', userId, 'enrolledCourses', courseId.toString()))
-    ).pipe(
-      map(docSnap => docSnap.exists()),
+      map(snapshot => !snapshot.empty),
       catchError(error => {
         console.error('Error checking enrollment:', error);
         return of(false);
@@ -317,25 +359,89 @@ export class CourseService {
   }
 
   /**
-   * Get all enrolled courses for a student
-   * Returns Course objects for each courseId in the user's 'enrolledCourses' subcollection
+   * Enroll a user in a course
+   */
+  enrollCourse(userId: string, courseId: string | number): Observable<void> {
+    return from(
+      addDoc(collection(this.firestore, 'enrollments'), {
+        userId,
+        courseId: String(courseId),
+        enrolledAt: serverTimestamp()
+      })
+    ).pipe(
+      map(() => void 0),
+      catchError(error => {
+        console.error('Error enrolling user:', error);
+        throw error;
+      })
+    );
+  }
+
+  /**
+   * Disenroll a user from a course
+   */
+  disenrollCourse(userId: string, courseId: string | number): Observable<void> {
+    return from(
+      getDocs(
+        query(
+          collection(this.firestore, 'enrollments'),
+          where('userId', '==', userId),
+          where('courseId', '==', String(courseId))
+        )
+      )
+    ).pipe(
+      switchMap(snapshot => {
+        if (snapshot.empty) {
+          return of(void 0);
+        }
+        const docId = snapshot.docs[0].id;
+        return from(deleteDoc(doc(this.firestore, 'enrollments', docId)));
+      }),
+      catchError(error => {
+        console.error('Error disenrolling user:', error);
+        throw error;
+      })
+    );
+  }
+
+  /**
+   * Get all courses a user is enrolled in
    */
   getStudentCourses(userId: string): Observable<Course[]> {
-    return from(getDocs(collection(this.firestore, 'users', userId, 'enrolledCourses'))).pipe(
-      switchMap(querySnapshot => {
-        const courseIds = querySnapshot.docs.map(doc => Number(doc.id));
-        
-        if (courseIds.length === 0) {
+    return from(
+      getDocs(
+        query(
+          collection(this.firestore, 'enrollments'),
+          where('userId', '==', userId)
+        )
+      )
+    ).pipe(
+      switchMap(snapshot => {
+        if (snapshot.empty) {
           return of([]);
         }
-
+        const courseIds = snapshot.docs.map(doc => doc.data()['courseId']);
         return this.courses$.pipe(
-          map(allCourses => allCourses.filter(course => courseIds.includes(course.id)))
+          map(courses => courses.filter(c => courseIds.includes(c.courseName) || courseIds.includes(String(c.id))))
         );
       }),
       catchError(error => {
-        console.error('Error fetching student courses:', error);
+        console.error('Error getting student courses:', error);
         return of([]);
+      })
+    );
+  }
+
+  /**
+   * Delete a course from Firestore
+   */
+  deleteCourse(courseName: string): Observable<void> {
+    const courseId = courseName.toLowerCase().replace(/\s+/g, '-');
+    return from(deleteDoc(doc(this.firestore, 'courses', courseId))).pipe(
+      switchMap(() => from(this.loadAllContent())),
+      catchError(error => {
+        console.error('Error deleting course:', error);
+        throw error;
       })
     );
   }

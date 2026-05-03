@@ -123,6 +123,17 @@
               >
                 Edit Course
               </button>
+              <button
+                class="btn-delete"
+                (click)="deleteCourse()"
+                [disabled]="isDeleting"
+                type="button"
+              >
+                <span>{{ isDeleting ? 'Deleting...' : 'Delete Course' }}</span>
+                @if (isDeleting) {
+                  <span class="spinner"></span>
+                }
+              </button>
             }
             @if (isEditMode) {
               <button

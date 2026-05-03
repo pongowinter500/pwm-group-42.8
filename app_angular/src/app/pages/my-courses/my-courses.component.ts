@@ -50,11 +50,11 @@ export class MyCoursesComponent implements OnInit {
     }
 
     this.courseService.getStudentCourses(this.userId).subscribe(
-      courses => {
+      (courses: Course[]) => {
         this.courses = courses;
         this.loading = false;
       },
-      error => {
+      (error: Error) => {
         this.error = 'Failed to load courses: ' + error.message;
         this.loading = false;
       }
@@ -70,7 +70,7 @@ export class MyCoursesComponent implements OnInit {
         this.courses = this.courses.filter(c => c.id !== courseId);
         this.delistingCourseId = null;
       },
-      error => {
+      (error: Error) => {
         this.error = 'Failed to delist course: ' + error.message;
         this.delistingCourseId = null;
       }

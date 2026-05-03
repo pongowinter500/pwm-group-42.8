@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CourseService } from '../../services/course.service';
 import { AuthService } from '../../services/auth.service';
 import { Course } from '../../models/course.model';
@@ -32,6 +32,7 @@ export class CourseDetailComponent implements OnInit {
   isSaving = false;
   isEnrolling = false;
   isEnrolled = false;
+  isDeleting = false;
   error: string | null = null;
   userRole$: Observable<string | null>;
   isAuthenticated$: Observable<boolean>;
@@ -47,6 +48,7 @@ export class CourseDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private courseService: CourseService,
     private authService: AuthService
   ) {
@@ -118,7 +120,7 @@ export class CourseDetailComponent implements OnInit {
         this.isEditMode = false;
         this.isSaving = false;
       },
-      error => {
+      (error: Error) => {
         this.error = 'Failed to save changes: ' + error.message;
         this.isSaving = false;
       }
@@ -134,7 +136,7 @@ export class CourseDetailComponent implements OnInit {
     if (!this.userId) return;
     
     this.courseService.isEnrolled(this.userId, courseId).subscribe(
-      enrolled => this.isEnrolled = enrolled
+      (enrolled: boolean) => this.isEnrolled = enrolled
     );
   }
 
@@ -147,7 +149,7 @@ export class CourseDetailComponent implements OnInit {
         this.isEnrolled = true;
         this.isEnrolling = false;
       },
-      error => {
+      (error: Error) => {
         this.error = 'Failed to enroll: ' + error.message;
         this.isEnrolling = false;
       }
@@ -163,9 +165,22 @@ export class CourseDetailComponent implements OnInit {
         this.isEnrolled = false;
         this.isEnrolling = false;
       },
-      error => {
+      (error: Error) => {
         this.error = 'Failed to disenroll: ' + error.message;
         this.isEnrolling = false;
+      }
+    );
+  }
+
+  deleteCourse(): void {
+    if (!this.course || !confirm(`Delete "${this.course.courseTitle}"? This cannot be undone.`)) return;
+    
+    this.isDeleting = true;
+    this.courseService.deleteCourse(this.course.courseName).subscribe(
+      () => this.router.navigate(['/']),
+      (error: Error) => {
+        this.error = 'Failed to delete course: ' + error.message;
+        this.isDeleting = false;
       }
     );
   }
