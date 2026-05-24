@@ -4,7 +4,7 @@ A production-ready Ionic 7 + Angular 17 mobile and web application for discoveri
 
 ## Developed by
 Andrea Pedrini
-Alberto Federici 
+Alberto Federici
 
 ## 📋 Quick Start
 
@@ -17,8 +17,8 @@ npm install
 # Start the development server on http://localhost:4200
 ng serve
 
-# Or using Ionic CLI for live reload
-ionic serve
+# Using "ionic serve" could bring to some libraries problems, so it's better to use  "ng serve", we imported the libreries that permits the use of SQLite even with this kind of command
+
 ```
 
 The application will automatically open in your browser and reload when you make changes.
