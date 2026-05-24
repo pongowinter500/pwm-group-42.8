@@ -1,0 +1,43 @@
+<ion-app>
+  <jeep-sqlite></jeep-sqlite>
+  
+  <ion-router-outlet id="main"></ion-router-outlet>
+  
+  <!-- Tabs for authenticated users only -->
+  <ion-tabs *ngIf="(authService.currentUser$ | async) as user" class="app-tabs">
+    <ion-tab-bar slot="bottom" class="tab-bar">
+      <!-- Home Tab -->
+      <ion-tab-button 
+        tab="home"
+        [routerLink]="['/home']"
+        routerLinkActive="active"
+        class="tab-button"
+      >
+        <ion-icon name="home" class="tab-icon"></ion-icon>
+        <ion-label>Home</ion-label>
+      </ion-tab-button>
+
+      <!-- Favorites Tab -->
+      <ion-tab-button 
+        tab="favorites"
+        [routerLink]="['/favorites']"
+        routerLinkActive="active"
+        class="tab-button"
+      >
+        <ion-icon name="star" class="tab-icon"></ion-icon>
+        <ion-label>Favorites</ion-label>
+      </ion-tab-button>
+
+      <!-- Profile Tab -->
+      <ion-tab-button 
+        tab="profile"
+        [routerLink]="['/profile']"
+        routerLinkActive="active"
+        class="tab-button"
+      >
+        <ion-icon name="person" class="tab-icon"></ion-icon>
+        <ion-label>Profile</ion-label>
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs>
+</ion-app>

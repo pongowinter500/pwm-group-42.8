@@ -1,0 +1,104 @@
+<ion-header class="ion-no-border detail-header">
+  <ion-toolbar class="detail-toolbar">
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()" class="back-button">
+        <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleFavorite()" [class.favorited]="isFavorited" class="favorite-button">
+        <ion-icon slot="icon-only" [name]="isFavorited ? 'star' : 'star-outline'"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="detail-content" [fullscreen]="true">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <ion-skeleton-text animated [ngStyle]="{ width: '100%', height: '300px', marginBottom: '20px' }"></ion-skeleton-text>
+    <ion-skeleton-text animated [ngStyle]="{ width: '80%', height: '30px', marginBottom: '15px' }"></ion-skeleton-text>
+    <ion-skeleton-text animated [ngStyle]="{ width: '100%', height: '100px' }"></ion-skeleton-text>
+  </div>
+
+  <!-- Destination Content -->
+  <div *ngIf="!isLoading && destination" class="destination-details">
+    <!-- Hero Image -->
+    <div class="hero-section">
+      <img
+        [src]="destination.imageUrl"
+        alt="{{ destination.name }}"
+        class="hero-image"
+      />
+    </div>
+
+    <!-- Content Container -->
+    <div class="content-container">
+      <!-- Title and Basic Info -->
+      <div class="title-section">
+        <h1 class="destination-name">{{ destination.name }}</h1>
+        <p class="destination-continent">{{ destination.continent }}</p>
+      </div>
+
+      <!-- Rating and Category -->
+      <div class="info-row">
+        <div class="info-item rating-item">
+          <span class="info-label">{{ screenText.ratingLabel || 'Rating' }}</span>
+          <div class="rating-display">
+            <ion-icon
+              *ngFor="let star of getStarDisplay(destination.rating)"
+              [name]="star"
+              class="star-icon"
+            ></ion-icon>
+            <span class="rating-value">{{ destination.rating }}</span>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <span class="info-label">{{ screenText.categoryLabel || 'Category' }}</span>
+          <span class="category-chip">{{ destination.category }}</span>
+        </div>
+      </div>
+
+      <!-- Short Description Card -->
+      <div class="description-card">
+        <p class="short-description">{{ destination.shortDescription }}</p>
+      </div>
+
+      <!-- Long Description -->
+      <div class="long-description-section">
+        <h2 class="section-title">About</h2>
+        <p class="long-description">{{ destination.longDescription }}</p>
+      </div>
+
+      <!-- Tags Section -->
+      <div *ngIf="destination.tags && destination.tags.length > 0" class="tags-section">
+        <h2 class="section-title">{{ screenText.tagsLabel || 'Tags' }}</h2>
+        <div class="tags-container">
+          <span class="tag-chip" *ngFor="let tag of destination.tags">{{ tag }}</span>
+        </div>
+      </div>
+
+      <!-- Floating Action Button -->
+      <div class="fab-container">
+        <ion-button
+          (click)="toggleFavorite()"
+          [class.favorited]="isFavorited"
+          class="fab-button"
+          shape="round"
+        >
+          <ion-icon slot="icon-only" [name]="isFavorited ? 'star' : 'star-outline'"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="!isLoading && !destination" class="error-state">
+    <ion-icon name="alert-circle-outline" class="error-icon"></ion-icon>
+    <p class="error-text">Destination not found</p>
+    <ion-button (click)="goBack()" color="primary">
+      Go Back
+    </ion-button>
+  </div>
+</ion-content>

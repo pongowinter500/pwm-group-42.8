@@ -1,0 +1,109 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="home-toolbar">
+    <ion-title class="home-title">{{ screenText.title || 'Explore' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="home-content" [fullscreen]="true">
+  <!-- Search Bar -->
+  <div class="search-container">
+    <ion-searchbar
+      [placeholder]="screenText.searchPlaceholder || 'Search destinations...'"
+      (ionInput)="onSearch($event)"
+      [value]="searchQuery"
+      class="search-bar"
+    ></ion-searchbar>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-skeleton-text animated [ngStyle]="{ width: '100%', height: '200px', marginBottom: '10px' }"></ion-skeleton-text>
+    <ion-skeleton-text animated [ngStyle]="{ width: '100%', height: '200px' }"></ion-skeleton-text>
+  </div>
+
+  <!-- Featured Destinations Section -->
+  <div *ngIf="!isLoading && featuredDestinations.length > 0" class="featured-section">
+    <h2 class="section-title">{{ screenText.featuredSection || 'Featured Destinations' }}</h2>
+    <ion-slides pager="true" [options]="{ slidesPerView: 1.1, spaceBetween: 16 }" class="featured-slides">
+      <ion-slide *ngFor="let dest of featuredDestinations; let i = index" [@fadeIn]>
+        <div class="featured-card" (click)="goToDetail(dest.id)">
+          <img
+            [src]="dest.imageUrl"
+            alt="{{ dest.name }}"
+            class="featured-image"
+          />
+          <div class="featured-overlay">
+            <h3 class="featured-name">{{ dest.name }}</h3>
+            <div class="featured-info">
+              <span class="category-chip">{{ dest.category }}</span>
+              <div class="rating-badge">
+                <ion-icon name="star" class="star-icon"></ion-icon>
+                <span class="rating-text">{{ dest.rating }}</span>
+              </div>
+            </div>
+          </div>
+          <ion-button
+            fill="clear"
+            size="small"
+            class="favorite-fab-featured"
+            (click)="toggleFavorite($event, dest.id)"
+            [class.favorited]="isFavorited(dest.id)"
+          >
+            <ion-icon slot="icon-only" [name]="isFavorited(dest.id) ? 'star' : 'star-outline'"></ion-icon>
+          </ion-button>
+        </div>
+      </ion-slide>
+    </ion-slides>
+  </div>
+
+  <!-- All Destinations Section -->
+  <div *ngIf="!isLoading" class="destinations-section">
+    <h2 class="section-title">{{ screenText.allDestinationsSection || 'All Destinations' }}</h2>
+
+    <!-- Empty State -->
+    <div *ngIf="filteredDestinations.length === 0" class="empty-state">
+      <ion-icon name="compass-outline" class="empty-icon"></ion-icon>
+      <p class="empty-text">{{ screenText.emptyState || 'No destinations found' }}</p>
+    </div>
+
+    <!-- Destinations Grid -->
+    <div class="destinations-grid">
+      <div
+        *ngFor="let dest of filteredDestinations; let i = index"
+        class="destination-card"
+        (click)="goToDetail(dest.id)"
+        [@fadeIn]
+      >
+        <div class="card-image-container">
+          <img
+            [src]="dest.thumbnailUrl || dest.imageUrl"
+            alt="{{ dest.name }}"
+            class="card-image"
+          />
+          <div class="card-overlay">
+            <ion-button
+              fill="clear"
+              size="small"
+              class="favorite-button"
+              (click)="toggleFavorite($event, dest.id)"
+              [class.favorited]="isFavorited(dest.id)"
+            >
+              <ion-icon slot="icon-only" [name]="isFavorited(dest.id) ? 'star' : 'star-outline'"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+        <div class="card-content">
+          <h3 class="card-title">{{ dest.name }}</h3>
+          <p class="card-description">{{ dest.shortDescription }}</p>
+          <div class="card-footer">
+            <span class="category-badge">{{ dest.category }}</span>
+            <div class="rating-display">
+              <ion-icon name="star" class="star-sm"></ion-icon>
+              <span class="rating-value">{{ dest.rating }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

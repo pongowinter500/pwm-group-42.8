@@ -1,0 +1,120 @@
+<ion-content class="register-content">
+  <div class="register-container">
+    <!-- Header -->
+    <div class="register-header">
+      <h1 class="title">{{ screenText.title || 'Create Account' }}</h1>
+    </div>
+
+    <!-- Form Card -->
+    <ion-card class="register-card">
+      <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+        <!-- First Name Field -->
+        <div class="form-group">
+          <ion-label class="form-label">{{ screenText.firstNameLabel || 'First Name' }}</ion-label>
+          <ion-input
+            formControlName="firstName"
+            type="text"
+            placeholder="John"
+            class="form-input"
+          ></ion-input>
+          <div class="error-message" *ngIf="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched">
+            {{ getFieldError('firstName') }}
+          </div>
+        </div>
+
+        <!-- Last Name Field -->
+        <div class="form-group">
+          <ion-label class="form-label">{{ screenText.lastNameLabel || 'Last Name' }}</ion-label>
+          <ion-input
+            formControlName="lastName"
+            type="text"
+            placeholder="Doe"
+            class="form-input"
+          ></ion-input>
+          <div class="error-message" *ngIf="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched">
+            {{ getFieldError('lastName') }}
+          </div>
+        </div>
+
+        <!-- Email Field -->
+        <div class="form-group">
+          <ion-label class="form-label">{{ screenText.emailLabel || 'Email' }}</ion-label>
+          <ion-input
+            formControlName="email"
+            type="email"
+            placeholder="you@example.com"
+            class="form-input"
+          ></ion-input>
+          <div class="error-message" *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+            {{ getFieldError('email') }}
+          </div>
+        </div>
+
+        <!-- Password Field -->
+        <div class="form-group">
+          <ion-label class="form-label">{{ screenText.passwordLabel || 'Password' }}</ion-label>
+          <ion-input
+            formControlName="password"
+            [type]="showPassword ? 'text' : 'password'"
+            placeholder="At least 6 characters"
+            class="form-input"
+          ></ion-input>
+          <ion-button
+            fill="clear"
+            size="small"
+            class="password-toggle"
+            (click)="togglePasswordVisibility()"
+            type="button"
+          >
+            <ion-icon slot="icon-only" [name]="showPassword ? 'eye-off' : 'eye'"></ion-icon>
+          </ion-button>
+          <div class="error-message" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+            {{ getFieldError('password') }}
+          </div>
+        </div>
+
+        <!-- Photo URL Field -->
+        <div class="form-group">
+          <ion-label class="form-label">{{ screenText.photoUrlLabel || 'Profile Photo URL' }}</ion-label>
+          <ion-input
+            formControlName="photoUrl"
+            type="text"
+            placeholder="https://example.com/photo.jpg"
+            class="form-input"
+          ></ion-input>
+          <div class="error-message" *ngIf="registerForm.get('photoUrl')?.invalid && registerForm.get('photoUrl')?.touched">
+            {{ getFieldError('photoUrl') }}
+          </div>
+        </div>
+
+        <!-- Error Message -->
+        <div class="error-banner" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
+
+        <!-- Success Message -->
+        <div class="success-banner" *ngIf="successMessage">
+          {{ successMessage }}
+        </div>
+
+        <!-- Register Button -->
+        <ion-button
+          type="submit"
+          expand="block"
+          class="register-button"
+          [disabled]="!registerForm.valid || isLoading"
+        >
+          <ion-spinner *ngIf="isLoading" class="spinner"></ion-spinner>
+          <span *ngIf="!isLoading">{{ screenText.registerButton || 'Register' }}</span>
+        </ion-button>
+      </form>
+    </ion-card>
+
+    <!-- Login Link -->
+    <div class="login-link">
+      <ion-button fill="clear" (click)="goToLogin()" class="text-link">
+        {{ screenText.loginLink || 'Already have an account? Login' }}
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

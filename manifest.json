@@ -1,0 +1,25 @@
+{
+  "name": "FavoritesApp",
+  "short_name": "Favorites",
+  "description": "Discover and save your favorite destinations with FavoritesApp",
+  "start_url": "/",
+  "display": "standalone",
+  "scope": "/",
+  "orientation": "portrait",
+  "background_color": "#0F0F23",
+  "theme_color": "#6C63FF",
+  "icons": [
+    {
+      "src": "assets/icon/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon/icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

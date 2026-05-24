@@ -1,0 +1,100 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="favorites-toolbar">
+    <ion-title class="favorites-title">{{ screenText.title || 'My Favorites' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="favorites-content" [fullscreen]="true">
+  <!-- Search Bar -->
+  <div class="search-container">
+    <ion-searchbar
+      [placeholder]="screenText.searchPlaceholder || 'Search favorites...'"
+      (ionInput)="onSearch($event)"
+      [value]="searchQuery"
+      class="search-bar"
+    ></ion-searchbar>
+  </div>
+
+  <!-- Filter Toggle -->
+  <div class="filter-container">
+    <ion-segment [value]="showOnlyFavorites ? 'favorites' : 'all'" (ionChange)="toggleFilter()">
+      <ion-segment-button value="favorites">
+        <ion-label>{{ screenText.showFavoritesToggle || 'Favorites' }}</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="all">
+        <ion-label>{{ screenText.showAllToggle || 'All' }}</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
+  <!-- Pull to Refresh -->
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-skeleton-text animated [ngStyle]="{ width: '100%', height: '150px', marginBottom: '12px' }"></ion-skeleton-text>
+    <ion-skeleton-text animated [ngStyle]="{ width: '100%', height: '150px', marginBottom: '12px' }"></ion-skeleton-text>
+    <ion-skeleton-text animated [ngStyle]="{ width: '100%', height: '150px' }"></ion-skeleton-text>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && filteredFavorites.length === 0" class="empty-state">
+    <ion-icon name="heart-outline" class="empty-icon"></ion-icon>
+    <h2 class="empty-title">{{ screenText.emptyState || 'No Favorites' }}</h2>
+    <p class="empty-description">{{ screenText.emptyDescription || 'Start adding to your favorites' }}</p>
+  </div>
+
+  <!-- Favorites List -->
+  <div *ngIf="!isLoading && filteredFavorites.length > 0" class="favorites-list">
+    <div
+      *ngFor="let favorite of filteredFavorites; let i = index"
+      class="favorite-card"
+      (click)="goToDetail(favorite.id)"
+      [@fadeIn]
+    >
+      <div class="card-image-container">
+        <img
+          [src]="favorite.imageUrl"
+          alt="{{ favorite.name }}"
+          class="card-image"
+        />
+        <div class="card-overlay">
+          <ion-button
+            fill="clear"
+            size="small"
+            class="remove-button"
+            (click)="removeFavorite($event, favorite.id)"
+          >
+            <ion-icon slot="icon-only" name="trash"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+
+      <div class="card-content">
+        <div class="card-header">
+          <h3 class="card-title">{{ favorite.name }}</h3>
+          <span class="continent-badge">{{ favorite.continent }}</span>
+        </div>
+        
+        <p class="card-description">{{ favorite.shortDescription }}</p>
+
+        <div class="card-meta">
+          <div class="meta-item">
+            <span class="category-label">{{ favorite.category }}</span>
+          </div>
+          
+          <div class="rating-display">
+            <ion-icon name="star" class="star-icon"></ion-icon>
+            <span class="rating-value">{{ favorite.rating }}</span>
+          </div>
+        </div>
+
+        <div class="tags-container" *ngIf="favorite.tags && favorite.tags.length > 0">
+          <span class="tag" *ngFor="let tag of favorite.tags">{{ tag }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,308 @@
+// Ionic CSS Variables
+// Reference: https://ionicframework.com/docs/utilities/themes
+
+// Color Variables - Premium Dark Theme
+:root {
+  // Primary color: Indigo-Violet
+  --ion-color-primary: #6C63FF;
+  --ion-color-primary-rgb: 108, 99, 255;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #5D54DD;
+  --ion-color-primary-tint: #7B75FF;
+
+  // Secondary color: Coral-Pink
+  --ion-color-secondary: #FF6584;
+  --ion-color-secondary-rgb: 255, 101, 132;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #E05474;
+  --ion-color-secondary-tint: #FF7591;
+
+  // Tertiary color: Gold
+  --ion-color-tertiary: #FFD700;
+  --ion-color-tertiary-rgb: 255, 215, 0;
+  --ion-color-tertiary-contrast: #000000;
+  --ion-color-tertiary-contrast-rgb: 0, 0, 0;
+  --ion-color-tertiary-shade: #E0B800;
+  --ion-color-tertiary-tint: #FFD916;
+
+  // Success: Green
+  --ion-color-success: #4CAF50;
+  --ion-color-success-rgb: 76, 175, 80;
+  --ion-color-success-contrast: #ffffff;
+  --ion-color-success-contrast-rgb: 255, 255, 255;
+  --ion-color-success-shade: #419A45;
+  --ion-color-success-tint: #5EC15F;
+
+  // Warning: Orange
+  --ion-color-warning: #FFA500;
+  --ion-color-warning-rgb: 255, 165, 0;
+  --ion-color-warning-contrast: #000000;
+  --ion-color-warning-contrast-rgb: 0, 0, 0;
+  --ion-color-warning-shade: #E09600;
+  --ion-color-warning-tint: #FFB11A;
+
+  // Danger: Red
+  --ion-color-danger: #FF3B30;
+  --ion-color-danger-rgb: 255, 59, 48;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-contrast-rgb: 255, 255, 255;
+  --ion-color-danger-shade: #E0332A;
+  --ion-color-danger-tint: #FF5245;
+
+  // Dark: Deep Dark Navy
+  --ion-color-dark: #0F0F23;
+  --ion-color-dark-rgb: 15, 15, 35;
+  --ion-color-dark-contrast: #ffffff;
+  --ion-color-dark-contrast-rgb: 255, 255, 255;
+  --ion-color-dark-shade: #0D0D1F;
+  --ion-color-dark-tint: #27273A;
+
+  // Medium: Surface cards
+  --ion-color-medium: #1A1A3E;
+  --ion-color-medium-rgb: 26, 26, 62;
+  --ion-color-medium-contrast: #ffffff;
+  --ion-color-medium-contrast-rgb: 255, 255, 255;
+  --ion-color-medium-shade: #161636;
+  --ion-color-medium-tint: #313152;
+
+  // Light: Light Gray
+  --ion-color-light: #A0A0C0;
+  --ion-color-light-rgb: 160, 160, 192;
+  --ion-color-light-contrast: #000000;
+  --ion-color-light-contrast-rgb: 0, 0, 0;
+  --ion-color-light-shade: #8E8EAD;
+  --ion-color-light-tint: #AAAACC;
+
+  // Font family
+  --ion-font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  // Background colors
+  --ion-background-color: #0F0F23;
+  --ion-background-color-rgb: 15, 15, 35;
+
+  --ion-text-color: #FFFFFF;
+  --ion-text-color-rgb: 255, 255, 255;
+
+  // Additional brand colors
+  --ion-color-surface: #1A1A3E;
+  --ion-color-surface-variant: #2A2A4E;
+  --ion-color-on-surface: #FFFFFF;
+  --ion-color-on-surface-variant: #A0A0C0;
+
+  // Backdrop
+  --ion-backdrop-color: rgba(0, 0, 0, 0.8);
+}
+
+// Light mode (if needed)
+@media (prefers-color-scheme: light) {
+  :root {
+    --ion-background-color: #FFFFFF;
+    --ion-background-color-rgb: 255, 255, 255;
+    --ion-text-color: #1A1A3E;
+    --ion-text-color-rgb: 26, 26, 62;
+  }
+}
+
+// Global font import
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+// Global styles
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #0F0F23 0%, #1A1A3E 100%);
+  color: #FFFFFF;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  position: fixed;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+// Ionic component overrides
+ion-content {
+  --background: transparent;
+}
+
+ion-card {
+  --background: rgba(26, 26, 62, 0.95);
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(108, 99, 255, 0.1);
+  margin: 12px;
+}
+
+ion-input {
+  --placeholder-color: rgba(160, 160, 192, 0.5);
+  --padding-start: 16px;
+  --padding-end: 16px;
+  color: #FFFFFF;
+
+  &::part(native) {
+    font-family: 'Poppins', sans-serif;
+  }
+}
+
+ion-textarea {
+  --placeholder-color: rgba(160, 160, 192, 0.5);
+  --padding-start: 16px;
+  --padding-end: 16px;
+  color: #FFFFFF;
+  font-family: 'Poppins', sans-serif;
+}
+
+ion-label {
+  color: #A0A0C0;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+}
+
+ion-button {
+  --font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+
+  &:disabled {
+    opacity: 0.5;
+  }
+}
+
+ion-icon {
+  color: inherit;
+}
+
+ion-spinner {
+  --color: #FFFFFF;
+}
+
+ion-toolbar {
+  --background: rgba(26, 26, 62, 0.95);
+  --border-color: rgba(108, 99, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+ion-header {
+  &.ion-no-border {
+    ion-toolbar {
+      --border-color: transparent;
+    }
+  }
+}
+
+// Scrollbar styling
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(108, 99, 255, 0.3);
+  border-radius: 4px;
+
+  &:hover {
+    background: rgba(108, 99, 255, 0.5);
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// Responsive breakpoints
+@media (max-width: 384px) {
+  :root {
+    --ion-padding: 12px;
+  }
+}
+
+@media (min-width: 385px) and (max-width: 768px) {
+  :root {
+    --ion-padding: 16px;
+  }
+}
+
+@media (min-width: 769px) {
+  :root {
+    --ion-padding: 20px;
+  }
+}
+
+// Utility classes
+.gradient-primary {
+  background: linear-gradient(135deg, #6C63FF, #FF6584);
+}
+
+.gradient-dark {
+  background: linear-gradient(135deg, #0F0F23, #1A1A3E);
+}
+
+.text-primary {
+  color: #6C63FF;
+}
+
+.text-secondary {
+  color: #FF6584;
+}
+
+.text-muted {
+  color: #A0A0C0;
+}
+
+.rounded-xl {
+  border-radius: 20px;
+}
+
+.rounded-lg {
+  border-radius: 16px;
+}
+
+.shadow-sm {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.shadow-md {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.shadow-lg {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+// Glass morphism effect
+.glassmorphism {
+  background: rgba(26, 26, 62, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(108, 99, 255, 0.1);
+}

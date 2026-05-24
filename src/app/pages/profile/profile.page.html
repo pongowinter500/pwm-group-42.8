@@ -1,0 +1,99 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="profile-toolbar">
+    <ion-title class="profile-title">{{ screenText.title || 'Profile' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="profile-content" [fullscreen]="true">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-skeleton-text animated [ngStyle]="{ width: '80px', height: '80px', borderRadius: '50%', margin: '0 auto 20px' }"></ion-skeleton-text>
+    <ion-skeleton-text animated [ngStyle]="{ width: '60%', height: '20px', margin: '0 auto 10px' }"></ion-skeleton-text>
+    <ion-skeleton-text animated [ngStyle]="{ width: '40%', height: '15px', margin: '0 auto' }"></ion-skeleton-text>
+  </div>
+
+  <!-- Profile Content -->
+  <div *ngIf="!isLoading && userProfile" class="profile-container">
+    <!-- Avatar Card -->
+    <div class="avatar-section">
+      <div class="avatar-container">
+        <img
+          *ngIf="userProfile.photoUrl"
+          [src]="userProfile.photoUrl"
+          alt="Profile"
+          class="avatar-image"
+        />
+        <div *ngIf="!userProfile.photoUrl" class="avatar-initials">
+          {{ getInitials() }}
+        </div>
+      </div>
+      
+      <h1 class="user-name">
+        {{ userProfile.firstName }} {{ userProfile.lastName }}
+      </h1>
+    </div>
+
+    <!-- User Info Cards -->
+    <div class="info-grid">
+      <!-- Email Card -->
+      <div class="info-card">
+        <div class="info-icon">
+          <ion-icon name="mail-outline"></ion-icon>
+        </div>
+        <div class="info-content">
+          <p class="info-label">{{ screenText.emailLabel || 'Email' }}</p>
+          <p class="info-value">{{ userProfile.email }}</p>
+        </div>
+      </div>
+
+      <!-- Member Since Card -->
+      <div class="info-card">
+        <div class="info-icon">
+          <ion-icon name="calendar-outline"></ion-icon>
+        </div>
+        <div class="info-content">
+          <p class="info-label">{{ screenText.memberSinceLabel || 'Member Since' }}</p>
+          <p class="info-value">{{ memberSince }}</p>
+        </div>
+      </div>
+
+      <!-- Favorites Count Card -->
+      <div class="info-card favorites-card">
+        <div class="info-icon">
+          <ion-icon name="star"></ion-icon>
+        </div>
+        <div class="info-content">
+          <p class="info-label">{{ screenText.favoritesCountLabel || 'Favorites' }}</p>
+          <p class="info-value">{{ favoritesCount }} items</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <ion-button
+        expand="block"
+        class="edit-button"
+        (click)="editProfile()"
+      >
+        <ion-icon slot="start" name="pencil"></ion-icon>
+        {{ screenText.editProfileBtn || 'Edit Profile' }}
+      </ion-button>
+
+      <ion-button
+        expand="block"
+        class="logout-button"
+        (click)="confirmLogout()"
+      >
+        <ion-icon slot="start" name="log-out"></ion-icon>
+        {{ screenText.logoutBtn || 'Logout' }}
+      </ion-button>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="!isLoading && !userProfile" class="error-state">
+    <ion-icon name="alert-circle-outline" class="error-icon"></ion-icon>
+    <p class="error-text">Unable to load profile</p>
+  </div>
+</ion-content>

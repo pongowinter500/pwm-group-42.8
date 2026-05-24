@@ -1,258 +1,335 @@
-# CodeMaster
+# FavoritesApp
 
-Online platform for computer science courses developed by **Group 42.8**.
-
-## Team
-- **Alberto Federici**
-- **Andrea Pedrini**
-- **Daniel Radoi**
-
-## Description
-WebMaster is an interactive web platform offering computer science courses across various technology areas. The project features a modern, responsive interface with a modular architecture.
-
-## Project Requirements
--newest courses section
--login form 
--possibility of searching specific courses
--course catalogue
--section about the platform
--intuitive design 
--possibility for businesses to contact the platform 
-
-### Main Pages
-- **`index.html`** - Implements the landing page
-- **`html/about.html`** - About/business page
-- **`html/business.html`** - About/business page
-- **`html/login.html`** - Login page
-
-### Course Pages (Details)
-Course details are contained in the `html/courses/` folder.
-- **`html/courses/ml.html`** - Machine Learning Bootcamp
-- **`html/courses/cybersecurity.html`** - Cybersecurity Fundamentals
-- **`html/courses/cloud.html`** - Cloud Computing Essentials
-- **`html/courses/fullstack.html`** - Full-Stack Development
-- **`html/courses/python.html`** - Python for Beginners
-- **`html/courses/database.html`** - Database Design and SQL
-- **`html/courses/devops.html`** - DevOps and Docker
-
-### HTML Modules (used only by the landing page, separated for clarity)
-- **`html/new_courses.html`** - New courses section with slider
-- **`html/catalogue.html`** - Full course catalogue
-
-### HTML Templates
-Modular HTML files are grouped under `html/templates/`.
-Header and footer are used by every page. 
-Course-template is used by all the course detail pages (all the pages inside "courses" directory)
-- **`html/templates/header.html`** - Header and navigation
-- **`html/templates/footer.html`** - Site footer
-- **`html/templates/course-template.html`** - Standardized template for course detail pages
-
-### Resources
-- **`figma_mockups/`** - Design mockups in PDF and PNG formats. Only header and footer have a storyboard,
-- because they're the only components whose design changed. Pages mockups have the second version (v2) of header and footer because we didn't modify them,
-- but in reality the implementation follows the third version (v3) of header and footer
-- **`css/`** - Modular style sheets
-- **`images/`** - Graphic assets
+A production-ready Ionic 7 + Angular 17 mobile application for discovering and saving favorite destinations with Firebase Authentication, Firestore, and SQLite persistence.
 
 ## Features
 
-### UI/UX Features
-**Responsive Design**
-- Mobile-first approach with three breakpoints: 481px (tablet), 769px (laptop), 1024px (desktop)
-- Optimized layouts for all screen sizes
-- Mobile menu with toggle button and keyboard navigation
-- Search functionality with mobile toggle
+- 🔐 **Secure Authentication**: Firebase Auth with email/password registration and login
+- 📱 **6 Fully Functional Screens**: Login, Register, Home, Favorites, Detail, and Profile
+- 🎨 **Premium UI Design**: Modern dark theme with gradient accents and glassmorphism effects
+- 🔖 **Local Favorites**: SQLite database for fast, offline-first favorite destinations
+- 🔥 **Real-time Data**: Firestore integration for all content (destinations, user profiles, UI text)
+- ✨ **Smooth Animations**: Angular Animations with fade-in effects and page transitions
+- 📊 **Responsive Design**: Optimized for both mobile phones and tablets
+- 🌐 **Offline Support**: Capacitor SQLite for persistent local data
 
-**Modular Architecture**
-- Reusable HTML components (header, footer, course sections)
-- Modular CSS for easy maintenance with CSS custom properties (variables)
-- Dynamic module loading system
-- Custom themes per course
-- Centralized UI state management (UIState object)
-
-**Interactive Components**
-- Mobile navigation menu with slide-out drawer
-- Search bar with mobile toggle
-- Course slider with previous/next navigation buttons
-- Course description dropdowns with expandable content
-- Footer menu toggles for mobile/tablet views
-
-**Alternating Layout (Desktop)**
-- Course instructor images alternate left-right on desktop view
-- Circular instructor images with colored border
-- Text and image alignment adjusts responsively
-
-### Authentication & User Management
-- **Login System** with HTML5 Constraint Validation
-- Email and password validation with custom error messages
-- User authentication against `data/users.json`
-- Role-based interface modifications (admin/user)
-- Authentication state persistence with localStorage
-- **Automatic Logout** after 30 minutes of inactivity
-- Session tracking with login time storage
-- Show/hide password toggle for better UX
-
-**Admin Features**
-- Admin users can edit course content inline on course detail pages
-- Edit mode activated via "Edit Course" button (visible only to admin users)
-- Editable fields include: course title, subtitle, instructor name/title, course descriptions, and topics
-- Changes are applied frontend-only (no JSON persistence)
-- Admin dashboard banner (red) displays when logged in as admin
-
-### JavaScript Utilities & Functions
-**Centralized Configuration**
-- `UI_SELECTORS` object - All DOM selectors in one place
-- `UIState` object - Global UI state management with methods:
-  - `setState(key, value)` - Set state values
-  - `isInitialized(id)` - Check if feature is initialized
-  - `markInitialized(id)` - Mark feature as initialized
-
-**Reusable Functions**
-- `debounce(func, delay)` - Performance optimization for resize events
-- `createToggleHandler(toggleSelector, contentSelector, options)` - Factory function for toggle components
-  - Supports custom callbacks (onOpen, onClose)
-  - Auto-focus on element when opened
-  - Keyboard escape key support
-  - Click-outside closing
-  - ARIA accessibility attributes
-
-**Dynamic Module Processing**
-- `loadHTMLModules()` - Dynamically loads external HTML files using `data-include-html` attribute
-- `markActiveNav()` - Highlights current page in navigation
-- `initSearchToggle()` - Mobile search bar toggle with focus management
-- `initMobileMenu()` - Mobile menu with slide animation and keyboard controls
-- `initNewCoursesSlider()` - Course slider with pagination buttons
-- `initFooterMenus()` - Mobile/tablet footer menu toggles
-- `initDescriptionToggle()` - Expandable course descriptions
-- `initPasswordToggle()` - Show/hide password in login form
-- `initLogoutTimer()` - Auto-logout on inactivity
-- `initResponsiveHandlers()` - Resize event management
-- `closeAllMobileUI()` - Closes all mobile UI elements at desktop breakpoint
-
-**Authentication & User Interface**
-- `handleLogin(event)` - Form submission handler with validation
-- `checkAuthStatus()` - Checks authentication status and updates UI
-  - Shows authentication banner (green for user, red for admin)
-  - Converts login link to logout
-  - Handles logout event with localStorage clear
-
-### CSS Features
-**CSS Variables System**
-- 40+ semantic CSS custom properties for colors, spacing, sizing, and transitions
-- Single source of truth for design system
-- Organized by category: colors, spacing, sizing, transitions
-
-**Responsive CSS Organization**
-- Mobile base styles in individual component files
-- Tablet styles (481px) in component files and responsive.css
-- Desktop/Laptop styles (769px+) in responsive.css
-- Semantic breakpoint organization
-
-**Visual Effects**
-- Smooth transitions for interactive elements
-- Shake animation for form validation errors
-- Box shadows for depth
-- Hover effects on buttons and cards
-
-## Technologies Used
-- **HTML5** - Semantic markup
-- **CSS3** - Modular architecture with custom properties
-- **JavaScript (ES6+)** - Dynamic component loading, event handling, state management
-- **Fetch API** - Async HTML and JSON loading
-- **LocalStorage API** - Session management
-- **HTML5 Constraint Validation API** - Form validation
-
-## Data Files
-
-### data/users.json
-- Stores user credentials for authentication
-- Contains user roles and metadata
-- Used for login form validation
-
-### data/content.json
-- Stores course content information
-- Used for dynamic course data population
-
-## Responsive Breakpoints
-
-| Breakpoint | Resolution | Usage |
-|-----------|-----------|-------|
-| Mobile | 0-480px | Base mobile styles, full-width layout, column stacking |
-| Tablet | 481px-768px | Two-column layouts, medium text sizes |
-| Desktop | 769px+ | Full multi-column layouts, large components, alternating image placement |
-| Large Desktop | 1024px+ | Extra spacing, maximum content width constraints |
-
-## File Structure
+## Project Structure
 
 ```
-pwm-group-42.8/
-├── index.html                          # Landing page
-├── module-loader.js                    # Core JS functionality (structure, layout, behavior)
-├── content-loader.js                   # Content data population (text, images)
-├── README.md                           # This file
-│
-├── css/
-│   ├── layout.css                      # Global layout with CSS variables
-│   ├── header.css                      # Header and navigation styles
-│   ├── footer.css                      # Footer styles
-│   ├── login.css                       # Login form styles
-│   ├── new-courses.css                 # New courses section styles
-│   ├── our-courses.css                 # Course catalogue section styles
-│   ├── course-template.css             # Course detail page template styles
-│   ├── about.css                       # About page styles
-│   ├── business.css                    # Business page styles
-│   ├── course-themes.css               # Course-specific color themes
-│   └── responsive.css                  # Responsive breakpoints and media queries
-│
-├── html/
-│   ├── about.html                      # About the platform page
-│   ├── business.html                   # Business contact/info page
-│   ├── catalogue.html                  # Full course catalogue
-│   ├── login.html                      # Login form page
-│   ├── new_courses.html                # New courses section (homepage)
-│   │
-│   ├── courses/                        # Detailed course pages
-│   │   ├── ml.html                     # Machine Learning Bootcamp
-│   │   ├── cybersecurity.html          # Cybersecurity Fundamentals
-│   │   ├── cloud.html                  # Cloud Computing Essentials
-│   │   ├── fullstack.html              # Full-Stack Development
-│   │   ├── python.html                 # Python for Beginners
-│   │   ├── database.html               # Database Design and SQL
-│   │   └── devops.html                 # DevOps and Docker
-│   │
-│   └── templates/                      # Reusable HTML components
-│       ├── header.html                 # Navigation header (used by all pages)
-│       ├── footer.html                 # Footer (used by all pages)
-│       └── course-template.html        # Course detail template (used by all course pages)
-│
-├── data/
-│   ├── users.json                      # User credentials and roles for authentication
-│   └── content.json                    # Course metadata, instructors, business info, admin config
-│
-├── images/                             # Graphic assets (icons, instructor photos, etc.)
-│
-├── figma_mockups_sprint1/              # Initial design mockups (PDF/PNG)
-├── figma_mockups_sprint2/              # Updated design mockups (PDF/PNG)
-│
-└── .git/                               # Version control history
+src/
+├── app/
+│   ├── guards/
+│   │   └── auth.guard.ts
+│   ├── services/
+│   │   ├── auth.service.ts          # Firebase Auth wrapper
+│   │   ├── firestore.service.ts     # Firestore data access
+│   │   ├── database.service.ts      # SQLite favorites
+│   │   └── favorites.service.ts     # Coordinates SQLite + Firestore
+│   ├── pages/
+│   │   ├── login/                   # Public auth screen
+│   │   ├── register/                # Public registration
+│   │   ├── home/                    # Featured + all destinations
+│   │   ├── favorites/               # Saved favorites
+│   │   ├── detail/:id/              # Single destination view
+│   │   └── profile/                 # User profile + logout
+│   ├── app-routing.module.ts
+│   ├── app.component.ts
+│   └── app.module.ts
+├── environments/
+│   ├── environment.ts
+│   └── environment.prod.ts
+├── theme/
+│   └── variables.scss               # Ionic CSS variables + custom styles
+├── index.html
+├── main.ts
+└── global.scss
 ```
 
-## Getting Started
-1. Open `index.html` in the browser to access the platform's landing page
-2. Use the navigation menu to explore different sections
-3. Click "Login" to test the authentication system
-   - **Test Credentials**: See `data/users.json` for available user accounts
-   - Available roles: `student` (can enroll in courses) and `admin` (can edit course content)
-4. Responsive design automatically adapts to your screen size
-5. **To test admin features**: Login with an admin account and navigate to any course page
-   - Click "Edit Course" button to enter edit mode
-   - Editable fields will display with orange borders
-   - Changes can be made inline and persist during the session
+## Installation & Setup
 
-## Code Quality
-- All comments in English for international collaboration
-- Semantic HTML for accessibility
-- CSS custom properties for maintainability
-- Centralized configuration for easy updates
-- Event delegation for performance optimization
-- Proper error handling and logging 
+### Prerequisites
+- Node.js 16+
+- npm or yarn
+- Ionic CLI: `npm install -g @ionic/cli`
+- Angular CLI: `npm install -g @angular/cli`
+
+### 1. Create the Project
+
+```bash
+ionic start FavoritesApp blank --type=angular
+cd FavoritesApp
+```
+
+### 2. Install Dependencies
+
+```bash
+npm install @angular/fire firebase
+npm install @capacitor-community/sqlite
+npm install @capacitor/core @capacitor/cli
+npm install rxjs tslib zone.js
+```
+
+### 3. Initialize Capacitor
+
+```bash
+npx cap init FavoritesApp com.example.favoritesapp
+```
+
+### 4. Copy Project Files
+
+Copy all files from this project into your newly created Ionic project, overwriting as needed.
+
+### 5. Configure Firebase
+
+1. Go to [Firebase Console](https://console.firebase.google.com/)
+2. Create a new project
+3. Enable Authentication (Email/Password)
+4. Create Firestore Database (Start in test mode)
+5. Copy your Firebase config
+6. Update `src/environments/environment.ts`:
+
+```typescript
+export const environment = {
+  production: false,
+  firebaseConfig: {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "your-project.firebaseapp.com",
+    projectId: "your-project-id",
+    storageBucket: "your-project.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  }
+};
+```
+
+### 6. Create Firestore Collections
+
+Create the following collections in Firestore:
+
+#### `siteConfig` collection (document: `appInfo`)
+```json
+{
+  "appName": "FavoritesApp",
+  "tagline": "Explore & Save Your Favorite Destinations",
+  "description": "Discover amazing places around the world",
+  "logoUrl": "https://...",
+  "primaryColor": "#6C63FF",
+  "accentColor": "#FF6584"
+}
+```
+
+#### `screens` collection (one document per screen)
+Documents: `register`, `login`, `home`, `favorites`, `detail`, `profile`
+
+Example for `register` document:
+```json
+{
+  "title": "Create Account",
+  "firstNameLabel": "First Name",
+  "lastNameLabel": "Last Name",
+  "emailLabel": "Email",
+  "passwordLabel": "Password",
+  "photoUrlLabel": "Profile Photo URL",
+  "registerButton": "Register",
+  "loginLink": "Already have an account? Login",
+  "registrationError": "Registration failed. Please try again."
+}
+```
+
+#### `destinations` collection
+Example document (ID: `dest_001`):
+```json
+{
+  "name": "Paris",
+  "shortDescription": "The City of Light",
+  "longDescription": "Paris, the capital of France, is known for its romantic ambiance, iconic landmarks like the Eiffel Tower, and world-class museums.",
+  "category": "City",
+  "rating": 4.8,
+  "continent": "Europe",
+  "imageUrl": "https://...",
+  "thumbnailUrl": "https://...",
+  "tags": ["romantic", "museums", "architecture"],
+  "featured": true
+}
+```
+
+#### `users` collection
+Auto-populated by the `AuthService` during registration.
+
+### 7. Run the Application
+
+```bash
+# Development server
+ionic serve
+
+# Build for production
+npm run build
+
+# Sync with native platforms
+npx cap sync
+
+# Open in iOS
+npx cap open ios
+
+# Open in Android
+npx cap open android
+```
+
+## API Reference
+
+### AuthService
+
+```typescript
+register(email, password, firstName, lastName, photoUrl): Promise<User>
+login(email, password): Promise<User>
+logout(): Promise<void>
+getCurrentUserId(): string | null
+currentUser$: Observable<User | null>
+```
+
+### FirestoreService
+
+```typescript
+getScreenText(screenId: string): Observable<any>
+getAppInfo(): Observable<any>
+getAllDestinations(): Observable<Destination[]>
+getDestinationById(id: string): Observable<Destination>
+getFeaturedDestinations(): Observable<Destination[]>
+saveUserProfile(uid, data): Promise<void>
+getUserProfile(uid): Observable<any>
+```
+
+### DatabaseService
+
+```typescript
+initializeDatabase(): Promise<void>
+addFavorite(id: string): Promise<void>
+removeFavorite(id: string): Promise<void>
+isFavorite(id: string): Promise<boolean>
+getAllFavoriteIds(): Promise<string[]>
+```
+
+### FavoritesService
+
+```typescript
+addFavorite(id: string): Promise<void>
+removeFavorite(id: string): Promise<void>
+isFavorite(id: string): Promise<boolean>
+toggleFavorite(id: string): Promise<boolean>
+getFavoritedDestinations(): Observable<Destination[]>
+getFavoritesCount(): Promise<number>
+refreshFavorites(): void
+```
+
+## UI Theme
+
+The app uses a premium dark theme with:
+- **Primary Color**: `#6C63FF` (Indigo-Violet)
+- **Accent Color**: `#FF6584` (Coral-Pink)
+- **Background**: `#0F0F23` (Deep Dark)
+- **Surface Cards**: `#1A1A3E`
+- **Text Primary**: `#FFFFFF`
+- **Text Secondary**: `#A0A0C0`
+
+All colors are defined in `src/theme/variables.scss` and can be customized globally.
+
+## Authentication Flow
+
+1. **User Registration** (`/register`)
+   - Form validation
+   - Firebase Auth user creation
+   - Firestore user profile stored
+
+2. **User Login** (`/login`)
+   - Email/password Firebase Auth
+   - Redirects to `/home` on success
+
+3. **Protected Routes**
+   - AuthGuard checks Firebase auth state
+   - Unauthenticated users redirected to `/login`
+
+4. **Logout** (from `/profile`)
+   - Signs out Firebase Auth
+   - Clears SQLite session
+   - Redirects to `/login`
+
+## Favorites Flow
+
+1. **Add to Favorites**
+   - Destination ID saved to SQLite
+   - UI updates immediately (star icon becomes solid)
+
+2. **View Favorites** (`/favorites`)
+   - Loads favorite IDs from SQLite
+   - Fetches full destination data from Firestore
+   - Search/filter functionality
+
+3. **Remove from Favorites**
+   - ID removed from SQLite
+   - Firestore data not affected
+
+## Deployment
+
+### Building for Production
+
+```bash
+npm run build
+# or
+ionic build --prod
+```
+
+### iOS Deployment
+
+```bash
+npx cap sync ios
+npx cap open ios
+# Build and submit in Xcode
+```
+
+### Android Deployment
+
+```bash
+npx cap sync android
+npx cap open android
+# Build and submit in Android Studio
+```
+
+## Troubleshooting
+
+### Firebase Connection Issues
+- Verify Firebase config in `environment.ts`
+- Check Firestore security rules allow read/write for authenticated users
+- Ensure API keys are correct
+
+### SQLite Errors
+- Clear app cache and data
+- Reinstall Capacitor SQLite: `npm install @capacitor-community/sqlite@latest`
+- Check device storage space
+
+### Page Not Loading
+- Check browser console for errors
+- Verify all services are provided in `app.module.ts`
+- Ensure Firestore collections exist with correct names
+
+## Performance Optimization
+
+- Lazy loading components on each page
+- Images optimized with `object-fit: cover`
+- Skeletons shown during data loading
+- SQLite for offline data access
+- Efficient Firestore queries with filters
+
+## Browser Compatibility
+
+- Chrome 90+
+- Firefox 88+
+- Safari 14+
+- Edge 90+
+
+## License
+
+MIT License - Feel free to use this project for personal and commercial purposes.
+
+---
+
+**Built with ❤️ using Ionic 7, Angular 17, Firebase, and Capacitor**
