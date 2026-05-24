@@ -1,153 +1,504 @@
-# FavoritesApp
+# PWM Group 42.8 - Destination Discovery App
 
-A production-ready Ionic 7 + Angular 17 mobile application for discovering and saving favorite destinations with Firebase Authentication, Firestore, and SQLite persistence.
+A production-ready Ionic 7 + Angular 17 mobile and web application for discovering, exploring, and saving favorite travel destinations worldwide. Built with Firebase for real-time data sync and SQLite for offline-first functionality.
 
-## Features
+## Developed by
+Andrea Pedrini
+Alberto Federici 
 
-- 🔐 **Secure Authentication**: Firebase Auth with email/password registration and login
-- 📱 **6 Fully Functional Screens**: Login, Register, Home, Favorites, Detail, and Profile
-- 🎨 **Premium UI Design**: Modern dark theme with gradient accents and glassmorphism effects
-- 🔖 **Local Favorites**: SQLite database for fast, offline-first favorite destinations
-- 🔥 **Real-time Data**: Firestore integration for all content (destinations, user profiles, UI text)
-- ✨ **Smooth Animations**: Angular Animations with fade-in effects and page transitions
-- 📊 **Responsive Design**: Optimized for both mobile phones and tablets
-- 🌐 **Offline Support**: Capacitor SQLite for persistent local data
+## 📋 Quick Start
 
-## Project Structure
+### Running the Development Server
+
+```bash
+# Install dependencies (first time only)
+npm install
+
+# Start the development server on http://localhost:4200
+ng serve
+
+# Or using Ionic CLI for live reload
+ionic serve
+```
+
+The application will automatically open in your browser and reload when you make changes.
+
+---
+
+## ✨ Key Features
+
+- 🔐 **Firebase Authentication**: Email/password registration, login, and secure logout
+- 🏠 **Public Home Screen**: Browse featured and all destinations without authentication
+- ⭐ **Personal Favorites**: User-specific saved destinations synced across all pages in real-time
+- 🔍 **Search Functionality**: 1.5-second debounce search across destination names and descriptions
+- 👤 **User Profile Management**: Edit name, surname, and profile photo stored in Firestore
+- 📱 **Responsive Design**: Optimized for mobile phones, tablets, and desktop browsers
+- 🎨 **Premium UI**: Modern dark theme with gradient effects and glassmorphism styling
+- 💾 **Offline Support**: SQLite local caching for offline access to favorites
+- ⚡ **Real-time Sync**: Firestore integration ensures data consistency across devices and pages
+- 🎭 **Smooth Animations**: Angular transitions and fade-in effects for professional UX
+- 🌐 **Multi-language Ready**: All UI text configurable from Firestore `screens` collection
+
+---
+
+## 📁 Project Architecture
 
 ```
 src/
 ├── app/
 │   ├── guards/
-│   │   └── auth.guard.ts
+│   │   └── auth.guard.ts                    # Route protection for authenticated screens
+│   │
 │   ├── services/
-│   │   ├── auth.service.ts          # Firebase Auth wrapper
-│   │   ├── firestore.service.ts     # Firestore data access
-│   │   ├── database.service.ts      # SQLite favorites
-│   │   └── favorites.service.ts     # Coordinates SQLite + Firestore
+│   │   ├── auth.service.ts                 # Firebase Auth wrapper (register, login, logout)
+│   │   ├── firestore.service.ts            # Firestore read/write operations
+│   │   ├── database.service.ts             # SQLite favorites database operations
+│   │   └── favorites.service.ts            # Orchestrates SQLite + Firestore sync
+│   │
 │   ├── pages/
-│   │   ├── login/                   # Public auth screen
-│   │   ├── register/                # Public registration
-│   │   ├── home/                    # Featured + all destinations
-│   │   ├── favorites/               # Saved favorites
-│   │   ├── detail/:id/              # Single destination view
-│   │   └── profile/                 # User profile + logout
-│   ├── app-routing.module.ts
-│   ├── app.component.ts
-│   └── app.module.ts
+│   │   ├── login/                          # Public: Email/password login
+│   │   │   ├── login.page.ts
+│   │   │   ├── login.page.html
+│   │   │   └── login.page.scss
+│   │   │
+│   │   ├── register/                       # Public: Create new account
+│   │   │   ├── register.page.ts
+│   │   │   ├── register.page.html
+│   │   │   └── register.page.scss
+│   │   │
+│   │   ├── home/                           # Public: Featured & all destinations
+│   │   │   ├── home.page.ts                # Search debounce, real-time favorites sync
+│   │   │   ├── home.page.html              # Search bar, featured carousel, grid view
+│   │   │   └── home.page.scss              # Dark theme with gradient backgrounds
+│   │   │
+│   │   ├── favorites/                      # Protected: User's saved destinations
+│   │   │   ├── favorites.page.ts           # Load favorites from Firestore
+│   │   │   ├── favorites.page.html         # Searchable favorites list with delete
+│   │   │   └── favorites.page.scss
+│   │   │
+│   │   ├── detail/                         # Semi-public: Destination details
+│   │   │   ├── detail.page.ts              # Full destination view with add/remove star
+│   │   │   ├── detail.page.html            # Hero image, description, tags, rating
+│   │   │   └── detail.page.scss
+│   │   │
+│   │   └── profile/                        # Protected: User account management
+│   │       ├── profile.page.ts             # Edit name/photo, view stats, logout
+│   │       ├── profile.page.html           # Profile card, edit mode form
+│   │       └── profile.page.scss
+│   │
+│   ├── app-routing.module.ts               # Route definitions with AuthGuard
+│   ├── app.component.ts                    # Root component with tab navigation
+│   ├── app.component.html
+│   ├── app.module.ts
+│   └── app.component.scss
+│
 ├── environments/
-│   ├── environment.ts
-│   └── environment.prod.ts
+│   ├── environment.ts                      # Dev Firebase config
+│   └── environment.prod.ts                 # Prod Firebase config
+│
 ├── theme/
-│   └── variables.scss               # Ionic CSS variables + custom styles
-├── index.html
-├── main.ts
-└── global.scss
+│   └── variables.scss                      # Ionic CSS variables + global styles
+│
+├── index.html                              # HTML entry point
+├── main.ts                                 # Angular bootstrap
+├── global.scss                             # Global styles
+└── styles.scss                             # App-wide styling
 ```
 
-## Installation & Setup
+---
+
+## 🔒 User Experience & Routing
+
+### Public Routes
+- **`/login`** - Email/password login
+- **`/register`** - Create new account
+- **`/home`** - Browse all destinations (no auth required)
+- **`/detail/:id`** - View single destination (non-authenticated users see "Sign In" prompt)
+
+### Protected Routes (Require Authentication)
+- **`/favorites`** - User's saved destinations
+- **`/profile`** - Account settings and profile management
+
+### Route Flow
+```
+Not Authenticated:
+  Login → Register → Home (public browsing)
+  
+Authenticated:
+  Login → Home → [Browse] → [Add to Favorites] → Favorites/Profile/Detail
+  
+After Logout:
+  Profile (Logout clicked) → Home (non-authenticated version)
+```
+
+---
+
+## 🔧 Installation & Configuration
 
 ### Prerequisites
-- Node.js 16+
-- npm or yarn
-- Ionic CLI: `npm install -g @ionic/cli`
-- Angular CLI: `npm install -g @angular/cli`
+```bash
+# Node.js 18+ and npm
+node --version
+npm --version
 
-### 1. Create the Project
+# Optional: Install Ionic CLI globally for enhanced development
+npm install -g @ionic/cli
+
+# Optional: Angular CLI for code generation
+npm install -g @angular/cli
+```
+
+### 1. Clone & Install Dependencies
 
 ```bash
-ionic start FavoritesApp blank --type=angular
-cd FavoritesApp
+git clone <repository-url>
+cd pwm-group-42.8
+npm install
 ```
 
-### 2. Install Dependencies
+### 2. Firebase Setup
 
-```bash
-npm install @angular/fire firebase
-npm install @capacitor-community/sqlite
-npm install @capacitor/core @capacitor/cli
-npm install rxjs tslib zone.js
-```
+1. **Create Firebase Project**
+   - Go to [Firebase Console](https://console.firebase.google.com/)
+   - Click "Create Project"
+   - Name it and enable Google Analytics (optional)
 
-### 3. Initialize Capacitor
+2. **Enable Authentication**
+   - In Firebase Console → Authentication → Sign-in method
+   - Enable "Email/Password" provider
 
-```bash
-npx cap init FavoritesApp com.example.favoritesapp
-```
+3. **Create Firestore Database**
+   - In Firebase Console → Firestore Database
+   - Start in **Test Mode** (for development)
+   - Select region (e.g., `us-central1`)
 
-### 4. Copy Project Files
+4. **Get Firebase Config**
+   - In Firebase Console → Project Settings → Web App
+   - Copy the configuration object
 
-Copy all files from this project into your newly created Ionic project, overwriting as needed.
+5. **Update Environment File**
+   - Edit `src/environments/environment.ts`:
+   ```typescript
+   export const environment = {
+     production: false,
+     firebaseConfig: {
+       apiKey: "YOUR_API_KEY",
+       authDomain: "your-project.firebaseapp.com",
+       projectId: "your-project-id",
+       storageBucket: "your-project.appspot.com",
+       messagingSenderId: "YOUR_SENDER_ID",
+       appId: "YOUR_APP_ID",
+       measurementId: "YOUR_MEASUREMENT_ID"
+     }
+   };
+   ```
 
-### 5. Configure Firebase
+### 3. Create Firestore Collections & Data
 
-1. Go to [Firebase Console](https://console.firebase.google.com/)
-2. Create a new project
-3. Enable Authentication (Email/Password)
-4. Create Firestore Database (Start in test mode)
-5. Copy your Firebase config
-6. Update `src/environments/environment.ts`:
-
-```typescript
-export const environment = {
-  production: false,
-  firebaseConfig: {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "your-project.firebaseapp.com",
-    projectId: "your-project-id",
-    storageBucket: "your-project.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
-  }
-};
-```
-
-### 6. Create Firestore Collections
-
-Create the following collections in Firestore:
-
-#### `siteConfig` collection (document: `appInfo`)
+#### Collection: `siteConfig` (Document: `appInfo`)
 ```json
 {
-  "appName": "FavoritesApp",
-  "tagline": "Explore & Save Your Favorite Destinations",
-  "description": "Discover amazing places around the world",
-  "logoUrl": "https://...",
+  "appName": "PWM Group",
+  "tagline": "Discover Amazing Destinations",
+  "description": "Explore the world's most beautiful travel destinations",
   "primaryColor": "#6C63FF",
   "accentColor": "#FF6584"
 }
 ```
 
-#### `screens` collection (one document per screen)
-Documents: `register`, `login`, `home`, `favorites`, `detail`, `profile`
+#### Collection: `screens` (UI Text - One Document Per Screen)
 
-Example for `register` document:
+**Document: `login`**
+```json
+{
+  "title": "Welcome Back",
+  "emailLabel": "Email Address",
+  "passwordLabel": "Password",
+  "loginButton": "Sign In",
+  "registerLink": "Don't have an account? Register",
+  "loginError": "Invalid email or password"
+}
+```
+
+**Document: `register`**
 ```json
 {
   "title": "Create Account",
   "firstNameLabel": "First Name",
   "lastNameLabel": "Last Name",
-  "emailLabel": "Email",
+  "emailLabel": "Email Address",
   "passwordLabel": "Password",
-  "photoUrlLabel": "Profile Photo URL",
-  "registerButton": "Register",
+  "photoUrlLabel": "Profile Photo URL (optional)",
+  "registerButton": "Create Account",
   "loginLink": "Already have an account? Login",
-  "registrationError": "Registration failed. Please try again."
+  "registrationError": "Registration failed. Try another email."
 }
 ```
 
-#### `destinations` collection
-Example document (ID: `dest_001`):
+**Document: `home`**
+```json
+{
+  "title": "Explore",
+  "searchPlaceholder": "Search destinations...",
+  "featuredSection": "Featured Destinations",
+  "allDestinationsSection": "All Destinations",
+  "emptyState": "No destinations found"
+}
+```
+
+**Document: `favorites`**
+```json
+{
+  "title": "My Favorites",
+  "searchPlaceholder": "Search your favorites...",
+  "emptyState": "No favorites yet",
+  "emptyDescription": "Start adding destinations to your favorites"
+}
+```
+
+**Document: `detail`**
+```json
+{
+  "addToFavoritesBtn": "Add to Favorites",
+  "removeFromFavoritesBtn": "Remove from Favorites",
+  "categoryLabel": "Category",
+  "ratingLabel": "Rating",
+  "continentLabel": "Continent",
+  "tagsLabel": "Tags"
+}
+```
+
+**Document: `profile`**
+```json
+{
+  "title": "My Profile",
+  "memberSinceLabel": "Member Since",
+  "favoritesCountLabel": "Favorites",
+  "emailLabel": "Email",
+  "editProfileBtn": "Edit Profile",
+  "logoutBtn": "Logout",
+  "logoutConfirm": "Are you sure you want to logout?"
+}
+```
+
+#### Collection: `destinations` (Travel Destinations)
+
+**Document Structure (Example: `destination_001`)**
 ```json
 {
   "name": "Paris",
-  "shortDescription": "The City of Light",
-  "longDescription": "Paris, the capital of France, is known for its romantic ambiance, iconic landmarks like the Eiffel Tower, and world-class museums.",
+  "shortDescription": "The City of Light - Iconic landmarks and romance",
+  "longDescription": "Paris, the capital of France, is renowned for its romantic ambiance, world-class museums, iconic landmarks like the Eiffel Tower, and exquisite cuisine. A must-visit destination.",
   "category": "City",
-  "rating": 4.8,
   "continent": "Europe",
-  "imageUrl": "https://...",
-  "thumbnailUrl": "https://...",
+  "featured": true,
+  "rating": 4.8,
+  "imageUrl": "https://example.com/paris-full.jpg",
+  "thumbnailUrl": "https://example.com/paris-thumb.jpg",
+  "tags": ["romantic", "historic", "museums", "food"],
+  "coordinates": {
+    "latitude": 48.8566,
+    "longitude": 2.3522
+  }
+}
+```
+
+Create multiple destination documents with different categories (Mountain, Beach, City, Nature) and continents (Europe, Asia, Africa, Americas, Oceania).
+
+---
+
+## 🚀 Development
+
+### Start Development Server
+```bash
+# Using Angular CLI
+ng serve
+
+# Or using Ionic CLI for better mobile preview
+ionic serve
+```
+
+Navigate to `http://localhost:4200/`. The app will auto-reload when you modify source files.
+
+### Build for Production
+```bash
+ng build --configuration production
+```
+
+### Run Unit Tests
+```bash
+ng test
+```
+
+### Generate New Component
+```bash
+ng generate component pages/my-page
+ng generate service services/my-service
+```
+
+---
+
+## 📊 Data Models
+
+### User Profile
+```typescript
+{
+  uid: string;              // Firebase Auth UID
+  firstName: string;
+  lastName: string;
+  email: string;
+  photoUrl?: string;        // Base64 or URL
+  createdAt: ISO8601;       // Timestamp
+  updatedAt?: ISO8601;      // Last update timestamp
+}
+```
+
+### Destination
+```typescript
+{
+  id: string;               // Document ID in Firestore
+  name: string;
+  shortDescription: string;
+  longDescription: string;
+  category: string;         // "City", "Beach", "Mountain", "Nature"
+  continent: string;        // Geographic region
+  featured: boolean;
+  rating: number;           // 0-5 stars
+  imageUrl: string;         // Full-size hero image
+  thumbnailUrl: string;     // List view thumbnail
+  tags: string[];           // Searchable keywords
+}
+```
+
+### Favorite (Firestore Path: `users/{uid}/favorites/{destinationId}`)
+```typescript
+{
+  destinationId: string;    // Reference to destination
+  addedAt: ISO8601;         // When favorited
+}
+```
+
+---
+
+## 🔄 Real-Time Sync Architecture
+
+### Favorites Sync Flow
+1. **User adds favorite** on Home → `FavoritesService.toggleFavorite()`
+2. **Service writes to Firestore** at `users/{uid}/favorites/{destId}`
+3. **Emit event** via `favoriteToggled$` BehaviorSubject
+4. **All subscribed pages** (Home, Detail, Favorites) update UI instantly
+5. **SQLite cached** locally for offline access
+
+### Search Functionality
+- **Debounce**: 1 second delay after user stops typing
+- **Real-time filtering**: Searches destination names and descriptions
+- **Featured destinations hide** during active search for cleaner UX
+
+---
+
+## 🎨 Styling & Theme
+
+### Color Palette
+```scss
+$primary: #6C63FF;          // Primary brand color
+$accent: #FF6584;           // Accent/secondary
+$dark-bg: #0F0F23;          // Main background
+$card-bg: #1A1A3E;          // Card/section background
+$text-light: #FFFFFF;       // Primary text
+$text-muted: #A0A0C0;       // Secondary text
+```
+
+### Customizing Theme
+Edit `src/theme/variables.scss` to change colors, fonts, and Ionic component styling.
+
+---
+
+## 🐛 Troubleshooting
+
+### Issue: "Cannot find module '@angular/fire'"
+```bash
+npm install @angular/fire firebase
+```
+
+### Issue: "SQLite not initialized"
+```bash
+npm install @capacitor-community/sqlite
+npx cap sync
+```
+
+### Issue: Firebase authentication not working
+- Verify Firebase credentials in `environment.ts`
+- Check that Email/Password auth is enabled in Firebase Console
+- Ensure Firestore security rules allow read/write in test mode
+
+### Issue: Favorites not syncing across pages
+- Check browser console for errors
+- Verify `FavoritesService.favoriteToggled$` subscription in components
+- Ensure user is authenticated when adding favorites
+
+---
+
+## 📱 Deployment
+
+### Build for Android
+```bash
+npm run build
+npx cap add android
+npx cap copy
+npx cap open android
+```
+
+### Build for iOS
+```bash
+npm run build
+npx cap add ios
+npx cap copy
+npx cap open ios
+```
+
+### Deploy to Web
+```bash
+ng build --configuration production
+# Upload dist/ folder to hosting service (Firebase Hosting, Netlify, Vercel)
+```
+
+---
+
+## 🤝 Team Development Notes
+
+### Key Technologies
+- **Angular 17+**: Standalone components, modern decorators
+- **Ionic 7**: Mobile UI framework with Material Design
+- **Firebase**: Auth, Firestore real-time database
+- **RxJS**: Reactive programming with Observables
+- **SQLite**: Local offline storage via Capacitor
+- **TypeScript**: Strong typing and OOP patterns
+
+### Code Conventions
+- **Naming**: camelCase for variables/methods, PascalCase for classes/components
+- **Comments**: Concise JSDoc-style documentation for public methods
+- **File Structure**: Organize by feature (pages), not by type
+- **Error Handling**: Always catch and log errors with console.error()
+- **Subscriptions**: Use `takeUntil()` to prevent memory leaks in ngOnDestroy
+
+### Performance Tips
+- Use `OnPush` change detection strategy where possible
+- Implement lazy loading for route modules
+- Optimize images (thumbnails vs full-size)
+- Debounce search and API calls
+- Track subscriptions and unsubscribe in ngOnDestroy
+
+---
+
+## 📄 License
+
+MIT License - See LICENSE file for details
+
+---
+
+## 👥 Support
+
+For issues or questions, please open an issue in the repository or contact the development team.
   "tags": ["romantic", "museums", "architecture"],
   "featured": true
 }
