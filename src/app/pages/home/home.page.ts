@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
@@ -7,6 +7,8 @@ import { FirestoreService } from '../../services/firestore.service';
 import { FavoritesService } from '../../services/favorites.service';
 import { AuthService } from '../../services/auth.service';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { Subject, Observable } from 'rxjs';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -23,26 +25,74 @@ import { trigger, transition, style, animate } from '@angular/animations';
     ])
   ]
 })
-export class HomePage implements OnInit {
+export class HomePage implements OnInit, OnDestroy {
   screenText: any = {};
   allDestinations: any[] = [];
   filteredDestinations: any[] = [];
   featuredDestinations: any[] = [];
   searchQuery = '';
   isLoading = true;
+  isSearching = false;
   favoriteIds: Set<string> = new Set();
+  currentUser$: Observable<any>;
+
+  // Subject for search query with debounce
+  private searchQuery$ = new Subject<string>();
+  private destroy$ = new Subject<void>();
 
   constructor(
     private firestoreService: FirestoreService,
     private favoritesService: FavoritesService,
     private authService: AuthService,
     private router: Router
-  ) {}
+  ) {
+    this.currentUser$ = this.authService.currentUser$;
+  }
 
   ngOnInit(): void {
     this.loadScreenText();
     this.loadDestinations();
-    this.loadFavorites();
+    
+    // Subscribe to authentication state
+    this.currentUser$.subscribe(user => {
+      if (user) {
+        this.loadFavorites();
+      } else {
+        // Clear favorites if user is not authenticated
+        this.favoriteIds.clear();
+      }
+    });
+    
+    // Subscribe to favorite changes to update UI in real-time
+    this.favoritesService.favoriteToggled$.subscribe(toggle => {
+      if (toggle) {
+        if (toggle.isFavorited) {
+          this.favoriteIds.add(toggle.id);
+        } else {
+          this.favoriteIds.delete(toggle.id);
+        }
+      }
+    });
+    
+    // Subscribe to search query changes with debounce of 1 second
+    this.searchQuery$
+      .pipe(
+        debounceTime(1000),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(query => {
+        this.searchQuery = query;
+        this.filterDestinations();
+        this.isSearching = false;
+      });
+  }
+
+  /**
+   * Cleanup on component destroy
+   */
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   /**
@@ -109,11 +159,14 @@ export class HomePage implements OnInit {
   }
 
   /**
-   * Filter destinations by search query
+   * Handle search input with debounce
    */
   onSearch(event: any): void {
-    this.searchQuery = event.detail.value?.toLowerCase() || '';
-    this.filterDestinations();
+    const query = event.detail.value?.toLowerCase() || '';
+    if (query) {
+      this.isSearching = true;
+    }
+    this.searchQuery$.next(query);
   }
 
   /**
@@ -149,6 +202,13 @@ export class HomePage implements OnInit {
    */
   async toggleFavorite(event: any, id: string): Promise<void> {
     event.stopPropagation();
+    
+    // Require authentication to add favorites
+    if (!this.authService.getCurrentUserId()) {
+      this.router.navigate(['/login']);
+      return;
+    }
+    
     try {
       const isFav = await this.favoritesService.toggleFavorite(id);
       if (isFav) {
@@ -159,5 +219,19 @@ export class HomePage implements OnInit {
     } catch (error) {
       console.error('Error toggling favorite:', error);
     }
+  }
+
+  /**
+   * Navigate to login page
+   */
+  goToLogin(): void {
+    this.router.navigate(['/login']);
+  }
+
+  /**
+   * Navigate to register page
+   */
+  goToRegister(): void {
+    this.router.navigate(['/register']);
   }
 }

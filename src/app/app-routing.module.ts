@@ -17,21 +17,21 @@ export const routes: Routes = [
     path: 'register',
     component: RegisterPage
   },
+  // Home is now public - users can browse without login
+  {
+    path: 'home',
+    component: HomePage
+  },
+  // Detail is now public - users can view destination details without login
+  {
+    path: 'detail/:id',
+    component: DetailPage
+  },
 
   // Protected routes
   {
-    path: 'home',
-    component: HomePage,
-    canActivate: [AuthGuard]
-  },
-  {
     path: 'favorites',
     component: FavoritesPage,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'detail/:id',
-    component: DetailPage,
     canActivate: [AuthGuard]
   },
   {

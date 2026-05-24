@@ -15,18 +15,6 @@
     ></ion-searchbar>
   </div>
 
-  <!-- Filter Toggle -->
-  <div class="filter-container">
-    <ion-segment [value]="showOnlyFavorites ? 'favorites' : 'all'" (ionChange)="toggleFilter()">
-      <ion-segment-button value="favorites">
-        <ion-label>{{ screenText.showFavoritesToggle || 'Favorites' }}</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="all">
-        <ion-label>{{ screenText.showAllToggle || 'All' }}</ion-label>
-      </ion-segment-button>
-    </ion-segment>
-  </div>
-
   <!-- Pull to Refresh -->
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>

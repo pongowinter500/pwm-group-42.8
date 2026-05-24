@@ -14,6 +14,90 @@
 
   <!-- Profile Content -->
   <div *ngIf="!isLoading && userProfile" class="profile-container">
+    <!-- Edit Mode Form -->
+    <div *ngIf="isEditMode" class="edit-mode-container">
+      <h2 class="edit-title">Edit Profile</h2>
+
+      <!-- Avatar Upload -->
+      <div class="avatar-upload-section">
+        <div class="avatar-container">
+          <img
+            *ngIf="previewImageUrl"
+            [src]="previewImageUrl"
+            alt="Profile Preview"
+            class="avatar-image"
+          />
+          <div *ngIf="!previewImageUrl" class="avatar-initials">
+            {{ getEditInitials() }}
+          </div>
+        </div>
+        <input
+          type="file"
+          accept="image/*"
+          (change)="onImageSelected($event)"
+          #imageInput
+          style="display: none"
+          class="image-input"
+        />
+        <ion-button
+          (click)="imageInput.click()"
+          fill="outline"
+          color="primary"
+          class="upload-btn"
+        >
+          <ion-icon slot="start" name="cloud-upload-outline"></ion-icon>
+          Change Photo
+        </ion-button>
+      </div>
+
+      <!-- Form Fields -->
+      <div class="edit-form">
+        <ion-item class="form-item">
+          <ion-label position="stacked">First Name</ion-label>
+          <ion-input
+            [(ngModel)]="editFormData.firstName"
+            placeholder="Enter first name"
+            type="text"
+          ></ion-input>
+        </ion-item>
+
+        <ion-item class="form-item">
+          <ion-label position="stacked">Last Name</ion-label>
+          <ion-input
+            [(ngModel)]="editFormData.lastName"
+            placeholder="Enter last name"
+            type="text"
+          ></ion-input>
+        </ion-item>
+      </div>
+
+      <!-- Edit Action Buttons -->
+      <div class="edit-action-buttons">
+        <ion-button
+          expand="block"
+          class="save-button"
+          (click)="saveProfileChanges()"
+          [disabled]="isSaving"
+        >
+          <ion-icon *ngIf="!isSaving" slot="start" name="checkmark"></ion-icon>
+          <ion-spinner *ngIf="isSaving" name="crescent" slot="start"></ion-spinner>
+          {{ isSaving ? 'Saving...' : 'Save Changes' }}
+        </ion-button>
+
+        <ion-button
+          expand="block"
+          class="cancel-button"
+          (click)="cancelEdit()"
+          [disabled]="isSaving"
+        >
+          <ion-icon slot="start" name="close"></ion-icon>
+          Cancel
+        </ion-button>
+      </div>
+    </div>
+
+    <!-- View Mode -->
+    <div *ngIf="!isEditMode">
     <!-- Avatar Card -->
     <div class="avatar-section">
       <div class="avatar-container">
@@ -88,6 +172,7 @@
         <ion-icon slot="start" name="log-out"></ion-icon>
         {{ screenText.logoutBtn || 'Logout' }}
       </ion-button>
+      </div>
     </div>
   </div>
 

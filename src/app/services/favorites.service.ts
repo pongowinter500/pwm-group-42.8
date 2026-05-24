@@ -16,6 +16,9 @@ import { switchMap } from 'rxjs/operators';
 export class FavoritesService {
   // Subject to trigger favorites list refresh
   private favoritesUpdated$ = new BehaviorSubject<void>(undefined);
+  
+  // Public subject to notify all listeners when a favorite is toggled
+  public favoriteToggled$ = new BehaviorSubject<{id: string, isFavorited: boolean} | null>(null);
 
   constructor(
     private databaseService: DatabaseService,
@@ -39,6 +42,8 @@ export class FavoritesService {
       // Also add to local SQLite for offline support
       await this.databaseService.addFavorite(id);
       this.favoritesUpdated$.next();
+      // Notify all listeners that a favorite was added
+      this.favoriteToggled$.next({ id, isFavorited: true });
     } catch (error) {
       console.error('Error adding favorite:', error);
     }
@@ -60,6 +65,8 @@ export class FavoritesService {
       // Also remove from local SQLite
       await this.databaseService.removeFavorite(id);
       this.favoritesUpdated$.next();
+      // Notify all listeners that a favorite was removed
+      this.favoriteToggled$.next({ id, isFavorited: false });
     } catch (error) {
       console.error('Error removing favorite:', error);
     }

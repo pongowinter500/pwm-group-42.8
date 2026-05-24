@@ -6,7 +6,12 @@
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button (click)="toggleFavorite()" [class.favorited]="isFavorited" class="favorite-button">
+      <ion-button
+        *ngIf="currentUser$ | async"
+        (click)="toggleFavorite()"
+        [class.favorited]="isFavorited"
+        class="favorite-button"
+      >
         <ion-icon slot="icon-only" [name]="isFavorited ? 'star' : 'star-outline'"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -65,6 +70,15 @@
         <p class="short-description">{{ destination.shortDescription }}</p>
       </div>
 
+      <!-- Login Notice -->
+      <div *ngIf="!(currentUser$ | async)" class="login-notice">
+        <ion-icon name="information-circle-outline" class="notice-icon"></ion-icon>
+        <p class="notice-text">Sign in to add this destination to your favorites</p>
+        <ion-button (click)="goToLogin()" color="primary" fill="solid" shape="round">
+          Sign In
+        </ion-button>
+      </div>
+
       <!-- Long Description -->
       <div class="long-description-section">
         <h2 class="section-title">About</h2>
@@ -80,7 +94,7 @@
       </div>
 
       <!-- Floating Action Button -->
-      <div class="fab-container">
+      <div *ngIf="currentUser$ | async" class="fab-container">
         <ion-button
           (click)="toggleFavorite()"
           [class.favorited]="isFavorited"

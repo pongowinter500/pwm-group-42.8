@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { FirestoreService } from '../../services/firestore.service';
 import { FavoritesService } from '../../services/favorites.service';
@@ -11,7 +12,7 @@ import { FavoritesService } from '../../services/favorites.service';
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule]
+  imports: [CommonModule, IonicModule, FormsModule]
 })
 export class ProfilePage implements OnInit {
   screenText: any = {};
@@ -20,6 +21,14 @@ export class ProfilePage implements OnInit {
   isLoading = true;
   favoritesCount = 0;
   memberSince = '';
+  isEditMode = false;
+  isSaving = false;
+  editFormData: any = {
+    firstName: '',
+    lastName: '',
+    photoUrl: ''
+  };
+  previewImageUrl: string | null = null;
 
   constructor(
     private authService: AuthService,
@@ -108,7 +117,7 @@ export class ProfilePage implements OnInit {
   async onLogout(): Promise<void> {
     try {
       await this.authService.logout();
-      this.router.navigate(['/login']);
+      this.router.navigate(['/home']);
     } catch (error) {
       console.error('Error during logout:', error);
     }
@@ -129,8 +138,88 @@ export class ProfilePage implements OnInit {
    * Edit profile (placeholder for future implementation)
    */
   editProfile(): void {
-    // This could navigate to an edit profile modal/page
-    console.log('Edit profile feature coming soon');
+    this.enterEditMode();
+  }
+
+  /**
+   * Enter edit mode
+   */
+  enterEditMode(): void {
+    this.isEditMode = true;
+    // Copy current profile data to edit form
+    this.editFormData = {
+      firstName: this.userProfile?.firstName || '',
+      lastName: this.userProfile?.lastName || '',
+      photoUrl: this.userProfile?.photoUrl || ''
+    };
+    this.previewImageUrl = this.userProfile?.photoUrl || null;
+  }
+
+  /**
+   * Cancel edit mode
+   */
+  cancelEdit(): void {
+    this.isEditMode = false;
+    this.editFormData = {
+      firstName: '',
+      lastName: '',
+      photoUrl: ''
+    };
+    this.previewImageUrl = null;
+  }
+
+  /**
+   * Handle image selection from file input
+   */
+  onImageSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.previewImageUrl = e.target.result;
+        this.editFormData.photoUrl = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  /**
+   * Save profile changes to Firestore
+   */
+  async saveProfileChanges(): Promise<void> {
+    if (!this.currentUserId) return;
+
+    // Validate inputs
+    if (!this.editFormData.firstName.trim() || !this.editFormData.lastName.trim()) {
+      alert('Please fill in all fields');
+      return;
+    }
+
+    this.isSaving = true;
+    try {
+      const updateData = {
+        firstName: this.editFormData.firstName.trim(),
+        lastName: this.editFormData.lastName.trim(),
+        photoUrl: this.editFormData.photoUrl || null,
+        updatedAt: new Date().toISOString()
+      };
+
+      await this.firestoreService.saveUserProfile(this.currentUserId, updateData);
+      
+      // Update local profile data
+      this.userProfile = {
+        ...this.userProfile,
+        ...updateData
+      };
+      
+      this.isEditMode = false;
+      alert('Profile updated successfully!');
+    } catch (error) {
+      console.error('Error saving profile:', error);
+      alert('Error updating profile. Please try again.');
+    } finally {
+      this.isSaving = false;
+    }
   }
 
   /**
@@ -141,6 +230,19 @@ export class ProfilePage implements OnInit {
       return (
         this.userProfile.firstName.charAt(0) +
         this.userProfile.lastName.charAt(0)
+      ).toUpperCase();
+    }
+    return 'U';
+  }
+
+  /**
+   * Get initials for edit mode
+   */
+  getEditInitials(): string {
+    if (this.editFormData?.firstName && this.editFormData?.lastName) {
+      return (
+        this.editFormData.firstName.charAt(0) +
+        this.editFormData.lastName.charAt(0)
       ).toUpperCase();
     }
     return 'U';

@@ -28,10 +28,8 @@ export class FavoritesPage implements OnInit {
   screenText: any = {};
   favorites: any[] = [];
   filteredFavorites: any[] = [];
-  allDestinations: any[] = [];
   searchQuery = '';
   isLoading = true;
-  showOnlyFavorites = true;
 
   constructor(
     private databaseService: DatabaseService,
@@ -44,6 +42,11 @@ export class FavoritesPage implements OnInit {
   ngOnInit(): void {
     this.loadScreenText();
     this.loadFavorites();
+    
+    // Subscribe to favorite changes to reload favorites list in real-time
+    this.favoritesService.favoriteToggled$.subscribe(() => {
+      this.loadFavorites();
+    });
   }
 
   /**
@@ -81,12 +84,10 @@ export class FavoritesPage implements OnInit {
       return;
     }
     
-    // First, get all destinations
+    // Get all destinations
     this.firestoreService.getAllDestinations().subscribe({
       next: (destinations) => {
-        this.allDestinations = destinations;
-        
-        // Then get favorite IDs from Firestore
+        // Get favorite IDs from Firestore
         this.databaseService.getAllFavoritesFromFirestore(uid).then(favoriteIds => {
           this.favorites = destinations.filter(d => favoriteIds.includes(d.id));
           this.filteredFavorites = [...this.favorites];
@@ -112,34 +113,16 @@ export class FavoritesPage implements OnInit {
   }
 
   /**
-   * Filter based on search and toggle settings
+   * Filter favorites by search query
    */
   filterFavorites(): void {
-    let results = this.favorites;
-
     if (this.searchQuery) {
-      results = results.filter(fav =>
+      this.filteredFavorites = this.favorites.filter(fav =>
         (fav.name || '').toLowerCase().includes(this.searchQuery) ||
         (fav.shortDescription || '').toLowerCase().includes(this.searchQuery)
       );
-    }
-
-    this.filteredFavorites = results;
-  }
-
-  /**
-   * Toggle filter between favorites and all
-   */
-  toggleFilter(): void {
-    this.showOnlyFavorites = !this.showOnlyFavorites;
-    if (!this.showOnlyFavorites) {
-      // Show all destinations
-      this.filteredFavorites = [...this.allDestinations];
-      this.filterFavorites();
     } else {
-      // Show only favorites
       this.filteredFavorites = [...this.favorites];
-      this.filterFavorites();
     }
   }
 
@@ -173,21 +156,4 @@ export class FavoritesPage implements OnInit {
     event.target.complete();
   }
 
-  /**
-   * Get star rating display
-   */
-  getStarDisplay(rating: number): string[] {
-    const stars = [];
-    const fullStars = Math.floor(rating);
-    for (let i = 0; i < 5; i++) {
-      if (i < fullStars) {
-        stars.push('star');
-      } else if (i === fullStars && rating % 1 !== 0) {
-        stars.push('star-half');
-      } else {
-        stars.push('star-outline');
-      }
-    }
-    return stars;
-  }
 }
