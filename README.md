@@ -1,686 +1,543 @@
 # PWM Group 42.8 - Destination Discovery App
 
-A production-ready Ionic 7 + Angular 17 mobile and web application for discovering, exploring, and saving favorite travel destinations worldwide. Built with Firebase for real-time data sync and SQLite for offline-first functionality.
+A production-ready mobile and web application built with **Ionic 7 + Angular 17** that enables users to discover, explore, and save their favorite travel destinations worldwide. The app integrates **Firebase** for real-time data synchronization and **SQLite** for offline support.
 
-## Developed by
-Andrea Pedrini
-Alberto Federici
+## 👥 Development Team
+- **Andrea Pedrini**
+- **Alberto Federici**
 
-## 📋 Quick Start
+---
 
-### Running the Development Server
+## 🚀 Getting Started
 
+### Installation
 ```bash
-# Install dependencies (first time only)
+# 1. Install dependencies
 npm install
 
-# Start the development server on http://localhost:4200
-ng serve
-
-# Using "ionic serve" could bring to some libraries problems, so it's better to use  "ng serve", we imported the libreries that permits the use of SQLite even with this kind of command
-
+# 2. Configure Firebase
+# Update src/environments/environment.ts with your Firebase credentials
 ```
 
-The application will automatically open in your browser and reload when you make changes.
+### Development
+```bash
+# Start the development server
+ng serve
+
+# The app will automatically open on http://localhost:4200
+# Automatically reloads when you save files
+```
+
+**Note:** Use `ng serve` instead of `ionic serve` to avoid issues with libraries (SQLite, Firebase)
 
 ---
 
-## ✨ Key Features
+## 🎯 Project Overview
 
-- 🔐 **Firebase Authentication**: Email/password registration, login, and secure logout
-- 🏠 **Public Home Screen**: Browse featured and all destinations without authentication
-- ⭐ **Personal Favorites**: User-specific saved destinations synced across all pages in real-time
-- 🔍 **Search Functionality**: 1.5-second debounce search across destination names and descriptions
-- 👤 **User Profile Management**: Edit name, surname, and profile photo stored in Firestore
-- 📱 **Responsive Design**: Optimized for mobile phones, tablets, and desktop browsers
-- 🎨 **Premium UI**: Modern dark theme with gradient effects and glassmorphism styling
-- 💾 **Offline Support**: SQLite local caching for offline access to favorites
-- ⚡ **Real-time Sync**: Firestore integration ensures data consistency across devices and pages
-- 🎭 **Smooth Animations**: Angular transitions and fade-in effects for professional UX
-- 🌐 **Multi-language Ready**: All UI text configurable from Firestore `screens` collection
+### What does it do?
+The application is a travel destination discovery platform with the following main features:
+- **Authentication**: Users register/login via email and password
+- **Exploration**: Browse public destinations with a home page accessible to everyone
+- **Personal Favorites**: Authenticated users can save/remove favorite destinations
+- **User Profile**: Manage personal data (name, surname, photo)
+- **Synchronization**: Data is synchronized in real-time with Firebase Firestore
+- **Offline**: Favorite destinations remain accessible offline thanks to SQLite
+
+### Technology Stack
+| Technology | Version | Purpose |
+|-----------|---------|---------|
+| **Angular** | 17.2.0 | Main framework for logic and components |
+| **Ionic** | 7.5.0 | UI components and mobile functionality |
+| **Firebase** | 9.23.0 | Authentication and cloud database (Firestore) |
+| **SQLite** | @capacitor-community/sqlite 5.0.0 | Local database for offline support |
+| **RxJS** | 7.8.0 | Stream and observable management |
+| **Capacitor** | 5.0.0 | Bridge between web and native platforms (iOS/Android) |
 
 ---
 
-## 📁 Project Architecture
+## 📁 Project Structure
 
 ```
 src/
 ├── app/
 │   ├── guards/
-│   │   └── auth.guard.ts                    # Route protection for authenticated screens
+│   │   └── auth.guard.ts
 │   │
 │   ├── services/
-│   │   ├── auth.service.ts                 # Firebase Auth wrapper (register, login, logout)
-│   │   ├── firestore.service.ts            # Firestore read/write operations
-│   │   ├── database.service.ts             # SQLite favorites database operations
-│   │   └── favorites.service.ts            # Orchestrates SQLite + Firestore sync
+│   │   ├── auth.service.ts
+│   │   ├── firestore.service.ts
+│   │   ├── database.service.ts
+│   │   └── favorites.service.ts
 │   │
 │   ├── pages/
-│   │   ├── login/                          # Public: Email/password login
-│   │   │   ├── login.page.ts
-│   │   │   ├── login.page.html
-│   │   │   └── login.page.scss
-│   │   │
-│   │   ├── register/                       # Public: Create new account
-│   │   │   ├── register.page.ts
-│   │   │   ├── register.page.html
-│   │   │   └── register.page.scss
-│   │   │
-│   │   ├── home/                           # Public: Featured & all destinations
-│   │   │   ├── home.page.ts                # Search debounce, real-time favorites sync
-│   │   │   ├── home.page.html              # Search bar, featured carousel, grid view
-│   │   │   └── home.page.scss              # Dark theme with gradient backgrounds
-│   │   │
-│   │   ├── favorites/                      # Protected: User's saved destinations
-│   │   │   ├── favorites.page.ts           # Load favorites from Firestore
-│   │   │   ├── favorites.page.html         # Searchable favorites list with delete
-│   │   │   └── favorites.page.scss
-│   │   │
-│   │   ├── detail/                         # Semi-public: Destination details
-│   │   │   ├── detail.page.ts              # Full destination view with add/remove star
-│   │   │   ├── detail.page.html            # Hero image, description, tags, rating
-│   │   │   └── detail.page.scss
-│   │   │
-│   │   └── profile/                        # Protected: User account management
-│   │       ├── profile.page.ts             # Edit name/photo, view stats, logout
-│   │       ├── profile.page.html           # Profile card, edit mode form
-│   │       └── profile.page.scss
+│   │   ├── login/
+│   │   ├── register/
+│   │   ├── home/
+│   │   ├── favorites/
+│   │   ├── detail/
+│   │   └── profile/
 │   │
-│   ├── app-routing.module.ts               # Route definitions with AuthGuard
-│   ├── app.component.ts                    # Root component with tab navigation
+│   ├── app-routing.module.ts
+│   ├── app.component.ts
 │   ├── app.component.html
-│   ├── app.module.ts
-│   └── app.component.scss
+│   ├── app.component.scss
+│   └── app.module.ts
 │
 ├── environments/
-│   ├── environment.ts                      # Dev Firebase config
-│   └── environment.prod.ts                 # Prod Firebase config
+│   ├── environment.ts
+│   └── environment.prod.ts
 │
 ├── theme/
-│   └── variables.scss                      # Ionic CSS variables + global styles
+│   └── variables.scss
 │
-├── index.html                              # HTML entry point
-├── main.ts                                 # Angular bootstrap
-├── global.scss                             # Global styles
-└── styles.scss                             # App-wide styling
+├── global.scss
+├── index.html
+└── main.ts
 ```
 
 ---
 
-## 🔒 User Experience & Routing
+## 🔧 File Details and Functions
 
-### Public Routes
-- **`/login`** - Email/password login
-- **`/register`** - Create new account
-- **`/home`** - Browse all destinations (no auth required)
-- **`/detail/:id`** - View single destination (non-authenticated users see "Sign In" prompt)
+### 📌 Main Configuration Files
 
-### Protected Routes (Require Authentication)
-- **`/favorites`** - User's saved destinations
-- **`/profile`** - Account settings and profile management
+#### **main.ts**
+**Purpose:** Angular application entry point
 
-### Route Flow
-```
-Not Authenticated:
-  Login → Register → Home (public browsing)
-  
-Authenticated:
-  Login → Home → [Browse] → [Add to Favorites] → Favorites/Profile/Detail
-  
-After Logout:
-  Profile (Logout clicked) → Home (non-authenticated version)
-```
+**Main Functions:**
+- Imports and initializes **jeep-sqlite** (SQLite driver for web)
+- Configures **Firebase** with credentials from `environment.ts`
+- Enables Angular animations
+- Sets routing with routes defined in `app-routing.module.ts`
+- Configures **@angular/fire** providers (Auth, Firestore)
+- Configures Ionic for mobile interface
 
----
-
-## 🔧 Installation & Configuration
-
-### Prerequisites
-```bash
-# Node.js 18+ and npm
-node --version
-npm --version
-
-# Optional: Install Ionic CLI globally for enhanced development
-npm install -g @ionic/cli
-
-# Optional: Angular CLI for code generation
-npm install -g @angular/cli
-```
-
-### 1. Clone & Install Dependencies
-
-```bash
-git clone <repository-url>
-cd pwm-group-42.8
-npm install
-```
-
-### 2. Firebase Setup
-
-1. **Create Firebase Project**
-   - Go to [Firebase Console](https://console.firebase.google.com/)
-   - Click "Create Project"
-   - Name it and enable Google Analytics (optional)
-
-2. **Enable Authentication**
-   - In Firebase Console → Authentication → Sign-in method
-   - Enable "Email/Password" provider
-
-3. **Create Firestore Database**
-   - In Firebase Console → Firestore Database
-   - Start in **Test Mode** (for development)
-   - Select region (e.g., `us-central1`)
-
-4. **Get Firebase Config**
-   - In Firebase Console → Project Settings → Web App
-   - Copy the configuration object
-
-5. **Update Environment File**
-   - Edit `src/environments/environment.ts`:
-   ```typescript
-   export const environment = {
-     production: false,
-     firebaseConfig: {
-       apiKey: "YOUR_API_KEY",
-       authDomain: "your-project.firebaseapp.com",
-       projectId: "your-project-id",
-       storageBucket: "your-project.appspot.com",
-       messagingSenderId: "YOUR_SENDER_ID",
-       appId: "YOUR_APP_ID",
-       measurementId: "YOUR_MEASUREMENT_ID"
-     }
-   };
-   ```
-
-### 3. Create Firestore Collections & Data
-
-#### Collection: `siteConfig` (Document: `appInfo`)
-```json
-{
-  "appName": "PWM Group",
-  "tagline": "Discover Amazing Destinations",
-  "description": "Explore the world's most beautiful travel destinations",
-  "primaryColor": "#6C63FF",
-  "accentColor": "#FF6584"
-}
-```
-
-#### Collection: `screens` (UI Text - One Document Per Screen)
-
-**Document: `login`**
-```json
-{
-  "title": "Welcome Back",
-  "emailLabel": "Email Address",
-  "passwordLabel": "Password",
-  "loginButton": "Sign In",
-  "registerLink": "Don't have an account? Register",
-  "loginError": "Invalid email or password"
-}
-```
-
-**Document: `register`**
-```json
-{
-  "title": "Create Account",
-  "firstNameLabel": "First Name",
-  "lastNameLabel": "Last Name",
-  "emailLabel": "Email Address",
-  "passwordLabel": "Password",
-  "photoUrlLabel": "Profile Photo URL (optional)",
-  "registerButton": "Create Account",
-  "loginLink": "Already have an account? Login",
-  "registrationError": "Registration failed. Try another email."
-}
-```
-
-**Document: `home`**
-```json
-{
-  "title": "Explore",
-  "searchPlaceholder": "Search destinations...",
-  "featuredSection": "Featured Destinations",
-  "allDestinationsSection": "All Destinations",
-  "emptyState": "No destinations found"
-}
-```
-
-**Document: `favorites`**
-```json
-{
-  "title": "My Favorites",
-  "searchPlaceholder": "Search your favorites...",
-  "emptyState": "No favorites yet",
-  "emptyDescription": "Start adding destinations to your favorites"
-}
-```
-
-**Document: `detail`**
-```json
-{
-  "addToFavoritesBtn": "Add to Favorites",
-  "removeFromFavoritesBtn": "Remove from Favorites",
-  "categoryLabel": "Category",
-  "ratingLabel": "Rating",
-  "continentLabel": "Continent",
-  "tagsLabel": "Tags"
-}
-```
-
-**Document: `profile`**
-```json
-{
-  "title": "My Profile",
-  "memberSinceLabel": "Member Since",
-  "favoritesCountLabel": "Favorites",
-  "emailLabel": "Email",
-  "editProfileBtn": "Edit Profile",
-  "logoutBtn": "Logout",
-  "logoutConfirm": "Are you sure you want to logout?"
-}
-```
-
-#### Collection: `destinations` (Travel Destinations)
-
-**Document Structure (Example: `destination_001`)**
-```json
-{
-  "name": "Paris",
-  "shortDescription": "The City of Light - Iconic landmarks and romance",
-  "longDescription": "Paris, the capital of France, is renowned for its romantic ambiance, world-class museums, iconic landmarks like the Eiffel Tower, and exquisite cuisine. A must-visit destination.",
-  "category": "City",
-  "continent": "Europe",
-  "featured": true,
-  "rating": 4.8,
-  "imageUrl": "https://example.com/paris-full.jpg",
-  "thumbnailUrl": "https://example.com/paris-thumb.jpg",
-  "tags": ["romantic", "historic", "museums", "food"],
-  "coordinates": {
-    "latitude": 48.8566,
-    "longitude": 2.3522
-  }
-}
-```
-
-Create multiple destination documents with different categories (Mountain, Beach, City, Nature) and continents (Europe, Asia, Africa, Americas, Oceania).
-
----
-
-## 🚀 Development
-
-### Start Development Server
-```bash
-# Using Angular CLI
-ng serve
-
-# Or using Ionic CLI for better mobile preview
-ionic serve
-```
-
-Navigate to `http://localhost:4200/`. The app will auto-reload when you modify source files.
-
-### Build for Production
-```bash
-ng build --configuration production
-```
-
-### Run Unit Tests
-```bash
-ng test
-```
-
-### Generate New Component
-```bash
-ng generate component pages/my-page
-ng generate service services/my-service
-```
-
----
-
-## 📊 Data Models
-
-### User Profile
+**Key Code:**
 ```typescript
-{
-  uid: string;              // Firebase Auth UID
-  firstName: string;
-  lastName: string;
-  email: string;
-  photoUrl?: string;        // Base64 or URL
-  createdAt: ISO8601;       // Timestamp
-  updatedAt?: ISO8601;      // Last update timestamp
-}
+jeepSqlite(window);  // Enable SQLite in browser
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideAnimations(),
+    provideRouter(routes),
+    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+    provideAuth(() => getAuth()),
+    provideFirestore(() => getFirestore()),
+    provideIonicAngular()
+  ]
+});
 ```
 
-### Destination
+#### **app-routing.module.ts**
+**Purpose:** Defines all application routes with protection
+
+**Main Functions:**
+- Maps URLs to pages (components)
+- Applies **AuthGuard** to protected routes (favorites, profile)
+- Public routes (login, register, home, detail) are accessible to everyone
+- Redirects unauthorized access to login page
+
+---
+
+### 🔐 Guard (Route Protection)
+
+#### **auth.guard.ts**
+**Purpose:** Protects routes that require authentication
+
+**Main Functions:**
 ```typescript
-{
-  id: string;               // Document ID in Firestore
-  name: string;
-  shortDescription: string;
-  longDescription: string;
-  category: string;         // "City", "Beach", "Mountain", "Nature"
-  continent: string;        // Geographic region
-  featured: boolean;
-  rating: number;           // 0-5 stars
-  imageUrl: string;         // Full-size hero image
-  thumbnailUrl: string;     // List view thumbnail
-  tags: string[];           // Searchable keywords
-}
+canActivate()  // Verifies if user is logged in
+               // If YES → allows navigation (return true)
+               // If NO → redirects to /login (return false)
 ```
 
-### Favorite (Firestore Path: `users/{uid}/favorites/{destinationId}`)
-```typescript
-{
-  destinationId: string;    // Reference to destination
-  addedAt: ISO8601;         // When favorited
-}
+**Implementation:**
+- Reads authentication state from Firebase Auth
+- Uses RxJS `map()` and `take(1)` to check if a user exists
+- Automatically redirects unauthenticated users
+
+---
+
+### 🛠️ Services (Application Logic)
+
+#### **auth.service.ts**
+**Purpose:** Manages Firebase authentication and user data
+
+**Main Functions:**
+
+1. **`register(email, password, firstName, lastName, photoUrl)`**
+   - Creates a new Firebase account with email and password
+   - Saves additional profile data to Firestore `users` collection
+   - Initializes user profile with name, surname, photo
+
+2. **`login(email, password)`**
+   - Authenticates user with Firebase
+   - Returns user object after login
+
+3. **`logout()`**
+   - Logs out the user from Firebase session
+
+4. **`currentUser$`** (Observable)
+   - Stream that emits current user state
+   - Available for binding in components
+
+5. **`getCurrentUserId()`**
+   - Returns UID of authenticated user
+   - Used for user-specific Firestore operations
+
+#### **firestore.service.ts**
+**Purpose:** Manages reads and writes to Firebase Firestore
+
+**Main Functions:**
+
+1. **`loadDestinations()`**
+   - Loads all destinations from `destinations` collection
+   - Returns Observable with complete list
+
+2. **`getDestinationById(id)`**
+   - Retrieves details of a single destination by ID
+
+3. **`getUserProfile(uid)`**
+   - Loads user profile from `users` collection
+   - Contains: firstName, lastName, photoUrl, email
+
+4. **`updateUserProfile(uid, profileData)`**
+   - Updates user profile (name, surname, photo)
+
+5. **`getUserFavorites(uid)`**
+   - Loads list of user's favorite destinations
+
+#### **database.service.ts**
+**Purpose:** Manages local SQLite database for offline support
+
+**Main Functions:**
+
+1. **`initializeDatabase()`**
+   - Creates SQLite tables on first run
+   - Initializes local database structure
+
+2. **`addFavorite(destinationId)`**
+   - Saves a destination to local SQLite table
+
+3. **`removeFavorite(destinationId)`**
+   - Removes a destination from local database
+
+4. **`getFavorites()`**
+   - Retrieves list of favorite destinations from local database
+   - Used when offline to maintain access to favorites
+
+5. **`addFavoriteToFirestore(uid, destinationId)`**
+   - Syncs favorite with cloud Firestore database
+
+#### **favorites.service.ts**
+**Purpose:** Orchestrates synchronization between SQLite and Firestore
+
+**Main Functions:**
+
+1. **`addFavorite(id)`**
+   - Adds a destination to favorites
+   - Saves to both SQLite (offline) and Firestore (cloud)
+   - Notifies listeners via `favoriteToggled$` Observable
+
+2. **`removeFavorite(id)`**
+   - Removes a destination from favorites
+   - Syncs with both databases
+   - Notifies all listeners in real-time
+
+3. **`isFavorite(id)`**
+   - Checks if a destination is in favorites
+   - Used to show/hide star icon
+
+4. **`getFavorites()`**
+   - Loads list of user's favorite destinations
+
+5. **`favoritesUpdated$`** (BehaviorSubject)
+   - Emits signal when favorites list changes
+   - Allows real-time refresh across multiple pages
+
+6. **`favoriteToggled$`** (BehaviorSubject)
+   - Notifies when a single favorite is added/removed
+   - Allows other components to react immediately
+
+---
+
+### 📄 Pages (Components)
+
+#### **login/** 
+**Purpose:** Public page for account access
+
+**Files:**
+- `login.page.ts` - Authentication logic
+- `login.page.html` - Form with email/password fields
+- `login.page.scss` - Dark theme styles
+
+**Main Functions:**
+- Login form with validation
+- Calls `authService.login(email, password)`
+- Redirects to home if login succeeds
+- Shows error messages if credentials are wrong
+
+#### **register/** 
+**Purpose:** Public page for new account registration
+
+**Files:**
+- `register.page.ts` - Registration logic
+- `register.page.html` - Form for email, password, name, surname, photo
+- `register.page.scss` - Styles
+
+**Main Functions:**
+- Registration form with validation
+- Loads photo from gallery/camera
+- Calls `authService.register(email, password, firstName, lastName, photoUrl)`
+- Creates user profile in Firestore
+- Redirects to login after registration
+
+#### **home/** 
+**Purpose:** Main public page with destination catalog
+
+**Files:**
+- `home.page.ts` - Search and destination loading logic
+- `home.page.html` - Featured carousel section + destination grid + search bar
+- `home.page.scss` - Gradient and responsive styles
+
+**Main Functions:**
+- **Load destinations**: Fetches from Firestore on load
+- **Real-time search**: Implements 1.5-second debounce
+  - Filters by destination name and description
+- **Real-time favorites**: 
+  - Subscribes to `favoriteToggled$` to update star icons
+  - Shows immediately if destination is favorited
+- **Featured carousel**: Shows subset of destinations in highlight
+- **Responsive grid**: Mobile/tablet/desktop layout
+
+#### **favorites/** 
+**Purpose:** Protected page (requires login) with user's favorite destinations
+
+**Files:**
+- `favorites.page.ts` - Loads and manages favorites list
+- `favorites.page.html` - Searchable list with delete option
+- `favorites.page.scss` - Styles
+
+**Main Functions:**
+- **Load favorites**: Fetches from Firestore on load
+- **Local search**: Filters favorites by name
+- **Removal**: Removes a destination from favorites
+- **Real-time sync**: Listens to `favoritesUpdated$` for automatic refresh
+- **Protected access**: Only logged-in users can access
+
+#### **detail/** 
+**Purpose:** Semi-public page with complete destination details
+
+**Files:**
+- `detail.page.ts` - Details logic and favorites management
+- `detail.page.html` - Hero image, description, tags, rating, star button
+- `detail.page.scss` - Styles
+
+**Main Functions:**
+- **Load details**: Fetches destination from Firestore by ID
+- **Star icon**: Shows if destination is favorited
+- **Toggle favorite**: Clicking star adds/removes from favorites
+- **Real-time update**: Listens to `favoriteToggled$` to update icon
+- **Display**: Shows image, description, rating, tags
+
+#### **profile/** 
+**Purpose:** Protected page for user profile management
+
+**Files:**
+- `profile.page.ts` - Profile loading/editing logic and logout
+- `profile.page.html` - Profile card with view/edit modes
+- `profile.page.scss` - Styles
+
+**Main Functions:**
+- **Load profile**: Fetches data from Firestore
+- **Edit mode**: Form to modify name, surname, photo
+- **Photo upload**: Uploads new photo and saves to Firestore
+- **Save**: Updates profile with `firestoreService.updateUserProfile()`
+- **Logout**: Logs out user and returns to login
+- **Statistics**: Can show number of favorites and other info
+
+#### **app.component**
+**Purpose:** Root component with main navigation
+
+**Files:**
+- `app.component.ts` - Navigation logic and state management
+- `app.component.html` - Tab bar for page navigation
+- `app.component.scss` - Styles
+
+**Main Functions:**
+- **Tab bar**: Allows switching between home, favorites, profile
+- **Visibility management**: Shows/hides tabs based on page
+- **Routing**: Coordinates navigation between pages
+
+---
+
+### 🎨 Theme and Styles
+
+#### **theme/variables.scss**
+**Purpose:** Defines global CSS variables and dark theme
+
+**Contains:**
+- Primary, secondary, background colors
+- Font family and sizes
+- Standard spacing (margin, padding)
+- Dark mode styles
+- Pre-configured Ionic variables
+
+#### **global.scss**
+**Purpose:** Global styles applied to entire application
+
+**Contains:**
+- CSS reset
+- Styles for body, html
+- Global animations
+- Common utility classes
+
+---
+
+### ⚙️ Configuration Files
+
+#### **environments/environment.ts**
+**Purpose:** Configuration for development
+
+**Contains:**
+- **firebaseConfig**: Development Firebase credentials
+  - apiKey
+  - authDomain
+  - projectId
+  - storageBucket
+  - messagingSenderId
+  - appId
+
+#### **environments/environment.prod.ts**
+**Purpose:** Configuration for production
+
+**Contains:**
+- **firebaseConfig**: Production Firebase credentials (different from dev)
+
+#### **package.json**
+**Purpose:** Manages dependencies and npm scripts
+
+**Main Scripts:**
+```bash
+npm start          # Starts ng serve
+npm build          # Builds for production
+npm test           # Runs tests
+npm run watch      # Build in watch mode
+```
+
+#### **angular.json**
+**Purpose:** Angular CLI configuration
+
+**Contains:**
+- Build configuration
+- Asset paths
+- Global styles
+- Development/production options
+
+#### **ionic.config.json**
+**Purpose:** Ionic configuration
+
+**Contains:**
+- App name
+- Capacitor settings
+- Platform configurations
+
+#### **capacitor.config.json**
+**Purpose:** Capacitor configuration for native builds
+
+**Contains:**
+- appId
+- appName
+- Permissions and platform configurations
+
+---
+
+## 🔄 Data Flow
+
+### User Registration
+```
+User (register.html) 
+  → authService.register() 
+  → Firebase Auth creates account
+  → Firestore saves profile to /users/{uid}
+  → Redirects to /login
+```
+
+### User Login
+```
+User (login.html)
+  → authService.login()
+  → Firebase Auth authenticates
+  → currentUser$ emits user
+  → App redirects to /home
+```
+
+### Adding a Favorite
+```
+User clicks star (detail.html or home.html)
+  → favoritesService.addFavorite(id)
+  → databaseService.addFavorite(id) [Local SQLite]
+  → databaseService.addFavoriteToFirestore(uid, id) [Cloud]
+  → favoriteToggled$ notifies all listeners
+  → Star icons updated in real-time
+  → FavoritesService.favoritesUpdated$ notifies refresh
+```
+
+### Loading Favorites
+```
+User accesses /favorites
+  → favoritesService.getFavorites()
+  → Firestore loads favorites from /users/{uid}/favorites
+  → favorites.page.ts populates list
+  → Listens to favoritesUpdated$ for refresh
 ```
 
 ---
 
-## 🔄 Real-Time Sync Architecture
+## 💾 Offline Synchronization
 
-### Favorites Sync Flow
-1. **User adds favorite** on Home → `FavoritesService.toggleFavorite()`
-2. **Service writes to Firestore** at `users/{uid}/favorites/{destId}`
-3. **Emit event** via `favoriteToggled$` BehaviorSubject
-4. **All subscribed pages** (Home, Detail, Favorites) update UI instantly
-5. **SQLite cached** locally for offline access
+The app uses a **SQLite + Firestore** strategy:
 
-### Search Functionality
-- **Debounce**: 1 second delay after user stops typing
-- **Real-time filtering**: Searches destination names and descriptions
-- **Featured destinations hide** during active search for cleaner UX
+1. **When online**:
+   - Data is saved to Firestore (source of truth)
+   - Local copy to SQLite for fast access
 
----
+2. **When offline**:
+   - SQLite continues to work locally
+   - User can still view favorites
+   - Changes are stored locally
 
-## 🎨 Styling & Theme
-
-### Color Palette
-```scss
-$primary: #6C63FF;          // Primary brand color
-$accent: #FF6584;           // Accent/secondary
-$dark-bg: #0F0F23;          // Main background
-$card-bg: #1A1A3E;          // Card/section background
-$text-light: #FFFFFF;       // Primary text
-$text-muted: #A0A0C0;       // Secondary text
-```
-
-### Customizing Theme
-Edit `src/theme/variables.scss` to change colors, fonts, and Ionic component styling.
+3. **When back online**:
+   - App syncs local changes with Firestore
+   - Resolves any conflicts
 
 ---
 
-## 🐛 Troubleshooting
+## 🔐 Security
 
-### Issue: "Cannot find module '@angular/fire'"
-```bash
-npm install @angular/fire firebase
-```
-
-### Issue: "SQLite not initialized"
-```bash
-npm install @capacitor-community/sqlite
-npx cap sync
-```
-
-### Issue: Firebase authentication not working
-- Verify Firebase credentials in `environment.ts`
-- Check that Email/Password auth is enabled in Firebase Console
-- Ensure Firestore security rules allow read/write in test mode
-
-### Issue: Favorites not syncing across pages
-- Check browser console for errors
-- Verify `FavoritesService.favoriteToggled$` subscription in components
-- Ensure user is authenticated when adding favorites
+- **Firebase Auth**: Handles secure authentication with password hashing
+- **Firestore Rules**: Limit access to personal data
+  - Users can only read/write their own data
+  - Public data (destinations) is readable by all
+- **No hardcoded credentials**: Uses `environment.ts` for config
 
 ---
 
-## 📱 Deployment
+## 📱 Mobile Features
 
-### Build for Android
-```bash
-npm run build
-npx cap add android
-npx cap copy
-npx cap open android
-```
-
-### Build for iOS
-```bash
-npm run build
-npx cap add ios
-npx cap copy
-npx cap open ios
-```
-
-### Deploy to Web
-```bash
-ng build --configuration production
-# Upload dist/ folder to hosting service (Firebase Hosting, Netlify, Vercel)
-```
+- **Capacitor**: Bridge to access native features (camera, storage)
+- **Responsive Design**: Optimized for phone, tablet, desktop
+- **Touch Gestures**: Touch gesture support on mobile
+- **App Icons and Splash**: Configurable via `ionic.config.json`
 
 ---
 
-## 🤝 Team Development Notes
+## ✨ Future Improvements
 
-### Key Technologies
-- **Angular 17+**: Standalone components, modern decorators
-- **Ionic 7**: Mobile UI framework with Material Design
-- **Firebase**: Auth, Firestore real-time database
-- **RxJS**: Reactive programming with Observables
-- **SQLite**: Local offline storage via Capacitor
-- **TypeScript**: Strong typing and OOP patterns
+- Add unit tests for services
+- Implement PWA (Progressive Web App)
+- Add push notifications
+- Implement lazy loading for images
+- Add advanced filters for destinations
+- Save search history
+- Share destinations on social media
 
-### Code Conventions
-- **Naming**: camelCase for variables/methods, PascalCase for classes/components
-- **Comments**: Concise JSDoc-style documentation for public methods
-- **File Structure**: Organize by feature (pages), not by type
-- **Error Handling**: Always catch and log errors with console.error()
-- **Subscriptions**: Use `takeUntil()` to prevent memory leaks in ngOnDestroy
-
-### Performance Tips
-- Use `OnPush` change detection strategy where possible
-- Implement lazy loading for route modules
-- Optimize images (thumbnails vs full-size)
-- Debounce search and API calls
-- Track subscriptions and unsubscribe in ngOnDestroy
-
----
-
-## 📄 License
-
-MIT License - See LICENSE file for details
-
----
-
-## 👥 Support
-
-For issues or questions, please open an issue in the repository or contact the development team.
-  "tags": ["romantic", "museums", "architecture"],
-  "featured": true
-}
-```
-
-#### `users` collection
-Auto-populated by the `AuthService` during registration.
-
-### 7. Run the Application
-
-```bash
-# Development server
-ionic serve
-
-# Build for production
-npm run build
-
-# Sync with native platforms
-npx cap sync
-
-# Open in iOS
-npx cap open ios
-
-# Open in Android
-npx cap open android
-```
-
-## API Reference
-
-### AuthService
-
-```typescript
-register(email, password, firstName, lastName, photoUrl): Promise<User>
-login(email, password): Promise<User>
-logout(): Promise<void>
-getCurrentUserId(): string | null
-currentUser$: Observable<User | null>
-```
-
-### FirestoreService
-
-```typescript
-getScreenText(screenId: string): Observable<any>
-getAppInfo(): Observable<any>
-getAllDestinations(): Observable<Destination[]>
-getDestinationById(id: string): Observable<Destination>
-getFeaturedDestinations(): Observable<Destination[]>
-saveUserProfile(uid, data): Promise<void>
-getUserProfile(uid): Observable<any>
-```
-
-### DatabaseService
-
-```typescript
-initializeDatabase(): Promise<void>
-addFavorite(id: string): Promise<void>
-removeFavorite(id: string): Promise<void>
-isFavorite(id: string): Promise<boolean>
-getAllFavoriteIds(): Promise<string[]>
-```
-
-### FavoritesService
-
-```typescript
-addFavorite(id: string): Promise<void>
-removeFavorite(id: string): Promise<void>
-isFavorite(id: string): Promise<boolean>
-toggleFavorite(id: string): Promise<boolean>
-getFavoritedDestinations(): Observable<Destination[]>
-getFavoritesCount(): Promise<number>
-refreshFavorites(): void
-```
-
-## UI Theme
-
-The app uses a premium dark theme with:
-- **Primary Color**: `#6C63FF` (Indigo-Violet)
-- **Accent Color**: `#FF6584` (Coral-Pink)
-- **Background**: `#0F0F23` (Deep Dark)
-- **Surface Cards**: `#1A1A3E`
-- **Text Primary**: `#FFFFFF`
-- **Text Secondary**: `#A0A0C0`
-
-All colors are defined in `src/theme/variables.scss` and can be customized globally.
-
-## Authentication Flow
-
-1. **User Registration** (`/register`)
-   - Form validation
-   - Firebase Auth user creation
-   - Firestore user profile stored
-
-2. **User Login** (`/login`)
-   - Email/password Firebase Auth
-   - Redirects to `/home` on success
-
-3. **Protected Routes**
-   - AuthGuard checks Firebase auth state
-   - Unauthenticated users redirected to `/login`
-
-4. **Logout** (from `/profile`)
-   - Signs out Firebase Auth
-   - Clears SQLite session
-   - Redirects to `/login`
-
-## Favorites Flow
-
-1. **Add to Favorites**
-   - Destination ID saved to SQLite
-   - UI updates immediately (star icon becomes solid)
-
-2. **View Favorites** (`/favorites`)
-   - Loads favorite IDs from SQLite
-   - Fetches full destination data from Firestore
-   - Search/filter functionality
-
-3. **Remove from Favorites**
-   - ID removed from SQLite
-   - Firestore data not affected
-
-## Deployment
-
-### Building for Production
-
-```bash
-npm run build
-# or
-ionic build --prod
-```
-
-### iOS Deployment
-
-```bash
-npx cap sync ios
-npx cap open ios
-# Build and submit in Xcode
-```
-
-### Android Deployment
-
-```bash
-npx cap sync android
-npx cap open android
-# Build and submit in Android Studio
-```
-
-## Troubleshooting
-
-### Firebase Connection Issues
-- Verify Firebase config in `environment.ts`
-- Check Firestore security rules allow read/write for authenticated users
-- Ensure API keys are correct
-
-### SQLite Errors
-- Clear app cache and data
-- Reinstall Capacitor SQLite: `npm install @capacitor-community/sqlite@latest`
-- Check device storage space
-
-### Page Not Loading
-- Check browser console for errors
-- Verify all services are provided in `app.module.ts`
-- Ensure Firestore collections exist with correct names
-
-## Performance Optimization
-
-- Lazy loading components on each page
-- Images optimized with `object-fit: cover`
-- Skeletons shown during data loading
-- SQLite for offline data access
-- Efficient Firestore queries with filters
-
-## Browser Compatibility
-
-- Chrome 90+
-- Firefox 88+
-- Safari 14+
-- Edge 90+
-
-## License
-
-MIT License - Feel free to use this project for personal and commercial purposes.
-
----
-
-**Built with ❤️ using Ionic 7, Angular 17, Firebase, and Capacitor**
